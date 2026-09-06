@@ -1,5 +1,6 @@
 import { inject } from '@angular/core';
 import { Router, Routes } from '@angular/router';
+import { legalDocTitle } from './data/legal-docs.data';
 import { HomePage } from './features/home/home.page';
 
 const SITE = 'BWG';
@@ -50,8 +51,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/project/project.page').then((m) => m.ProjectPage),
   },
   {
+    // The document's own name is the title — "Privacy Policy — BWG" rather than
+    // "Legal — BWG" for every document alike. legal-docs.data.ts resolves it, so
+    // the tab, the history entry and the page all read from one place.
     path: 'legal/:doc',
-    title: `Legal — ${SITE}`,
+    title: (route) => `${legalDocTitle(route.paramMap.get('doc') ?? '')} — ${SITE}`,
     loadComponent: () => import('./features/legal/legal.page').then((m) => m.LegalPage),
   },
   {

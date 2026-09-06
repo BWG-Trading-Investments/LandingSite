@@ -52,7 +52,6 @@ interface Spotlight {
   readonly lockup: { readonly src: string; readonly width: number; readonly height: number };
   readonly stats: readonly StatRow[];
   readonly bio: readonly BioBlock[];
-  readonly quote: string;
   readonly areasHeading: string;
   readonly areas: readonly AreaItem[];
 }
@@ -117,9 +116,6 @@ const CONTENT: Spotlight = {
       text: "At BWG, Dr. Basem Hashaad leads the Group's strategic vision and growth agenda, leveraging his extensive international trade expertise, institutional relationships, and entrepreneurial mindset to expand BWG's regional and international presence and develop high-value business opportunities and strategic partnerships.",
     },
   ],
-
-  quote:
-    'Transforming strategic opportunities into sustainable growth and building connections that create value across markets.',
 
   areasHeading: 'Core Areas of Expertise',
   areas: [

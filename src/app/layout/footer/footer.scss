@@ -1,0 +1,64 @@
+@use 'abstracts' as *;
+
+:host {
+  display: block;
+}
+
+// A hairline and a line of small type. It closes the page without competing
+// with the contact section immediately above it on the homepage.
+.foot {
+  display: block;
+  border-block-start: 1px solid var(--bwg-hairline);
+  padding-block: var(--bwg-sp-6);
+}
+
+.wrap {
+  @include wrap;
+}
+
+.foot__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bwg-sp-4);
+
+  // Side by side once there is room; stacked and left-aligned on a phone, which
+  // is where centring small type only makes it harder to read.
+  @include up('sm') {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--bwg-sp-5);
+  }
+}
+
+.foot__copy {
+  color: var(--bwg-text-muted);
+  font-size: var(--bwg-fs-sm);
+  line-height: var(--bwg-lh-snug);
+}
+
+.foot__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bwg-sp-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.foot__link {
+  color: var(--bwg-text-muted);
+  font-size: var(--bwg-fs-sm);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-wide);
+  transition: color var(--bwg-dur-base) var(--bwg-ease-out);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--bwg-gold);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}

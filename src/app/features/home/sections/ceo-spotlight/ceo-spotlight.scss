@@ -136,8 +136,11 @@ $stack-all: 62rem; // 992px  — everything becomes one column
   gap: var(--bwg-sp-6);
 
   @media (min-width: $stack-all) {
-    grid-template-columns: 28% minmax(0, 1fr);
-    gap: var(--bwg-sp-5);
+    // The portrait column is sized to the portrait rather than the other way
+    // round: at this width the contained image comes out about as wide as 26%
+    // of the card, so the column reads as full and the gutter does the spacing.
+    grid-template-columns: 26% minmax(0, 1fr);
+    gap: var(--bwg-sp-6);
     align-items: end;
   }
 }
@@ -147,8 +150,16 @@ $stack-all: 62rem; // 992px  — everything becomes one column
   position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   align-items: center;
   min-width: 0;
+
+  @media (min-width: $stack-all) {
+    // Stretched rather than bottom-aligned, so the portrait has the full height
+    // of the row — the one the name, stats and biography beside it set — to
+    // fill, instead of standing in the foot of an otherwise empty column.
+    align-self: stretch;
+  }
 }
 
 .stage__photo {
@@ -156,7 +167,14 @@ $stack-all: 62rem; // 992px  — everything becomes one column
   width: auto;
   max-width: 100%;
   height: auto;
-  max-height: 20rem;
+  max-height: 22rem;
+
+  // The card is wide here but still a single column, so he can afford to be a
+  // little larger than on a phone without crowding the copy beneath him.
+  @media (min-width: 40rem) {
+    max-height: 26rem;
+  }
+
   // A soft ground shadow that follows the silhouette rather than a box, so he
   // stands on the card instead of being pasted onto it.
   filter: drop-shadow(0 0.5rem 0.7rem rgb(var(--bwg-shadow-rgb) / 16%));
@@ -165,62 +183,32 @@ $stack-all: 62rem; // 992px  — everything becomes one column
   mask-image: linear-gradient(to bottom, #000 92%, transparent 100%);
 
   @media (min-width: $stack-all) {
-    // Bottom-aligned and pushed to the trailing side of its column, which is
-    // what leaves the corner free for the quote to sit in.
-    max-height: 24rem;
-    margin-inline-start: auto;
+    // Taken out of flow, so the height of the row is set by the name, stats
+    // and biography beside him and never by the portrait, and anchored to the
+    // foot of the column so the free space opens above his head, not under him.
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    margin-inline: auto;
+
+    // Both dimensions left to the artwork and only bounded, which is what keeps
+    // him in proportion: with width and height auto, hitting either bound
+    // scales the other with it, so the box is always exactly the shape of the
+    // portrait — no crop, no stretch, no letterbox — and the bottom fade stays
+    // on the cut it was drawn for. He runs the full height of the column where
+    // there is room for it and the full width where there is not.
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: bottom center;
   }
 }
 
 // A halo, because a navy suit on a near-black card cannot cast a dark shadow.
 :host-context([data-theme='dark']) .stage__photo {
   filter: drop-shadow(0 0 1.2rem rgb(var(--bwg-gold-rgb) / 18%));
-}
-
-// -- quote --------------------------------------------------------------------
-.quote {
-  position: relative;
-  margin: var(--bwg-sp-4) 0 0;
-  padding-inline-start: 1.4rem;
-  max-width: 22rem;
-
-  @media (min-width: $stack-all) {
-    // The bottom-left corner of the column. It overlaps the portrait vertically
-    // but never horizontally: he is pushed to the trailing side, so navy italic
-    // never lands on a navy suit.
-    position: absolute;
-    inset-block-end: 0;
-    inset-inline-start: 0;
-    max-width: 52%;
-    margin-block-start: 0;
-  }
-}
-
-.quote__mark {
-  color: var(--bwg-gold);
-  font-family: $serif;
-  font-size: 1.9rem;
-  line-height: 0;
-}
-
-.quote__mark:not(.quote__mark--close) {
-  position: absolute;
-  inset-block-start: 0.55rem;
-  inset-inline-start: 0;
-}
-
-.quote__mark--close {
-  margin-inline-start: 0.15rem;
-  vertical-align: -0.35rem;
-}
-
-.quote__text {
-  margin: 0;
-  color: var(--bwg-text);
-  font-family: $serif;
-  font-size: 0.8125rem; // 13px
-  font-style: italic;
-  line-height: 1.5;
 }
 
 // =============================================================================

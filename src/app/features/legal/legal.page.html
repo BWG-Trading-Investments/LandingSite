@@ -1,0 +1,139 @@
+@if (document(); as doc) {
+  <article class="legal">
+    <div class="wrap">
+      <a class="legal__back" routerLink="/">
+        <svg
+          viewBox="0 0 20 20"
+          width="14"
+          height="14"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M16 10H5M9 6l-4 4 4 4" />
+        </svg>
+        Back to BWG
+      </a>
+
+      <header class="legal__head">
+        <p class="eyebrow legal__eyebrow">Legal</p>
+        <h1 class="legal__title">{{ title() }}</h1>
+        <p class="legal__updated">Last updated {{ doc.updated }}</p>
+        <span class="legal__rule" aria-hidden="true"></span>
+        <p class="legal__intro">{{ doc.intro }}</p>
+      </header>
+
+      <!--
+        Routed links rather than bare `href="#id"` anchors. index.html carries
+        <base href="/">, and a fragment-only href resolves against the document
+        base — so `#contact` from this page would land on the homepage's contact
+        section, not on this document's. Naming the route makes the target
+        explicit. anchorScrolling is enabled in app.config.ts, so the router
+        scrolls to the section, and the headings carry scroll-margin so the
+        fixed navbar never covers the one you land on.
+      -->
+      <nav class="toc" aria-labelledby="legal-contents">
+        <h2 class="toc__heading eyebrow" id="legal-contents">Contents</h2>
+        <ol class="toc__list">
+          @for (section of doc.sections; track section.id; let i = $index) {
+            <li class="toc__item">
+              <a class="toc__link" [routerLink]="['/legal', doc.slug]" [fragment]="section.id">
+                <span class="toc__num">{{ num(i) }}</span>
+                <span class="toc__label">{{ section.heading }}</span>
+              </a>
+            </li>
+          }
+        </ol>
+      </nav>
+
+      <div class="legal__body">
+        @for (section of doc.sections; track section.id; let i = $index) {
+          <section class="doc" [attr.aria-labelledby]="section.id + '-heading'">
+            <span class="doc__anchor" [id]="section.id" aria-hidden="true"></span>
+
+            <h2 class="doc__heading" [id]="section.id + '-heading'">
+              <span class="doc__num" aria-hidden="true">{{ num(i) }}</span>
+              {{ section.heading }}
+            </h2>
+
+            @for (paragraph of section.body; track $index) {
+              <p class="doc__para">{{ paragraph }}</p>
+            }
+
+            @if (section.list?.length) {
+              <ul class="doc__list" role="list">
+                @for (item of section.list; track $index) {
+                  <li class="doc__item">{{ item }}</li>
+                }
+              </ul>
+            }
+
+            @if (section.contact; as contact) {
+              <address class="contact">
+                <p class="contact__entity">{{ contact.entity }}</p>
+
+                <p class="contact__row">
+                  <span class="contact__label">Email</span>
+                  <a class="contact__link" [href]="'mailto:' + contact.email">{{
+                    contact.email
+                  }}</a>
+                </p>
+
+                <p class="contact__row">
+                  <span class="contact__label">Address</span>
+                  <span class="contact__address">
+                    @for (line of contact.addressLines; track line) {
+                      <span>{{ line }}</span>
+                    }
+                  </span>
+                </p>
+              </address>
+            }
+
+            @for (paragraph of section.closing; track $index) {
+              <p class="doc__para">{{ paragraph }}</p>
+            }
+          </section>
+        }
+      </div>
+    </div>
+  </article>
+} @else {
+  <article class="legal legal--missing">
+    <div class="wrap">
+      <a class="legal__back" routerLink="/">
+        <svg
+          viewBox="0 0 20 20"
+          width="14"
+          height="14"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M16 10H5M9 6l-4 4 4 4" />
+        </svg>
+        Back to BWG
+      </a>
+
+      <header class="legal__head">
+        <p class="eyebrow legal__eyebrow">Legal</p>
+        <h1 class="legal__title">Not yet published</h1>
+        <span class="legal__rule" aria-hidden="true"></span>
+        <p class="legal__intro">
+          This document has not been published yet. Our Privacy Policy is available, and you are
+          welcome to contact us with any question in the meantime.
+        </p>
+      </header>
+
+      <p class="legal__links">
+        <a class="legal__link" routerLink="/legal/privacy">Read the Privacy Policy</a>
+      </p>
+    </div>
+  </article>
+}

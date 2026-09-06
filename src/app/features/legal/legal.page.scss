@@ -1,0 +1,310 @@
+@use 'abstracts' as *;
+
+// A long-form document, so this file is deliberately plain: one column of text
+// at a readable measure, hairline rules for structure, and the brand's gold
+// used only for the numerals, the rule and links. No cards, no animation.
+
+:host {
+  display: block;
+}
+
+.legal {
+  display: block;
+  // Clears the fixed navbar, which this page sits under like every other route.
+  padding-block: calc(var(--bwg-nav-h) + var(--bwg-sp-8)) var(--bwg-section-y);
+}
+
+.wrap {
+  @include wrap;
+}
+
+.legal__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bwg-sp-2);
+  color: var(--bwg-gold);
+  font-size: var(--bwg-fs-xs);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-eyebrow);
+  text-transform: uppercase;
+  transition: color var(--bwg-dur-base) var(--bwg-ease-out);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--bwg-gold-bright);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+// =============================================================================
+// Masthead
+// =============================================================================
+.legal__head {
+  max-width: var(--bwg-measure);
+  margin-block-start: var(--bwg-sp-7);
+}
+
+.legal__eyebrow {
+  color: var(--bwg-gold);
+}
+
+.legal__title {
+  margin-block-start: var(--bwg-sp-3);
+  color: var(--bwg-text);
+  font-family: var(--bwg-font-display);
+  font-size: var(--bwg-fs-3xl);
+  font-weight: var(--bwg-fw-display-strong);
+  line-height: var(--bwg-lh-tight);
+  letter-spacing: var(--bwg-tracking-tight);
+}
+
+.legal__updated {
+  margin-block-start: var(--bwg-sp-4);
+  color: var(--bwg-text-muted);
+  font-size: var(--bwg-fs-sm);
+  letter-spacing: var(--bwg-tracking-wide);
+  text-transform: uppercase;
+}
+
+.legal__rule {
+  display: block;
+  width: 3.5rem;
+  height: 2px;
+  margin-block-start: var(--bwg-sp-5);
+  background: var(--bwg-gold);
+}
+
+.legal__intro {
+  margin-block-start: var(--bwg-sp-5);
+  color: var(--bwg-text);
+  font-size: var(--bwg-fs-lg);
+  line-height: var(--bwg-lh-relaxed);
+}
+
+// =============================================================================
+// Contents
+//
+// One column on a phone, two once there is room. It is a convenience, not the
+// structure of the page — the document reads top to bottom without it.
+// =============================================================================
+.toc {
+  max-width: var(--bwg-measure);
+  margin-block-start: var(--bwg-sp-8);
+  padding: var(--bwg-sp-5) var(--bwg-sp-6);
+  @include card-surface;
+
+  @include up('lg') {
+    max-width: none;
+  }
+}
+
+.toc__heading {
+  color: var(--bwg-gold);
+}
+
+.toc__list {
+  display: grid;
+  gap: var(--bwg-sp-1);
+  margin-block-start: var(--bwg-sp-4);
+  padding: 0;
+  list-style: none;
+
+  @include up('sm') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--bwg-sp-6);
+  }
+}
+
+.toc__link {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: var(--bwg-sp-2);
+  align-items: baseline;
+  padding-block: var(--bwg-sp-2);
+  color: var(--bwg-text-muted);
+  font-size: var(--bwg-fs-base);
+  line-height: var(--bwg-lh-snug);
+  transition: color var(--bwg-dur-base) var(--bwg-ease-out);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--bwg-text);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.toc__num {
+  color: var(--bwg-gold);
+  font-size: var(--bwg-fs-xs);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-wide);
+  font-variant-numeric: tabular-nums;
+}
+
+// =============================================================================
+// The document
+// =============================================================================
+.legal__body {
+  margin-block-start: var(--bwg-sp-9);
+}
+
+.doc {
+  max-width: var(--bwg-measure);
+
+  & + & {
+    margin-block-start: var(--bwg-sp-8);
+    padding-block-start: var(--bwg-sp-8);
+    border-block-start: 1px solid var(--bwg-hairline);
+  }
+}
+
+// The scroll target for the contents list, and the reason the heading itself
+// does not carry the id.
+//
+// Angular's anchorScrolling moves the window with scrollTo() rather than
+// scrollIntoView(), so it honours neither scroll-margin here nor the
+// scroll-padding-top the reset sets on <html> — a section would land flush
+// under the fixed navbar. Rather than reach into the global scroller for the
+// sake of one page, the target is a zero-height marker lifted by the height of
+// the bar, so every way into a section — clicked in the contents, or a pasted
+// deep link — leaves the heading clear of it.
+.doc__anchor {
+  display: block;
+  position: relative;
+  inset-block-start: calc(-1 * (var(--bwg-nav-h) + var(--bwg-sp-4)));
+  height: 0;
+}
+
+.doc__heading {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  align-items: baseline;
+  color: var(--bwg-text);
+  font-family: var(--bwg-font-display);
+  font-size: var(--bwg-fs-xl);
+  font-weight: var(--bwg-fw-display);
+  line-height: var(--bwg-lh-snug);
+}
+
+.doc__num {
+  color: var(--bwg-gold);
+  font-family: var(--bwg-font-ui);
+  font-size: var(--bwg-fs-sm);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-wide);
+  font-variant-numeric: tabular-nums;
+}
+
+.doc__para {
+  margin-block-start: var(--bwg-sp-4);
+  color: var(--bwg-text-muted);
+  font-size: var(--bwg-fs-md);
+  line-height: var(--bwg-lh-relaxed);
+}
+
+.doc__list {
+  margin-block-start: var(--bwg-sp-4);
+  padding: 0;
+  list-style: none;
+}
+
+// A gold dash rather than a bullet, which is the only list mark this brand uses.
+.doc__item {
+  position: relative;
+  padding-inline-start: var(--bwg-sp-5);
+  color: var(--bwg-text-muted);
+  font-size: var(--bwg-fs-md);
+  line-height: var(--bwg-lh-relaxed);
+
+  & + & {
+    margin-block-start: var(--bwg-sp-3);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    // Centres the dash on the first line's cap height at any font size.
+    inset-block-start: calc(var(--bwg-fs-md) * var(--bwg-lh-relaxed) / 2);
+    width: 0.75rem;
+    height: 1px;
+    background: var(--bwg-rule-strong);
+  }
+}
+
+// =============================================================================
+// Contact block
+// =============================================================================
+.contact {
+  margin-block-start: var(--bwg-sp-5);
+  padding: var(--bwg-sp-5) var(--bwg-sp-6);
+  font-style: normal;
+  @include card-surface;
+}
+
+.contact__entity {
+  color: var(--bwg-text);
+  font-family: var(--bwg-font-display);
+  font-size: var(--bwg-fs-base);
+  font-weight: var(--bwg-fw-display);
+  line-height: var(--bwg-lh-snug);
+}
+
+.contact__row {
+  display: grid;
+  gap: var(--bwg-sp-1);
+  margin-block-start: var(--bwg-sp-4);
+
+  @include up('sm') {
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: var(--bwg-sp-4);
+    align-items: baseline;
+  }
+}
+
+.contact__label {
+  color: var(--bwg-gold);
+  font-size: var(--bwg-fs-xs);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+.contact__address {
+  display: grid;
+  gap: var(--bwg-sp-1);
+  color: var(--bwg-text-muted);
+  font-size: var(--bwg-fs-md);
+  line-height: var(--bwg-lh-snug);
+}
+
+.contact__link,
+.legal__link {
+  color: var(--bwg-gold);
+  font-size: var(--bwg-fs-md);
+  // Long addresses must never push the page sideways on a narrow phone.
+  overflow-wrap: anywhere;
+  transition: color var(--bwg-dur-base) var(--bwg-ease-out);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--bwg-gold-bright);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+// =============================================================================
+// The routed-but-unpublished state
+// =============================================================================
+.legal__links {
+  margin-block-start: var(--bwg-sp-6);
+}
