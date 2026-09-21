@@ -23,7 +23,12 @@ import type { IconName } from '../shared/ui/icon/icon';
 export interface ProjectBlock {
   readonly icon: IconName;
   readonly heading: string;
-  readonly body: string;
+  /**
+   * The line under the heading, where the material writes one. MOSHAREK's does
+   * not: its slide lists what the platform provides as four named items and says
+   * nothing further about them, so those blocks are a heading and a mark.
+   */
+  readonly body?: string;
   /**
    * The group the supplied material files this capability under, where it
    * groups them at all. Blocks carrying one are rendered together under that
@@ -108,15 +113,16 @@ export interface Project {
    */
   readonly imageOnPlate: boolean;
   /**
-   * True when the artwork above belongs to the card and not to the detail page,
-   * which then keeps the project's icon in its own much larger frame.
+   * True when the artwork above is a small mark rather than a full-size one.
    *
-   * MOSHAREK is the one: its mark is the symbol cut out of the lockup printed on
-   * its slide, and at 128px across it carries a 68px square and nothing wider.
-   * A project whose artwork suits both places simply leaves this unset, which is
-   * what every other one does.
+   * MOSHAREK's is the symbol cut out of the lockup printed on its slide, and at
+   * 128px across it is sharp on a card and beside a heading but soft in the
+   * page's much larger frame. So the detail page sets it next to the name — the
+   * way the slide sets it next to the wordmark — and leaves the project's icon
+   * in the frame. A project whose artwork carries that frame leaves this unset,
+   * which is what every other one does.
    */
-  readonly imageCardOnly?: boolean;
+  readonly smallMark?: boolean;
   /** One line on the card, and the standfirst on the page. Client copy, verbatim. */
   readonly cardSummary: string;
   /** The opening line of the detail page, set larger than the body. */
@@ -367,48 +373,44 @@ export const PROJECTS: readonly Project[] = [
   {
     slug: 'mosharek',
     name: 'MOSHAREK',
-    tagline: 'Businesses, opportunities and participation',
-    sector: 'Business Development',
+    // Rewritten from the project's own slide, which is about investment
+    // opportunities and franchise development rather than the connect-and-take-
+    // part framing the earlier copy used. The slide sets the year under the
+    // wordmark, as FISH LINK's and MADAAAD's do, so the tagline carries it.
+    tagline: '2025',
+    sector: 'Digital Transformation & Smart Platforms',
     icon: 'users',
     url: null,
     urlLabel: null,
-    // The symbol alone, cut from the lockup on the project's slide: the card
-    // slot is a small square, and a mark reads there where a wordmark beside it
-    // would not. Keyed off the near-white ground it is printed on, which is why
-    // it asks for the plate — see imageOnPlate.
+    // The symbol alone, cut from the lockup on the project's slide. Keyed off
+    // the near-white ground it is printed on, which is why it asks for the plate
+    // on a card — see imageOnPlate — and why the page sets it beside the name
+    // rather than in its frame, see smallMark.
     image: '/assets/images/mosharek-mark.png',
     imageWidth: 128,
     imageHeight: 79,
     imageOnPlate: true,
-    imageCardOnly: true,
-    cardSummary: 'A platform focused on connecting businesses, opportunities and participation.',
+    smallMark: true,
+    // One sentence, the same in both places, so the page states it once.
+    cardSummary:
+      'Developed a specialized digital platform for investment opportunities and franchise development, connecting investors with franchise owners and opportunity providers.',
     intro:
-      'A platform built around three things: businesses, the opportunities in front of them, and the means to take part.',
-    overview: [
-      'Most opportunities are missed not because a business could not deliver on them, but because it never saw them, or had no straightforward way in. MOSHAREK is aimed squarely at that gap.',
-      'The platform connects businesses to opportunities and gives them a route to participate — the connecting step BWG performs across its ecosystem, built into a platform rather than delivered as a service.',
-    ],
+      'Developed a specialized digital platform for investment opportunities and franchise development, connecting investors with franchise owners and opportunity providers.',
+    // The line the slide puts above the four items below it.
+    overview: ['The platform provides:'],
     blocks: [
-      {
-        icon: 'briefcase',
-        heading: 'Businesses',
-        body: 'Brings businesses into one place where they can be found, and can find each other.',
-      },
-      {
-        icon: 'spark',
-        heading: 'Opportunities',
-        body: 'Surfaces the opportunities a business would otherwise never see.',
-      },
-      {
-        icon: 'users',
-        heading: 'Participation',
-        body: 'Gives a business a clear route to take part, rather than only to be informed.',
-      },
+      { icon: 'book', heading: 'Smart operating guides' },
+      { icon: 'growth', heading: 'Investment models' },
+      { icon: 'building', heading: 'Franchise opportunities' },
+      { icon: 'handshake', heading: 'Investor-to-franchisor connectivity' },
     ],
+    // The strip the slide closes on. The page's glance shows one line per item,
+    // so each carries its figure and what the figure counts.
     highlights: [
-      { icon: 'handshake', label: 'Connection' },
-      { icon: 'spark', label: 'Opportunity' },
-      { icon: 'users', label: 'Participation' },
+      { icon: 'users', label: '500+ Investors' },
+      { icon: 'tag', label: '300+ Franchise Brands' },
+      { icon: 'layers', label: '20+ Sectors' },
+      { icon: 'spark', label: '1000+ Opportunities' },
     ],
   },
 

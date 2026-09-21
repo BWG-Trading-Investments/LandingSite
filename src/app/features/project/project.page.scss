@@ -145,6 +145,17 @@
   text-transform: uppercase;
 }
 
+// The mark beside the name, where a project supplies a small one. Sized in `em`
+// so it scales with the heading it sits in and keeps the file's own ratio, and
+// nudged off the baseline so its middle sits with the caps rather than on them.
+.project__mark {
+  display: inline-block;
+  width: auto;
+  height: 1.05em;
+  margin-inline-start: 0.4em;
+  vertical-align: -0.18em;
+}
+
 .project__tagline {
   max-width: var(--bwg-measure);
   margin-block-start: var(--bwg-sp-3);

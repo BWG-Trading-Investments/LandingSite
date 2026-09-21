@@ -102,9 +102,13 @@
   fill: rgb(122 200 240 / 14%);
 }
 
+// Reversed, because the fish are drawn facing the inline-start edge and the
+// keyframes below carried them the other way — a shoal swimming backwards. The
+// direction is flipped here rather than in the keyframes so the drift, its
+// distance and its timing are all still stated once, below.
 @media (prefers-reduced-motion: no-preference) {
   .hero__shoal {
-    animation: fl-drift 26s linear infinite;
+    animation: fl-drift 26s linear infinite reverse;
   }
 }
 
@@ -118,18 +122,51 @@
   }
 }
 
+// The way back now has this row to itself. It keeps the corner and the height
+// the row had when the lockup stood in it, so nothing below has moved.
 .hero__shell {
   display: flex;
   flex-wrap: wrap;
   gap: var(--bwg-sp-4);
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
+  min-height: 3rem;
+}
+
+// ── BRAND LOCKUP ──────────────────────────────────────────────────────────
+//
+// The group's lockup and the product's wordmark, set as one block: the mark
+// sitting on the wordmark's shoulder, both hung on the same left edge, and the
+// two of them spaced closer to each other than to anything around them, which
+// is what makes them read as one lockup rather than as two marks that happen to
+// be near each other.
+//
+// Stacked rather than side by side, and not for taste: FISH LINK is set at up
+// to 4.6rem in a heavy geometric face, and the wordmark alone measures wider
+// than half of a 1280px column. Standing the lockup beside it would have forced
+// the name to shrink or to break across two lines, and the name is not mine to
+// change. A short rule under the mark ties it to the name the way the rest of
+// the site ties an eyebrow to a heading.
+.hero__brand {
+  display: grid;
+  justify-items: start;
+  gap: clamp(0.7rem, 1.6vw, 1.1rem);
+  margin-block-start: var(--bwg-sp-5);
 }
 
 .hero__lockup {
   display: block;
   width: auto;
-  height: 3rem;
+  height: clamp(2.5rem, 5.2vw, 3.6rem);
+  // The supplied wordmark is ink, drawn for the ivory theme, and this hero is
+  // deep water in both themes. The original white artwork is what belongs here.
+  content: url('/assets/bwg-lockup.png');
+}
+
+.hero__brand-rule {
+  width: clamp(2.4rem, 6vw, 3.6rem);
+  height: 2px;
+  background: var(--fl-bright);
 }
 
 // The way back, at the top of the page and again at the foot of it.
@@ -172,7 +209,8 @@
   flex-wrap: wrap;
   gap: 0.28em;
   align-items: center;
-  margin-block-start: var(--bwg-sp-4);
+  // The space above the brand line belongs to the line, not to the wordmark
+  // inside it: a margin here would push the name off the lockup's centre.
   font-family: var(--bwg-font-display);
   font-size: clamp(2.6rem, 7.2vw, 4.6rem);
   line-height: var(--bwg-lh-tight);
@@ -189,10 +227,21 @@
   font-weight: var(--bwg-fw-display);
 }
 
+// The supplied mark, unaltered: navy and mid-blue, drawn for the white slide it
+// is printed on. On this hero it would be one dark shape on another, so it gets
+// a ground of its own rather than being recoloured — the same answer the project
+// card gives it. Width-driven, with the height left to follow the file's ratio.
 .hero__fish {
-  width: clamp(2.6rem, 6vw, 3.9rem);
+  // Tracks the column rather than the viewport. The name is set at up to 4.6rem
+  // and the copy column is at its narrowest just as the layout splits in two, so
+  // a mark sized to the viewport was wider than the line had left and dropped to
+  // a line of its own there. This keeps it on the name's line at every width.
+  width: clamp(2.8rem, 4.6vw, 4.7rem);
   height: auto;
-  color: var(--fl-bright);
+  padding: 0.5rem 0.55rem;
+  background: var(--fl-paper);
+  border-radius: 10px;
+  box-shadow: 0 0.5rem 1.2rem rgb(2 12 24 / 45%);
 }
 
 .hero__year {
