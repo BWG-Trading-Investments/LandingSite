@@ -61,4 +61,18 @@ export class ProjectPage {
 
   /** Which of the two layouts renders. See the note above. */
   protected readonly isMadaaad = computed(() => this.project()?.slug === 'madaaad');
+
+  /**
+   * Whether the page draws its large mark frame beside the copy.
+   *
+   * Only for a project with artwork the frame can actually hold. One with none,
+   * and one whose mark is small enough that it is set beside the name instead,
+   * both used to get the frame anyway with the project's icon inside it — a
+   * square several times the glyph's size, which read as an empty placeholder.
+   * Those pages now run the copy the full width of the column.
+   */
+  protected readonly hasMarkFrame = computed(() => {
+    const item = this.project();
+    return !!item?.image && !item.smallMark;
+  });
 }

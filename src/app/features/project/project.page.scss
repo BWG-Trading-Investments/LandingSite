@@ -65,6 +65,15 @@
   }
 }
 
+// Without the mark there is no second column to hold open: the copy starts at
+// the gutter like the sections below it, rather than at an indent left behind by
+// something that is no longer there.
+.project__grid--solo {
+  @include up('lg') {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 // The mark sits on a plate rather than loose on the page: unlike a cut-out
 // portrait it has no silhouette of its own to stand on, so without a ground it
 // would read as a floating sticker.
@@ -117,10 +126,6 @@
   width: auto;
   height: auto;
   object-fit: contain;
-}
-
-.mark__icon {
-  color: var(--bwg-gold);
 }
 
 // =============================================================================

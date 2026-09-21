@@ -345,23 +345,22 @@
           Our Projects
         </a>
 
-        <div class="project__grid">
+        <div class="project__grid" [class.project__grid--solo]="!hasMarkFrame()">
           <!--
-            The mark, given the same standing the portrait has on a leader profile.
-            The slot is a fixed square in CSS, so the space is reserved before any
-            file arrives and nothing shifts as the image loads; without a file it
-            holds the project's own icon rather than a collapsed box.
+            The mark, given the same standing the portrait has on a leader
+            profile. The slot is a fixed square in CSS, so the space is reserved
+            before the file arrives and nothing shifts as it loads.
+
+            It is only drawn for a project that has artwork to put in it. It used
+            to fall back to the project's own icon, which left a large square
+            holding one small glyph and read as an empty box rather than as a
+            mark; those pages now start their copy at the gutter instead. See
+            hasMarkFrame in project.page.ts.
           -->
-          <figure class="mark" [class.mark--plate]="item.imageOnPlate && !item.smallMark">
-            <span class="mark__glow" aria-hidden="true"></span>
-            <span class="mark__plate">
-              <!--
-                A small mark is not shown here: this slot is several times the
-                size of a card's, and artwork that is sharp at 68px is not sharp
-                at 288. Those projects keep the icon here and set the mark beside
-                the name instead.
-              -->
-              @if (item.image && !item.smallMark) {
+          @if (hasMarkFrame()) {
+            <figure class="mark" [class.mark--plate]="item.imageOnPlate">
+              <span class="mark__glow" aria-hidden="true"></span>
+              <span class="mark__plate">
                 <img
                   class="mark__image"
                   [src]="item.image"
@@ -371,11 +370,9 @@
                   fetchpriority="high"
                   decoding="async"
                 />
-              } @else {
-                <bwg-icon class="mark__icon" [name]="item.icon" [size]="72" />
-              }
-            </span>
-          </figure>
+              </span>
+            </figure>
+          }
 
           <div class="project__copy">
             <p class="project__sector">{{ item.sector }}</p>
