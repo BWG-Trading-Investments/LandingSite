@@ -1,0 +1,503 @@
+@use 'abstracts' as *;
+
+// =============================================================================
+// MADAAAD
+//
+// The second of the two layouts project.page.ts renders — see the note there for
+// why MADAAAD renders inside that component rather than at a route of its own.
+// All three stylesheets load on every project page and none can reach another's
+// layout: the two branches share no class name, and everything here is under
+// `.md`. The two device mockups are in project.page.madaaad-devices.scss.
+//
+// The palette is the product's own, read off its mark in
+// src/assets/images/app_mark.png — the deep green of the letterform, the mint of
+// the pencil barrel beside it, and the pale washes the platform sets its cards
+// on. Every value is declared as `--md-*` on the article and nowhere else, so
+// none of it can reach the group's ink-and-gold tokens.
+//
+// Unlike FISH LINK, this page does follow the site theme. The platform's own
+// surfaces are white and the site's default theme is ivory, so a page that
+// stayed white in dark mode would be the one lit window on the site. Only the
+// surfaces and the text swap; the green stays green.
+// =============================================================================
+.md {
+  --md-brand: #02572f; // the letterform's own green
+  --md-brand-hover: #046b3b;
+  --md-accent: #008463;
+  --md-accent-strong: #02572f;
+  --md-mint: #4fd4bc; // the pencil barrel
+
+  --md-page: #f2faf6;
+  --md-card: #fff;
+  --md-wash: #e6f5ee; // the soft green behind icons, chips and search fields
+  --md-line: rgb(2 87 47 / 11%);
+  --md-ink: #0b2b1f;
+  --md-ink-soft: #4f6f60;
+  --md-heading: #02572f;
+
+  --md-shadow-sm: 0 2px 10px rgb(2 87 47 / 6%);
+  --md-shadow: 0 1rem 2.25rem rgb(2 87 47 / 10%);
+
+  // The band under the categories, and the storefront card inside the handset.
+  // Deep green in both themes: it is the brand's own surface, not a theme's.
+  --md-band: linear-gradient(152deg, #056c3c, #02401f 72%, #012c15);
+  --md-on-band: #f1fbf6;
+
+  // Madaaad rounds everything, which is the most visible thing its brand does
+  // differently from the group's deliberately restrained 4px.
+  --md-r: 14px;
+  --md-r-lg: 22px;
+
+  // The keyboard ring is gold everywhere else on the site. On this page that is
+  // the one colour that does not belong, so it is re-pinned rather than fought.
+  --bwg-focus: #008463;
+
+  display: block;
+  background: var(--md-page);
+  color: var(--md-ink);
+}
+
+:host-context([data-theme='dark']) .md {
+  --md-brand: #0a6b40;
+  --md-brand-hover: #0e8552;
+  --md-accent: #4fd4bc;
+  --md-accent-strong: #8de3ca;
+
+  --md-page: #060f0c;
+  --md-card: #0d1e17;
+  --md-wash: #12291f;
+  --md-line: rgb(141 227 202 / 14%);
+  --md-ink: #e9f6f0;
+  --md-ink-soft: #9bb9ab;
+  --md-heading: #8de3ca;
+
+  --md-shadow-sm: 0 2px 10px rgb(0 0 0 / 40%);
+  --md-shadow: 0 1rem 2.25rem rgb(0 0 0 / 45%);
+
+  --bwg-focus: #8de3ca;
+}
+
+// ── HERO ─────────────────────────────────────────────────────────────────────
+
+.md-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  // Clears the fixed navbar, which this page sits under like every other route.
+  padding-block: calc(var(--bwg-nav-h) + var(--bwg-sp-6)) var(--bwg-sp-9);
+}
+
+// The ground: a mint bloom behind the platform over a soft green wash falling to
+// the page colour, and the dot field the app sets behind its own illustrations.
+.md-hero__wash {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(58% 52% at 84% 6%, rgb(79 212 188 / 20%), transparent 70%),
+    linear-gradient(180deg, var(--md-wash), var(--md-page) 68%);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, var(--md-line) 1px, transparent 1.2px);
+    background-size: 26px 26px;
+    mask-image: linear-gradient(180deg, rgb(0 0 0 / 55%), transparent 58%);
+  }
+}
+
+.md-hero__shell,
+.md-close__wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bwg-sp-5);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.md-hero__lockup {
+  display: block;
+  width: auto;
+  height: 3rem;
+}
+
+// The supplied wordmark is white, which is invisible on this page's wash, so the
+// file in the markup is the ink variant; this swaps the original back in once
+// the page itself is dark. The same trade the leader profiles make.
+:host-context([data-theme='dark']) .md-hero__lockup {
+  content: url('/assets/bwg-lockup.png');
+}
+
+// The way back, at the head of the page and again at the foot of it.
+.md-back,
+.md-close__back {
+  color: var(--md-accent);
+  font-size: var(--bwg-fs-xs);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-eyebrow);
+  text-transform: uppercase;
+  transition: color var(--bwg-dur-base) var(--bwg-ease-out);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--md-accent-strong);
+  }
+}
+
+.md-back {
+  display: inline-flex;
+  gap: var(--bwg-sp-2);
+  align-items: center;
+}
+
+.md-hero__layout {
+  display: grid;
+  // minmax(0, 1fr), never a bare `auto` column: the dashboard beside the copy is
+  // a wide object with a min-content width of its own, and an auto column would
+  // size to it and push the whole page sideways on a phone.
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--bwg-sp-8);
+  align-items: center;
+  margin-block-start: var(--bwg-sp-8);
+
+  @include up('lg') {
+    grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
+    column-gap: clamp(2.5rem, 4vw, 4rem);
+  }
+}
+
+.md-kicker {
+  color: var(--md-accent);
+  font-size: var(--bwg-fs-sm);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+// The wordmark: two lines weighted against each other the way the slide sets
+// them, with the product's mark alongside at a size that never outgrows them.
+.md-word {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  align-items: center;
+  margin-block-start: var(--bwg-sp-4);
+  font-family: var(--bwg-font-display);
+  font-size: clamp(2.3rem, 6vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: var(--bwg-tracking-tight);
+}
+
+.md-word__lines {
+  display: grid;
+}
+
+.md-word__name {
+  color: var(--md-heading);
+  font-weight: var(--bwg-fw-display-strong);
+}
+
+.md-word__kind {
+  color: var(--md-accent);
+  font-weight: var(--bwg-fw-display);
+}
+
+.md-word__mark {
+  width: clamp(3rem, 6.5vw, 4.4rem);
+  height: auto;
+}
+
+.md-year {
+  display: inline-flex;
+  gap: var(--bwg-sp-2);
+  align-items: center;
+  margin-block-start: var(--bwg-sp-5);
+  padding: 0.4rem 0.95rem;
+  background: var(--md-card);
+  border: 1px solid var(--md-line);
+  border-radius: var(--bwg-r-pill);
+  box-shadow: var(--md-shadow-sm);
+  color: var(--md-heading);
+  font-size: var(--bwg-fs-base);
+  font-weight: var(--bwg-fw-ui-medium);
+
+  svg {
+    color: var(--md-accent);
+  }
+}
+
+.md-lede {
+  max-width: 40ch;
+  margin-block-start: var(--bwg-sp-5);
+  font-size: var(--bwg-fs-lg);
+  line-height: var(--bwg-lh-relaxed);
+}
+
+// ── WHO IT IS BUILT FOR ──────────────────────────────────────────────────────
+//
+// Four rows, each a card with the mark held in a disc and the label behind a
+// hairline — the slide's own arrangement, which reads as a list of sectors
+// rather than as four tiles of equal weight.
+
+.md-serves {
+  display: grid;
+  gap: var(--bwg-sp-3);
+  max-width: 30rem;
+  margin-block-start: var(--bwg-sp-6);
+  padding: 0;
+  list-style: none;
+}
+
+.md-serve {
+  display: flex;
+  gap: var(--bwg-sp-4);
+  align-items: center;
+  padding: var(--bwg-sp-3) var(--bwg-sp-4);
+  box-shadow: var(--md-shadow-sm);
+}
+
+.md-serve__label {
+  flex: 1;
+  padding-inline-start: var(--bwg-sp-4);
+  border-inline-start: 1px solid var(--md-line);
+  font-size: var(--bwg-fs-md);
+  font-weight: var(--bwg-fw-ui-medium);
+}
+
+// The line the description closes on. The emphasis is the slide's, carried by
+// the stylesheet rather than by a tag in the copy — see ProjectFocus.
+.md-focus {
+  max-width: 34rem;
+  margin-block-start: var(--bwg-sp-6);
+  padding-inline-start: var(--bwg-sp-4);
+  border-inline-start: 3px solid var(--md-accent);
+  color: var(--md-ink-soft);
+  font-size: var(--bwg-fs-md);
+  line-height: var(--bwg-lh-relaxed);
+
+  strong {
+    color: var(--md-heading);
+    font-weight: 600;
+  }
+}
+
+// ── CAPABILITIES AND CATEGORIES ──────────────────────────────────────────────
+//
+// The five capabilities the slide runs across its foot become one strip held
+// together by hairlines only once all five fit on a line; below that they are
+// cards, because a divider between wrapped rows draws a line through nothing.
+// The categories are the same cell in the band's own colours.
+
+.md-caps {
+  padding-block-end: var(--bwg-sp-9);
+}
+
+.md-caps__strip,
+.md-cats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--bwg-sp-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include up('sm') {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.md-caps__strip {
+  @include up('lg') {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
+    padding: var(--bwg-sp-3);
+    background: var(--md-card);
+    border: 1px solid var(--md-line);
+    border-radius: var(--md-r-lg);
+    box-shadow: var(--md-shadow);
+  }
+}
+
+.md-cap,
+.md-cat {
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: var(--bwg-sp-3);
+  padding: var(--bwg-sp-5) var(--bwg-sp-4);
+  border-radius: var(--md-r);
+  text-align: center;
+}
+
+.md-cap {
+  box-shadow: var(--md-shadow-sm);
+
+  @include up('lg') {
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+
+    & + & {
+      border-inline-start: 1px solid var(--md-line);
+    }
+  }
+}
+
+.md-cap__label,
+.md-cat__label {
+  font-size: var(--bwg-fs-base);
+  font-weight: var(--bwg-fw-ui-medium);
+  line-height: var(--bwg-lh-snug);
+}
+
+.md-cap__label {
+  max-width: 11ch;
+}
+
+// ── THE STOREFRONT BAND ──────────────────────────────────────────────────────
+//
+// What the platform carries, under its own heading, with the handset beside it
+// so the product is not only ever seen from a desk. The band is the brand's own
+// green in both themes, so everything on it is set against white rather than
+// against a token that swaps under it.
+
+.md-shop {
+  padding-block: var(--bwg-sp-9);
+  background: var(--md-band);
+  color: var(--md-on-band);
+
+  // Mint, because a green ring on green is no ring at all.
+  --bwg-focus: #8de3ca;
+}
+
+.md-shop__wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr); // as above: the handset must not set the width
+  gap: var(--bwg-sp-8);
+  align-items: center;
+
+  @include up('lg') {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    column-gap: clamp(2.5rem, 5vw, 5rem);
+  }
+}
+
+.md-shop__h {
+  color: #fff;
+  font-family: var(--bwg-font-display);
+  font-size: var(--bwg-fs-2xl);
+  font-weight: var(--bwg-fw-display-strong);
+  line-height: var(--bwg-lh-tight);
+  letter-spacing: var(--bwg-tracking-tight);
+}
+
+.md-cats {
+  margin-block-start: var(--bwg-sp-6);
+}
+
+.md-cat {
+  background: rgb(255 255 255 / 7%);
+  border: 1px solid rgb(255 255 255 / 14%);
+
+  &:hover {
+    background: rgb(255 255 255 / 13%);
+    border-color: rgb(141 227 202 / 40%);
+  }
+}
+
+// ── SHARED SHAPES ────────────────────────────────────────────────────────────
+//
+// The card and the disc, declared once for every part of the page that wants
+// them: an emulated-encapsulation stylesheet pays for each selector it writes,
+// and one disc written five times is what spends the budget.
+
+.md-serve,
+.md-cap {
+  background: var(--md-card);
+  border: 1px solid var(--md-line);
+  border-radius: var(--md-r);
+}
+
+.md-serve__icon,
+.md-cap__icon,
+.md-cat__icon {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 2.85rem;
+  height: 2.85rem;
+  border-radius: var(--bwg-r-circle);
+}
+
+.md-serve__icon,
+.md-cap__icon {
+  background: var(--md-wash);
+  color: var(--md-accent-strong);
+}
+
+.md-cat__icon {
+  background: rgb(255 255 255 / 10%);
+  color: var(--md-mint);
+}
+
+// Cards lift rather than light up: transform only, so it stays on the
+// compositor, and only where motion is welcome.
+@include motion-safe {
+  .md-serve,
+  .md-cat {
+    transition: transform var(--bwg-dur-base) var(--bwg-ease-out);
+  }
+
+  .md-serve:hover,
+  .md-cat:hover {
+    transform: translateY(-2px);
+  }
+}
+
+// ── THE TWO WAYS OUT ─────────────────────────────────────────────────────────
+
+.md-cta,
+.md-close__visit {
+  display: inline-flex;
+  gap: var(--bwg-sp-3);
+  align-items: center;
+  padding: 0.8rem 1.55rem;
+  background: var(--md-brand);
+  border-radius: var(--bwg-r-pill);
+  box-shadow: 0 0.75rem 1.5rem rgb(2 87 47 / 20%);
+  color: #f1fbf6;
+  font-size: var(--bwg-fs-base);
+  font-weight: var(--bwg-fw-ui-medium);
+  transition: background var(--bwg-dur-base) var(--bwg-ease-out);
+
+  &:hover,
+  &:focus-visible {
+    background: var(--md-brand-hover);
+  }
+
+  svg {
+    flex: 0 0 auto;
+    transition: transform var(--bwg-dur-base) var(--bwg-ease-out);
+  }
+
+  @include motion-safe {
+    &:hover svg,
+    &:focus-visible svg {
+      transform: translateX(3px);
+    }
+  }
+}
+
+.md-cta {
+  margin-block-start: var(--bwg-sp-6);
+}
+
+.md-close {
+  padding-block: var(--bwg-sp-9);
+}
+
+.md-close__wrap {
+  justify-content: center;
+}

@@ -1,0 +1,627 @@
+@use 'abstracts' as *;
+
+// =============================================================================
+// TOMEYYA
+//
+// The page's own world: deep red, warm cream and paper, with the dark only ever
+// used as a ground to set the red against. Declared as `--tm-*` on the article
+// and nowhere else, so the group's ink-and-gold tokens are left exactly as they
+// are and none of this can reach another page.
+//
+// The page follows the site theme, as MADAAAD's does and unlike FISH LINK's:
+// the surfaces here are paper and cream, and a page that stayed cream in dark
+// mode would be the one lit window on the site. What does not swap is the brand:
+// the hero and the closing stay deep red in both themes, the workflow band stays
+// dark, and the four device screens stay light, because a screen is emissive.
+//
+// Rules are grouped by what they do rather than by where they sit wherever
+// several parts want the same thing — a component stylesheet is measured per
+// file, and emulated encapsulation charges for every selector written.
+// =============================================================================
+.tm {
+  --tm-red: #8f2233; // the deep one, for ink on a light ground
+  --tm-red-deep: #5c1220;
+  --tm-red-soft: #b4505e;
+  --tm-paper: #fffdf9;
+  --tm-cream: #f8f1e6; // the warm band between the paper ones
+  --tm-sand: #ecdfc9; // deeper beige, for edges and fills
+  --tm-ink: #241b18; // warm near-black, never a cold grey
+  --tm-ink-soft: #6b5a52;
+  --tm-line: rgb(36 27 24 / 12%);
+
+  // The two grounds that do not follow the theme: the brand's red, and the dark
+  // the workflow is drawn on.
+  --tm-band: linear-gradient(148deg, #a32a3b 0%, #7c1c2c 46%, #4e0f1c 100%);
+  --tm-dark: linear-gradient(160deg, #241b18, #150f0d 70%);
+  --tm-on-band: #fdf4ea;
+  --tm-on-band-soft: rgb(253 244 234 / 76%);
+
+  --tm-shadow-sm: 0 2px 10px rgb(36 27 24 / 7%);
+  --tm-shadow: 0 1.1rem 2.4rem rgb(36 27 24 / 12%);
+
+  // Softer than the group's 4px, harder than a consumer app's pill: a product
+  // that runs a till should look engineered, not playful.
+  --tm-r: 12px;
+  --tm-r-lg: 20px;
+
+  // Gold is the site's focus ring and the one colour that has no business here.
+  --bwg-focus: #8f2233;
+
+  display: block;
+  background: var(--tm-paper);
+  color: var(--tm-ink);
+}
+
+:host-context([data-theme='dark']) .tm {
+  --tm-red: #d2707c; // ink on a dark ground has to lift off it
+  --tm-red-soft: #e6a3ab;
+  --tm-paper: #14100e;
+  --tm-cream: #1d1512;
+  --tm-sand: #2a1f1a;
+  --tm-ink: #f6ece0;
+  --tm-ink-soft: #b7a496;
+  --tm-line: rgb(246 236 224 / 14%);
+
+  --tm-shadow-sm: 0 2px 10px rgb(0 0 0 / 40%);
+  --tm-shadow: 0 1.1rem 2.4rem rgb(0 0 0 / 45%);
+
+  --bwg-focus: #e6a3ab;
+}
+
+.wrap {
+  @include wrap;
+}
+
+// ── TYPE AND SHARED SHAPES ───────────────────────────────────────────────────
+
+.kicker {
+  color: var(--tm-on-band-soft);
+  font-size: var(--bwg-fs-sm);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+.kicker--ink {
+  color: var(--tm-red);
+}
+
+.kicker--on-dark {
+  color: #e6a3ab;
+}
+
+.eco__h,
+.show__h,
+.caps__h,
+.chain__h {
+  max-width: 24ch;
+  margin-block-start: var(--bwg-sp-4);
+  font-family: var(--bwg-font-display);
+  font-size: var(--bwg-fs-2xl);
+  font-weight: var(--bwg-fw-display-strong);
+  line-height: var(--bwg-lh-tight);
+  letter-spacing: var(--bwg-tracking-tight);
+}
+
+.eco,
+.caps {
+  padding-block: var(--bwg-section-y);
+  background: var(--tm-paper);
+}
+
+.show,
+.glance {
+  padding-block: var(--bwg-section-y);
+  background: var(--tm-cream);
+}
+
+// Every list on the page is styled, so none of them keep their bullets.
+.hero__chips,
+.eco__set,
+.grp__items,
+.chain__track,
+.glance__grid {
+  padding: 0;
+  list-style: none;
+}
+
+.exp__icon,
+.cap__icon,
+.gl__icon {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--bwg-r-circle);
+  color: var(--tm-red);
+}
+
+.exp__icon,
+.gl__icon {
+  background: rgb(143 34 51 / 9%);
+}
+
+// Both ways out sit on the red: one at the head of the page, one at the foot.
+.back,
+.close__back {
+  display: inline-flex;
+  gap: var(--bwg-sp-2);
+  align-items: center;
+  color: var(--tm-on-band-soft);
+  font-size: var(--bwg-fs-xs);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-eyebrow);
+  text-transform: uppercase;
+  transition: color var(--bwg-dur-base) var(--bwg-ease-out);
+
+  &:hover,
+  &:focus-visible {
+    color: #fff;
+  }
+}
+
+// ── HERO ─────────────────────────────────────────────────────────────────────
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: calc(var(--bwg-nav-h) + var(--bwg-sp-6)) var(--bwg-sp-10);
+  color: var(--tm-on-band);
+}
+
+// Deep red, warmed from the top right, with the faintest linen weave over it so
+// the ground reads as a surface rather than as a flat fill.
+.hero__ground {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(52% 48% at 82% 6%, rgb(236 223 201 / 20%), transparent 68%), var(--tm-band);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.45;
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgb(255 255 255 / 5%) 0 1px,
+      transparent 1px 8px
+    );
+  }
+}
+
+.hero__shell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bwg-sp-4);
+  align-items: center;
+  justify-content: space-between;
+}
+
+// The supplied lockup is the ink variant, which would disappear into this red.
+// The original white artwork is what belongs here, in both themes.
+.hero__lockup {
+  display: block;
+  width: auto;
+  height: 3rem;
+  content: url('/assets/bwg-lockup.png');
+}
+
+.hero__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--bwg-sp-8);
+  align-items: center;
+  margin-block-start: var(--bwg-sp-8);
+
+  @include up('lg') {
+    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+    column-gap: clamp(2.5rem, 4vw, 4rem);
+  }
+}
+
+.hero__word {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bwg-sp-4);
+  align-items: center;
+  margin-block-start: var(--bwg-sp-4);
+}
+
+.hero__name {
+  color: #fff;
+  font-family: var(--bwg-font-display);
+  font-size: clamp(2.6rem, 7vw, 4.4rem);
+  font-weight: var(--bwg-fw-display-strong);
+  line-height: 0.98;
+  letter-spacing: var(--bwg-tracking-tight);
+}
+
+.hero__mark {
+  display: grid;
+  place-items: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  background: rgb(255 255 255 / 12%);
+  border: 1px solid rgb(255 255 255 / 22%);
+  border-radius: var(--tm-r);
+  color: #fdf4ea;
+}
+
+.hero__tag {
+  max-width: 26ch;
+  margin-block-start: var(--bwg-sp-5);
+  color: #fff;
+  font-family: var(--bwg-font-display);
+  font-size: var(--bwg-fs-xl);
+  font-weight: var(--bwg-fw-display);
+  line-height: var(--bwg-lh-snug);
+}
+
+.hero__lede {
+  max-width: 44ch;
+  margin-block-start: var(--bwg-sp-4);
+  color: var(--tm-on-band-soft);
+  font-size: var(--bwg-fs-md);
+  line-height: var(--bwg-lh-relaxed);
+}
+
+.hero__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bwg-sp-3);
+  margin-block-start: var(--bwg-sp-6);
+}
+
+.chip {
+  display: inline-flex;
+  gap: var(--bwg-sp-2);
+  align-items: center;
+  padding: 0.45rem 0.9rem;
+  background: rgb(255 255 255 / 10%);
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: var(--bwg-r-pill);
+  color: #fdf4ea;
+  font-size: var(--bwg-fs-xs);
+  font-weight: var(--bwg-fw-ui-medium);
+}
+
+// ── THE ECOSYSTEM ────────────────────────────────────────────────────────────
+
+.eco__intro {
+  max-width: 62ch;
+  margin-block-start: var(--bwg-sp-5);
+
+  p {
+    color: var(--tm-ink-soft);
+    font-size: var(--bwg-fs-md);
+    line-height: var(--bwg-lh-relaxed);
+
+    & + p {
+      margin-block-start: var(--bwg-sp-4);
+    }
+  }
+}
+
+.eco__set {
+  display: grid;
+  gap: var(--bwg-sp-6);
+  margin-block-start: var(--bwg-sp-8);
+
+  @include up('md') {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--bwg-sp-5);
+  }
+}
+
+// Numbered, and strung on a rule that runs between them: three products that
+// are one platform, which a row of three boxes would not have said.
+.exp {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: var(--bwg-sp-3);
+  padding: var(--bwg-sp-6) var(--bwg-sp-5) var(--bwg-sp-5);
+  background: var(--tm-paper);
+  border: 1px solid var(--tm-line);
+  border-radius: var(--tm-r-lg);
+  box-shadow: var(--tm-shadow-sm);
+}
+
+.exp__rail {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: var(--bwg-sp-5);
+  height: 3px;
+  background: linear-gradient(90deg, var(--tm-red), var(--tm-red-soft));
+  border-radius: var(--bwg-r-pill);
+}
+
+.exp__n {
+  color: var(--tm-red-soft);
+  font-family: var(--bwg-font-display);
+  font-size: var(--bwg-fs-sm);
+  font-weight: var(--bwg-fw-display-strong);
+  letter-spacing: var(--bwg-tracking-wide);
+}
+
+.exp__h,
+.gl__h {
+  font-family: var(--bwg-font-display);
+  font-size: var(--bwg-fs-lg);
+  font-weight: var(--bwg-fw-display);
+  line-height: var(--bwg-lh-snug);
+}
+
+.exp__b,
+.gl__b,
+.cap__b {
+  color: var(--tm-ink-soft);
+  font-size: var(--bwg-fs-base);
+  line-height: var(--bwg-lh-relaxed);
+}
+
+// ── PRODUCT SHOWCASE ─────────────────────────────────────────────────────────
+
+.show__set {
+  display: grid;
+  gap: var(--bwg-sp-7);
+  margin-block-start: var(--bwg-sp-8);
+
+  @include up('lg') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: end;
+  }
+}
+
+// The orders board is the widest of the three and takes the full row; the web
+// and the handset share the one below it.
+.stage--wide {
+  @include up('lg') {
+    grid-column: 1 / -1;
+  }
+}
+
+// ── CAPABILITIES ─────────────────────────────────────────────────────────────
+
+// Columns rather than a grid: the six groups hold one, two and four
+// capabilities, and a grid would either stretch the short panels to the height
+// of the tall one or leave the holes its rows cannot close. Columns let each
+// panel be exactly as tall as what is in it and pack the next one under it.
+.caps__set {
+  margin-block-start: var(--bwg-sp-8);
+  column-gap: var(--bwg-sp-5);
+
+  @include up('sm') {
+    columns: 2;
+  }
+
+  @include up('wide') {
+    columns: 3;
+  }
+}
+
+.grp {
+  display: grid;
+  align-content: start;
+  gap: var(--bwg-sp-4);
+  // A panel is never split across a column break, and the margin is what
+  // separates it from the one beneath: `gap` has no vertical half in a column
+  // layout.
+  break-inside: avoid;
+  margin-block-end: var(--bwg-sp-5);
+  padding: var(--bwg-sp-6) var(--bwg-sp-5);
+  background: var(--tm-cream);
+  border: 1px solid var(--tm-line);
+  border-radius: var(--tm-r-lg);
+}
+
+.grp__h {
+  color: var(--tm-red);
+  font-size: var(--bwg-fs-sm);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+.grp__items {
+  display: grid;
+  gap: var(--bwg-sp-5);
+}
+
+.cap {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--bwg-sp-1) var(--bwg-sp-4);
+  align-items: start;
+}
+
+.cap__icon {
+  grid-row: span 2;
+  width: 2.4rem;
+  height: 2.4rem;
+  background: var(--tm-paper);
+  border: 1px solid var(--tm-line);
+  border-radius: var(--tm-r);
+}
+
+.cap__h {
+  font-family: var(--bwg-font-display);
+  font-size: var(--bwg-fs-base);
+  font-weight: var(--bwg-fw-display);
+  line-height: var(--bwg-lh-snug);
+}
+
+// ── CONNECTED WORKFLOW ───────────────────────────────────────────────────────
+
+.chain {
+  padding-block: var(--bwg-section-y);
+  background: var(--tm-dark);
+  color: #f6ece0;
+
+  --bwg-focus: #e6a3ab;
+}
+
+.chain__track {
+  display: grid;
+  gap: var(--bwg-sp-6);
+  margin-block-start: var(--bwg-sp-8);
+
+  @include up('sm') {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @include up('wide') {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+.step {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: var(--bwg-sp-3);
+  text-align: center;
+}
+
+// The rule between the steps, drawn from each node to the next and stopped
+// before the last one so the chain ends rather than trailing off.
+.step__rail {
+  position: absolute;
+  inset-block-start: 1.6rem;
+  inset-inline: 50% -50%;
+  height: 1px;
+  background: linear-gradient(90deg, rgb(230 163 171 / 55%), transparent);
+
+  @include down('wide') {
+    display: none;
+  }
+}
+
+.step:last-child .step__rail {
+  display: none;
+}
+
+.step__node {
+  display: grid;
+  place-items: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  background: rgb(255 255 255 / 7%);
+  border: 1px solid rgb(230 163 171 / 34%);
+  border-radius: var(--bwg-r-circle);
+  color: #e6a3ab;
+}
+
+.step__n {
+  color: rgb(246 236 224 / 50%);
+  font-size: var(--bwg-fs-xs);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-wide);
+}
+
+.step__label {
+  font-family: var(--bwg-font-display);
+  font-size: var(--bwg-fs-base);
+  font-weight: var(--bwg-fw-display);
+  line-height: var(--bwg-lh-snug);
+}
+
+.chain__close {
+  max-width: 62ch;
+  margin-block-start: var(--bwg-sp-8);
+  padding-inline-start: var(--bwg-sp-5);
+  border-inline-start: 3px solid #b4505e;
+  color: rgb(246 236 224 / 78%);
+  font-size: var(--bwg-fs-md);
+  line-height: var(--bwg-lh-relaxed);
+}
+
+// ── AT A GLANCE ──────────────────────────────────────────────────────────────
+
+.glance__grid {
+  display: grid;
+  gap: var(--bwg-sp-5);
+  margin-block-start: var(--bwg-sp-7);
+
+  @include up('sm') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include up('lg') {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.gl {
+  display: grid;
+  align-content: start;
+  gap: var(--bwg-sp-3);
+  padding: var(--bwg-sp-6) var(--bwg-sp-5);
+  background: var(--tm-paper);
+  border: 1px solid var(--tm-line);
+  border-radius: var(--tm-r-lg);
+  box-shadow: var(--tm-shadow-sm);
+}
+
+// ── CLOSING ──────────────────────────────────────────────────────────────────
+
+.close {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: var(--bwg-sp-10);
+  color: var(--tm-on-band);
+  text-align: center;
+}
+
+.close__ground {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(50% 70% at 50% 0%, rgb(236 223 201 / 18%), transparent 70%), var(--tm-band);
+}
+
+.close__line {
+  display: grid;
+  gap: var(--bwg-sp-1);
+  color: #fff;
+  font-family: var(--bwg-font-display);
+  font-size: clamp(1.9rem, 5vw, 3.4rem);
+  font-weight: var(--bwg-fw-display-strong);
+  line-height: 1.02;
+  letter-spacing: var(--bwg-tracking-tight);
+  text-transform: uppercase;
+}
+
+.close__line-alt {
+  color: rgb(253 244 234 / 62%);
+}
+
+.close__back {
+  margin-block-start: var(--bwg-sp-7);
+}
+
+// ── NOT FOUND ────────────────────────────────────────────────────────────────
+
+.tm--missing {
+  padding-block: calc(var(--bwg-nav-h) + var(--bwg-sp-9)) var(--bwg-sp-10);
+
+  h1 {
+    font-family: var(--bwg-font-display);
+    font-size: var(--bwg-fs-2xl);
+    font-weight: var(--bwg-fw-display-strong);
+  }
+
+  a {
+    display: inline-block;
+    margin-block-start: var(--bwg-sp-5);
+    color: var(--tm-red);
+    font-size: var(--bwg-fs-xs);
+    letter-spacing: var(--bwg-tracking-eyebrow);
+    text-transform: uppercase;
+  }
+}

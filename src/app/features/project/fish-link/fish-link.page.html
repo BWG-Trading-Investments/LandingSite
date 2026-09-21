@@ -1,0 +1,352 @@
+@if (project(); as item) {
+  <article class="fl">
+    <!--
+      HERO — the product's own water. Everything above the fold is Fish Link's,
+      apart from the BWG lockup and the way back, which are what keep this a page
+      inside the group's site rather than a different site entirely.
+    -->
+    <header class="hero">
+      <!-- Ocean depth, sonar rings, drifting shoal. Decorative, so it is hidden. -->
+      <div class="hero__water" aria-hidden="true">
+        <span class="hero__beam"></span>
+        <svg class="hero__net" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <radialGradient id="fl-sonar" cx="50%" cy="50%" r="50%">
+              <stop offset="60%" stop-color="transparent" />
+              <stop offset="100%" stop-color="rgba(122, 200, 240, 0.30)" />
+            </radialGradient>
+          </defs>
+          <g class="hero__grid">
+            <path d="M0 150h1200M0 300h1200M0 450h1200" />
+            <path d="M200 0v600M400 0v600M600 0v600M800 0v600M1000 0v600" />
+          </g>
+          <g class="hero__rings">
+            <circle cx="880" cy="300" r="120" fill="url(#fl-sonar)" />
+            <circle cx="880" cy="300" r="120" />
+            <circle cx="880" cy="300" r="210" />
+            <circle cx="880" cy="300" r="300" />
+          </g>
+          <g class="hero__shoal">
+            <path d="M120 470c14-9 26-9 40 0-14 9-26 9-40 0zm40 0 12-7v14z" />
+            <path d="M210 520c14-9 26-9 40 0-14 9-26 9-40 0zm40 0 12-7v14z" />
+            <path d="M70 560c14-9 26-9 40 0-14 9-26 9-40 0zm40 0 12-7v14z" />
+          </g>
+        </svg>
+      </div>
+
+      <div class="wrap hero__wrap">
+        <div class="hero__shell">
+          <img
+            class="hero__lockup"
+            [src]="lockup.src"
+            [attr.alt]="lockup.alt"
+            [width]="lockup.width"
+            [height]="lockup.height"
+            fetchpriority="high"
+            decoding="async"
+          />
+
+          <a class="hero__back" routerLink="/" fragment="projects">
+            <svg
+              viewBox="0 0 20 20"
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M16 10H5M9 6l-4 4 4 4" />
+            </svg>
+            Our Projects
+          </a>
+        </div>
+
+        <div class="hero__layout">
+          <div class="hero__copy">
+            <p class="kicker kicker--on-dark">{{ item.sector }}</p>
+
+            <!--
+              The wordmark. The supplied logo is a wide lockup drawn for a white
+              slide — it is what the project card carries, and it cannot be laid
+              on this page's water without a plate under it. So here the name is
+              set rather than placed: display face, the two words weighted against
+              each other the way the deck sets them, and the fish drawn beside it
+              as a mark of its own.
+            -->
+            <h1 class="hero__word">
+              <span class="hero__word-fish">Fish</span>
+              <span class="hero__word-link">Link</span>
+              <svg
+                class="hero__fish"
+                viewBox="0 0 64 32"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M4 16c10-11 26-11 36 0-10 11-26 11-36 0z" />
+                <path d="M40 16l14-8v16z" />
+                <circle cx="15" cy="13.5" r="1.3" fill="currentColor" stroke="none" />
+              </svg>
+            </h1>
+
+            <p class="hero__year">
+              <svg
+                viewBox="0 0 20 20"
+                width="15"
+                height="15"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="3" y="4.5" width="14" height="12.5" rx="1.6" />
+                <path d="M3 8.5h14M7 3v3M13 3v3" />
+              </svg>
+              {{ item.tagline }}
+            </p>
+
+            <p class="hero__lede">{{ item.intro }}</p>
+
+            @if (item.url) {
+              <a class="hero__cta" [href]="item.url" target="_blank" rel="noopener noreferrer">
+                <span>Visit {{ item.urlLabel }}</span>
+                <svg
+                  viewBox="0 0 20 20"
+                  width="15"
+                  height="15"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M4 10h11M11 6l4 4-4 4" />
+                </svg>
+                <span class="visually-hidden">Opens in a new tab</span>
+              </a>
+            }
+          </div>
+
+          <!-- The platform itself. Both devices are decorative and say so. -->
+          <div class="hero__rig">
+            <bwg-fl-dashboard />
+            <bwg-fl-phone class="hero__phone" />
+          </div>
+        </div>
+      </div>
+
+      <span class="hero__tide" aria-hidden="true"></span>
+    </header>
+
+    <!--
+      CAPABILITIES — read as the route a consignment actually takes, because that
+      is what the five of them are: logged, held, moved, checked, counted. A row
+      of five identical tiles would have said nothing about the order they
+      happen in.
+    -->
+    <section class="chain" aria-labelledby="fl-capabilities">
+      <div class="wrap">
+        <p class="kicker">Key Capabilities Include</p>
+        <h2 class="chain__h" id="fl-capabilities">One consignment, tracked end to end</h2>
+
+        <ol class="chain__track" role="list">
+          @for (cap of item.highlights; track cap.label) {
+            <li class="stage">
+              <span class="stage__rail" aria-hidden="true"></span>
+              <span class="stage__node">
+                <svg
+                  viewBox="0 0 20 20"
+                  width="22"
+                  height="22"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.35"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  @switch (cap.icon) {
+                    @case ('tag') {
+                      <path d="M10 2.6 3.4 6v8L10 17.4 16.6 14V6z" />
+                      <path d="M3.4 6 10 9.4 16.6 6" />
+                      <path d="M10 9.4v8" />
+                    }
+                    @case ('layers') {
+                      <path d="M2.6 8.6 10 3.6l7.4 5" />
+                      <path d="M4.2 8.6v8h11.6v-8" />
+                      <path d="M7.6 16.6v-4.2h4.8v4.2" />
+                    }
+                    @case ('compass') {
+                      <path d="M2.4 5.8h8.4v7.6H2.4z" />
+                      <path d="M10.8 8.6h3.1l3.7 2.9v1.9h-6.8z" />
+                      <circle cx="6" cy="15.4" r="1.7" />
+                      <circle cx="14.2" cy="15.4" r="1.7" />
+                    }
+                    @case ('shield') {
+                      <path
+                        d="M10 2.6 4.2 5v4.9c0 3.2 2.4 5.7 5.8 7.5 3.4-1.8 5.8-4.3 5.8-7.5V5z"
+                      />
+                      <path d="M7.5 9.8 9.4 11.7 13 8.1" />
+                    }
+                    @default {
+                      <path d="M3.4 16.6h13.2" />
+                      <path d="M6.4 16.6v-4.4" />
+                      <path d="M10 16.6V8.2" />
+                      <path d="M13.6 16.6v-6.2" />
+                    }
+                  }
+                </svg>
+              </span>
+              <span class="stage__n">0{{ $index + 1 }}</span>
+              <span class="stage__label">{{ cap.label }}</span>
+            </li>
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- SHOWCASE — the handset half, so the platform is not only seen from a desk. -->
+    <section class="show" aria-labelledby="fl-platform">
+      <div class="wrap show__wrap">
+        <div class="show__copy">
+          <p class="kicker kicker--on-dark">The Platform</p>
+          <h2 class="show__h" id="fl-platform">Every shipment, live in the hand</h2>
+
+          <ul class="mods" role="list">
+            <li>Dashboard</li>
+            <li>Products</li>
+            <li>Warehouse</li>
+            <li>Transportation</li>
+            <li>Quality Monitoring</li>
+            <li>Analytics</li>
+            <li>Reports</li>
+            <li>Settings</li>
+          </ul>
+        </div>
+
+        <div class="show__device">
+          <bwg-fl-phone [large]="true" />
+        </div>
+      </div>
+    </section>
+
+    <!--
+      STRATEGIC VALUE — the deck's closing strip, kept as a strip. Four columns
+      held apart by hairlines rather than four boxes, so it reads as one
+      statement in four parts.
+    -->
+    <section class="value" aria-labelledby="fl-value">
+      <div class="wrap">
+        <p class="kicker">Strategic Value</p>
+        <h2 class="visually-hidden" id="fl-value">Strategic value</h2>
+
+        <ul class="value__strip" role="list">
+          @for (block of item.blocks; track block.heading) {
+            <li class="val">
+              <span class="val__icon">
+                <svg
+                  viewBox="0 0 20 20"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  @switch (block.icon) {
+                    @case ('globe') {
+                      <circle cx="10" cy="10" r="7.2" />
+                      <path d="M2.8 10h14.4" />
+                      <path
+                        d="M10 2.8c2.1 2.3 3.1 4.7 3.1 7.2s-1 4.9-3.1 7.2c-2.1-2.3-3.1-4.7-3.1-7.2s1-4.9 3.1-7.2z"
+                      />
+                    }
+                    @case ('gear') {
+                      <circle cx="10" cy="10" r="7.2" />
+                      <circle cx="10" cy="10" r="3.4" />
+                      <circle cx="10" cy="10" r="0.9" fill="currentColor" stroke="none" />
+                    }
+                    @case ('shield') {
+                      <path
+                        d="M10 2.6 4.2 5v4.9c0 3.2 2.4 5.7 5.8 7.5 3.4-1.8 5.8-4.3 5.8-7.5V5z"
+                      />
+                      <path d="M7.5 9.8 9.4 11.7 13 8.1" />
+                    }
+                    @default {
+                      <path d="M3.2 16.8h13.6" />
+                      <path d="M6.2 16.8v-3.6" />
+                      <path d="M9.8 16.8v-6.4" />
+                      <path d="M13.4 16.8v-4.6" />
+                      <path d="M5 8.6 9.2 4.8l2.8 2.6 3.6-3.4" />
+                    }
+                  }
+                </svg>
+              </span>
+              <h3 class="val__h">{{ block.heading }}</h3>
+              <p class="val__b">{{ block.body }}</p>
+            </li>
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!--
+      CLOSING — back up to the surface, and back out to the group. The two named
+      parties are the ones the description already names; nothing new is claimed.
+    -->
+    <section class="close">
+      <span class="close__deep" aria-hidden="true"></span>
+
+      <div class="wrap">
+        <svg
+          class="close__fish"
+          viewBox="0 0 64 32"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M4 16c10-11 26-11 36 0-10 11-26 11-36 0z" />
+          <path d="M40 16l14-8v16z" />
+          <circle cx="15" cy="13.5" r="1.3" fill="currentColor" stroke="none" />
+        </svg>
+
+        <p class="close__line">
+          <span>Smart Supply Chain Initiative</span>
+          <i aria-hidden="true"></i>
+          <span>National Fisheries Company</span>
+        </p>
+
+        <div class="close__actions">
+          @if (item.url) {
+            <a class="close__visit" [href]="item.url" target="_blank" rel="noopener noreferrer">
+              Visit {{ item.urlLabel }}
+              <span class="visually-hidden">Opens in a new tab</span>
+            </a>
+          }
+          <a class="close__back" routerLink="/" fragment="projects">All BWG projects</a>
+        </div>
+      </div>
+    </section>
+  </article>
+} @else {
+  <article class="fl fl--missing">
+    <div class="wrap">
+      <h1>Project not found</h1>
+      <a routerLink="/" fragment="projects">Our Projects</a>
+    </div>
+  </article>
+}

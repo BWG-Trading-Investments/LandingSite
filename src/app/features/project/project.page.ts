@@ -18,6 +18,17 @@ import { Icon } from '../../shared/ui/icon/icon';
  * Every section is conditional on its own data. A project with no overview, no
  * blocks or no highlights simply does not render those parts.
  *
+ * MADAAAD is the one exception to "one layout serves all of them". Its slide is
+ * a product world of its own — a green storefront platform, with its sectors,
+ * its supply categories and its own interface — and the ink-and-gold layout
+ * above cannot carry that without becoming a different page for everyone. So the
+ * template branches on the slug and MADAAAD renders its own composition inside
+ * this same component and the same `projects/:slug` route: no second route, no
+ * second page, and every other project's markup left exactly as it was.
+ *
+ * Its copy comes from the same record in data/projects.data.ts that the homepage
+ * card reads, so the page and the card can never drift.
+ *
  * The outbound link to a live site lives here and only here. It used to sit on
  * the homepage card, which meant the two projects with a site were the only ones
  * you could click and they took you straight off the site; now every card leads
@@ -29,7 +40,14 @@ import { Icon } from '../../shared/ui/icon/icon';
   imports: [RouterLink, Icon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './project.page.html',
-  styleUrl: './project.page.scss',
+  // Three stylesheets, one component: the shared layout, MADAAAD's page, and its
+  // two device mockups. They share no selector, and a component style budget is
+  // measured per file — one file carrying all of it fails the build.
+  styleUrls: [
+    './project.page.scss',
+    './project.page.madaaad.scss',
+    './project.page.madaaad-devices.scss',
+  ],
 })
 export class ProjectPage {
   /** Bound from the `:slug` route param by withComponentInputBinding(). */
@@ -40,4 +58,7 @@ export class ProjectPage {
 
   /** The resolved project, or null when the slug is not one of ours. */
   protected readonly project = computed<Project | null>(() => findProject(this.slug()) ?? null);
+
+  /** Which of the two layouts renders. See the note above. */
+  protected readonly isMadaaad = computed(() => this.project()?.slug === 'madaaad');
 }

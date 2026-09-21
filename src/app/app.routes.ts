@@ -42,7 +42,34 @@ export const routes: Routes = [
     loadComponent: () => import('./features/leader/leader.page').then((m) => m.LeaderPage),
   },
   {
-    // One component for every project; the slug picks the record out of
+    // FISH LINK has a page of its own, and it is matched before the generic
+    // project route below because the router takes the first match — the URL,
+    // the card that links to it and the prerendered path are all unchanged.
+    //
+    // This is the pattern for any project whose own material justifies its own
+    // world: add a route here, leave everything else alone. A project without
+    // one keeps falling through to the shared layout, which is still what five
+    // of the six use.
+    path: 'projects/fish-link',
+    title: `Fish Link — ${SITE}`,
+    loadComponent: () =>
+      import('./features/project/fish-link/fish-link.page').then((m) => m.FishLinkPage),
+  },
+  {
+    // TOMEYYA is the second project with a world of its own, and for the same
+    // reason: it is three products — a till, a web menu and a handset app — and
+    // the shared layout has one slot for one mark and no way to show them.
+    //
+    // The URL is the one the card already links to, `/projects/tomeyya`, and it
+    // is prerendered from the same PROJECTS list as every other project page.
+    // This entry only decides which component answers it.
+    path: 'projects/tomeyya',
+    title: `Tomeyya — ${SITE}`,
+    loadComponent: () =>
+      import('./features/project/tomeyya/tomeyya.page').then((m) => m.TomeyyaPage),
+  },
+  {
+    // One component for every other project; the slug picks the record out of
     // data/projects.data.ts, which is also what enumerates these for the
     // prerenderer in app.routes.server.ts. A project's outbound link to its live
     // site lives on this page rather than on the homepage card.
@@ -61,7 +88,6 @@ export const routes: Routes = [
   {
     path: '**',
     title: `Page not found — ${SITE}`,
-    loadComponent: () =>
-      import('./features/not-found/not-found.page').then((m) => m.NotFoundPage),
+    loadComponent: () => import('./features/not-found/not-found.page').then((m) => m.NotFoundPage),
   },
 ];

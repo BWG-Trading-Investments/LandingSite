@@ -1,88 +1,40 @@
 @if (project(); as item) {
-  <article class="project">
-    <div class="wrap">
-      <!--
-        The lockup, top left, on every detail page, exactly as on a leader
-        profile. Height is set in CSS and the width left to follow, so it can
-        never be stretched.
-      -->
-      <img
-        class="project__lockup"
-        [src]="lockup.src"
-        [attr.alt]="lockup.alt"
-        [width]="lockup.width"
-        [height]="lockup.height"
-        fetchpriority="high"
-        decoding="async"
-      />
+  @if (isMadaaad()) {
+    <!--
+      MADAAAD — the slide as a page.
+      =========================================================================
+      This is the same component and the same `projects/:slug` route as every
+      other project; only the composition below is its own. See the note in
+      project.page.ts.
 
-      <a class="project__back" routerLink="/" fragment="projects">
-        <svg
-          viewBox="0 0 20 20"
-          width="14"
-          height="14"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.4"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M16 10H5M9 6l-4 4 4 4" />
-        </svg>
-        Our Projects
-      </a>
+      Every word of copy comes from the record in data/projects.data.ts, which is
+      the slide's wording verbatim. The storefront inside the two devices is the
+      platform's own interface as the slide shows it — including its figures —
+      and both devices are decorative, so a screen reader is never read a shop
+      window it cannot act on.
+    -->
+    <article class="md">
+      <header class="md-hero">
+        <span class="md-hero__wash" aria-hidden="true"></span>
 
-      <div class="project__grid">
-        <!--
-          The mark, given the same standing the portrait has on a leader profile.
-          The slot is a fixed square in CSS, so the space is reserved before any
-          file arrives and nothing shifts as the image loads; without a file it
-          holds the project's own icon rather than a collapsed box.
-        -->
-        <figure class="mark" [class.mark--plate]="item.imageOnPlate">
-          <span class="mark__glow" aria-hidden="true"></span>
-          <span class="mark__plate">
-            @if (item.image) {
-              <img
-                class="mark__image"
-                [src]="item.image"
-                [attr.alt]="item.name + ' logo'"
-                [width]="item.imageWidth"
-                [height]="item.imageHeight"
-                fetchpriority="high"
-                decoding="async"
-              />
-            } @else {
-              <bwg-icon class="mark__icon" [name]="item.icon" [size]="72" />
-            }
-          </span>
-        </figure>
+        <div class="wrap">
+          <!-- The BWG shell: still a page inside the group's site. -->
+          <div class="md-hero__shell">
+            <img
+              class="md-hero__lockup"
+              [src]="lockup.src"
+              [attr.alt]="lockup.alt"
+              [width]="lockup.width"
+              [height]="lockup.height"
+              fetchpriority="high"
+              decoding="async"
+            />
 
-        <div class="project__copy">
-          <p class="project__sector">{{ item.sector }}</p>
-
-          <h1 class="project__name">{{ item.name }}</h1>
-
-          <p class="project__tagline">{{ item.tagline }}</p>
-
-          <span class="project__rule" aria-hidden="true"></span>
-
-          <p class="project__intro">{{ item.intro }}</p>
-
-          <p class="project__summary">{{ item.cardSummary }}</p>
-
-          <!--
-            The only way out to a live product, and it exists only for a project
-            that has one. Nothing here offers a click that leads nowhere.
-          -->
-          @if (item.url) {
-            <a class="visit" [href]="item.url" target="_blank" rel="noopener noreferrer">
-              <span class="visit__label">Visit {{ item.urlLabel }}</span>
+            <a class="md-back" routerLink="/" fragment="projects">
               <svg
                 viewBox="0 0 20 20"
-                width="16"
-                height="16"
+                width="14"
+                height="14"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="1.4"
@@ -90,58 +42,433 @@
                 stroke-linejoin="round"
                 aria-hidden="true"
               >
-                <path d="M7.4 12.6 15 5" />
-                <path d="M9.6 4.8H15.6v6" />
-                <path
-                  d="M14.4 11.6v3.2a1.6 1.6 0 0 1-1.6 1.6H5.2a1.6 1.6 0 0 1-1.6-1.6V7.2a1.6 1.6 0 0 1 1.6-1.6h3.2"
-                />
+                <path d="M16 10H5M9 6l-4 4 4 4" />
               </svg>
+              Our Projects
+            </a>
+          </div>
+
+          <div class="md-hero__layout">
+            <div class="md-hero__copy">
+              <p class="md-kicker">{{ item.sector }}</p>
+
+              <!--
+                The wordmark, set the way the slide sets it: two lines, title
+                case, the product's own mark beside them. `name` is the card's
+                uppercase form and cannot be case-folded back, so the two words
+                are typeset here and the mark carries no alt text of its own —
+                the heading already says what it is.
+              -->
+              <h1 class="md-word">
+                <span class="md-word__lines">
+                  <span class="md-word__name">Madaaad</span>
+                  <span class="md-word__kind">Platform</span>
+                </span>
+
+                @if (item.image) {
+                  <img
+                    class="md-word__mark"
+                    [src]="item.image"
+                    alt=""
+                    [width]="item.imageWidth"
+                    [height]="item.imageHeight"
+                    fetchpriority="high"
+                    decoding="async"
+                  />
+                }
+              </h1>
+
+              <p class="md-year">
+                <svg
+                  viewBox="0 0 20 20"
+                  width="15"
+                  height="15"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="3" y="4.5" width="14" height="12.5" rx="1.6" />
+                  <path d="M3 8.5h14M7 3v3M13 3v3" />
+                </svg>
+                {{ item.tagline }}
+              </p>
+
+              <p class="md-lede">{{ item.intro }}</p>
+
+              <!-- The four sectors the description runs on into. -->
+              @if (item.serves; as serves) {
+                <ul class="md-serves" role="list">
+                  @for (sector of serves; track sector.label) {
+                    <li class="md-serve">
+                      <span class="md-serve__icon">
+                        <bwg-icon [name]="sector.icon" [size]="24" />
+                      </span>
+                      <span class="md-serve__label">{{ sector.label }}</span>
+                    </li>
+                  }
+                </ul>
+              }
+
+              @if (item.focus; as focus) {
+                <p class="md-focus">
+                  {{ focus.lead }} <strong>{{ focus.emphasis }}</strong>
+                </p>
+              }
+
+              @if (item.url) {
+                <a class="md-cta" [href]="item.url" target="_blank" rel="noopener noreferrer">
+                  <span>Visit {{ item.urlLabel }}</span>
+                  <svg
+                    viewBox="0 0 20 20"
+                    width="15"
+                    height="15"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M4 10h11M11 6l4 4-4 4" />
+                  </svg>
+                  <span class="visually-hidden">Opens in a new tab</span>
+                </a>
+              }
+            </div>
+
+            <!-- The platform, seen from a desk. Decorative. -->
+            <div class="md-rig" aria-hidden="true">
+              <div class="md-screen">
+                <div class="md-screen__bar">
+                  <span class="md-brand">
+                    <span class="md-brand__name">Madaaad</span>
+                    <span class="md-brand__kind">Platform</span>
+                  </span>
+                  <span class="md-screen__search">Search for products, brands, categories…</span>
+                  <span class="md-screen__go">Search</span>
+                </div>
+
+                <div class="md-screen__body">
+                  <div class="md-screen__nav">
+                    <span class="md-screen__nav-i is-on">Dashboard</span>
+                    <span class="md-screen__nav-i">Categories</span>
+                    <span class="md-screen__nav-i">Products</span>
+                    <span class="md-screen__nav-i">Orders</span>
+                    <span class="md-screen__nav-i">Quotations</span>
+                    <span class="md-screen__nav-i">Suppliers</span>
+                    <span class="md-screen__nav-i">Deliveries</span>
+                    <span class="md-screen__nav-i">Reports</span>
+                    <span class="md-screen__nav-i">Settings</span>
+                  </div>
+
+                  <div class="md-screen__main">
+                    <div class="md-promo">
+                      <span class="md-promo__h">
+                        <span>Everything you need.</span>
+                        <span class="md-promo__h-alt">Delivered with care.</span>
+                      </span>
+                      <span class="md-promo__b">
+                        Your one-stop platform for office equipment, stationery, and operational
+                        supplies.
+                      </span>
+                      <span class="md-promo__cta">Start Shopping</span>
+                    </div>
+
+                    <div class="md-stats">
+                      <span class="md-stat">
+                        <span class="md-stat__k">Total Orders</span>
+                        <span class="md-stat__v">1,248<span class="md-stat__d">+15.7%</span></span>
+                        <span class="md-stat__n">vs last month</span>
+                      </span>
+                      <span class="md-stat">
+                        <span class="md-stat__k">Active Suppliers</span>
+                        <span class="md-stat__v">320<span class="md-stat__d">+8.2%</span></span>
+                        <span class="md-stat__n">vs last month</span>
+                      </span>
+                      <span class="md-stat">
+                        <span class="md-stat__k">Products</span>
+                        <span class="md-stat__v">12,540<span class="md-stat__d">+11.3%</span></span>
+                        <span class="md-stat__n">vs last month</span>
+                      </span>
+                      <span class="md-stat">
+                        <span class="md-stat__k">On-time Delivery</span>
+                        <span class="md-stat__v">98.6%<span class="md-stat__d">+2.4%</span></span>
+                        <span class="md-stat__n">vs last month</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!--
+        The five the slide runs across the foot of it, kept as one strip held
+        together by hairlines rather than five separate boxes.
+      -->
+      @if (item.highlights.length) {
+        <section class="md-caps" aria-label="Platform capabilities">
+          <div class="wrap">
+            <ul class="md-caps__strip" role="list">
+              @for (capability of item.highlights; track capability.label) {
+                <li class="md-cap">
+                  <span class="md-cap__icon">
+                    <bwg-icon [name]="capability.icon" [size]="26" />
+                  </span>
+                  <span class="md-cap__label">{{ capability.label }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+        </section>
+      }
+
+      <!--
+        What the platform carries, under the storefront's own heading, with the
+        handset beside it so the product is not only seen from a desk.
+      -->
+      @if (item.categories; as categories) {
+        <section class="md-shop" aria-labelledby="md-shop-h">
+          <div class="wrap md-shop__wrap">
+            <div class="md-shop__copy">
+              <h2 class="md-shop__h" id="md-shop-h">Browse Categories</h2>
+
+              <ul class="md-cats" role="list">
+                @for (category of categories; track category.label) {
+                  <li class="md-cat">
+                    <span class="md-cat__icon">
+                      <bwg-icon [name]="category.icon" [size]="24" />
+                    </span>
+                    <span class="md-cat__label">{{ category.label }}</span>
+                  </li>
+                }
+              </ul>
+            </div>
+
+            <!-- The platform, in the hand. Decorative. -->
+            <div class="md-shop__device" aria-hidden="true">
+              <div class="md-phone">
+                <span class="md-phone__notch"></span>
+
+                <div class="md-phone__screen">
+                  <span class="md-phone__bar">
+                    <span class="md-brand">
+                      <span class="md-brand__name">Madaaad</span>
+                      <span class="md-brand__kind">Platform</span>
+                    </span>
+                    <span class="md-phone__cart">
+                      <bwg-icon name="cart" [size]="16" />
+                    </span>
+                  </span>
+
+                  <span class="md-phone__promo">
+                    <span class="md-phone__promo-h">Smart Procurement for Every Institution</span>
+                    <span class="md-phone__promo-b">
+                      Schools, Universities, Corporations — We Supply What You Need.
+                    </span>
+                    <span class="md-phone__promo-cta">Shop Now</span>
+                  </span>
+
+                  <span class="md-phone__label">Best Sellers</span>
+
+                  <span class="md-phone__item">
+                    <span class="md-phone__thumb">
+                      <bwg-icon name="layers" [size]="20" />
+                    </span>
+                    <span class="md-phone__item-copy">
+                      <span class="md-phone__item-h">Premium Copy Paper A4</span>
+                      <span class="md-phone__item-b">500 Sheets</span>
+                      <span class="md-phone__item-p">EGP 120.00</span>
+                    </span>
+                    <span class="md-phone__add">
+                      <bwg-icon name="cart" [size]="14" />
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      }
+
+      <!-- Back out to the group, and out to the live platform. -->
+      <section class="md-close">
+        <div class="wrap md-close__wrap">
+          @if (item.url) {
+            <a class="md-close__visit" [href]="item.url" target="_blank" rel="noopener noreferrer">
+              Visit {{ item.urlLabel }}
               <span class="visually-hidden">Opens in a new tab</span>
             </a>
           }
 
-          @if (item.overview.length) {
-            <div class="overview">
-              @for (paragraph of item.overview; track $index) {
-                <p class="overview__para">{{ paragraph }}</p>
-              }
-            </div>
-          }
+          <a class="md-close__back" routerLink="/" fragment="projects">All BWG projects</a>
+        </div>
+      </section>
+    </article>
+  } @else {
+    <article class="project">
+      <div class="wrap">
+        <!--
+          The lockup, top left, on every detail page, exactly as on a leader
+          profile. Height is set in CSS and the width left to follow, so it can
+          never be stretched.
+        -->
+        <img
+          class="project__lockup"
+          [src]="lockup.src"
+          [attr.alt]="lockup.alt"
+          [width]="lockup.width"
+          [height]="lockup.height"
+          fetchpriority="high"
+          decoding="async"
+        />
 
-          @if (item.blocks.length) {
-            <ul class="blocks" role="list">
-              @for (block of item.blocks; track block.heading) {
-                <li class="blocks__item">
-                  <span class="blocks__icon">
-                    <bwg-icon [name]="block.icon" [size]="20" />
+        <a class="project__back" routerLink="/" fragment="projects">
+          <svg
+            viewBox="0 0 20 20"
+            width="14"
+            height="14"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M16 10H5M9 6l-4 4 4 4" />
+          </svg>
+          Our Projects
+        </a>
+
+        <div class="project__grid">
+          <!--
+            The mark, given the same standing the portrait has on a leader profile.
+            The slot is a fixed square in CSS, so the space is reserved before any
+            file arrives and nothing shifts as the image loads; without a file it
+            holds the project's own icon rather than a collapsed box.
+          -->
+          <figure class="mark" [class.mark--plate]="item.imageOnPlate && !item.imageCardOnly">
+            <span class="mark__glow" aria-hidden="true"></span>
+            <span class="mark__plate">
+              <!--
+                Artwork the record marks as the card's own is not shown here: the
+                slot below is several times the size of a card's, and a mark that
+                is sharp at 68px is not sharp at 288. Those pages keep the icon.
+              -->
+              @if (item.image && !item.imageCardOnly) {
+                <img
+                  class="mark__image"
+                  [src]="item.image"
+                  [attr.alt]="item.name + ' logo'"
+                  [width]="item.imageWidth"
+                  [height]="item.imageHeight"
+                  fetchpriority="high"
+                  decoding="async"
+                />
+              } @else {
+                <bwg-icon class="mark__icon" [name]="item.icon" [size]="72" />
+              }
+            </span>
+          </figure>
+
+          <div class="project__copy">
+            <p class="project__sector">{{ item.sector }}</p>
+
+            <h1 class="project__name">{{ item.name }}</h1>
+
+            <p class="project__tagline">{{ item.tagline }}</p>
+
+            <span class="project__rule" aria-hidden="true"></span>
+
+            <p class="project__intro">{{ item.intro }}</p>
+
+            <!--
+              Skipped where a project's supplied material is a single sentence and
+              the card line is that same sentence, so the page states it once
+              rather than printing it twice under its own heading.
+            -->
+            @if (item.cardSummary !== item.intro) {
+              <p class="project__summary">{{ item.cardSummary }}</p>
+            }
+
+            <!--
+              The only way out to a live product, and it exists only for a project
+              that has one. Nothing here offers a click that leads nowhere.
+            -->
+            @if (item.url) {
+              <a class="visit" [href]="item.url" target="_blank" rel="noopener noreferrer">
+                <span class="visit__label">Visit {{ item.urlLabel }}</span>
+                <svg
+                  viewBox="0 0 20 20"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M7.4 12.6 15 5" />
+                  <path d="M9.6 4.8H15.6v6" />
+                  <path
+                    d="M14.4 11.6v3.2a1.6 1.6 0 0 1-1.6 1.6H5.2a1.6 1.6 0 0 1-1.6-1.6V7.2a1.6 1.6 0 0 1 1.6-1.6h3.2"
+                  />
+                </svg>
+                <span class="visually-hidden">Opens in a new tab</span>
+              </a>
+            }
+
+            @if (item.overview.length) {
+              <div class="overview">
+                @for (paragraph of item.overview; track $index) {
+                  <p class="overview__para">{{ paragraph }}</p>
+                }
+              </div>
+            }
+
+            @if (item.blocks.length) {
+              <ul class="blocks" role="list">
+                @for (block of item.blocks; track block.heading) {
+                  <li class="blocks__item">
+                    <span class="blocks__icon">
+                      <bwg-icon [name]="block.icon" [size]="20" />
+                    </span>
+                    <h2 class="blocks__heading">{{ block.heading }}</h2>
+                    <p class="blocks__body">{{ block.body }}</p>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+        </div>
+
+        @if (item.highlights.length) {
+          <section class="glance" aria-labelledby="project-glance">
+            <h2 class="glance__heading" id="project-glance">
+              {{ item.glanceHeading ?? 'At a Glance' }}
+            </h2>
+
+            <ul class="glance__grid" role="list">
+              @for (highlight of item.highlights; track highlight.label) {
+                <li class="glance__item">
+                  <span class="glance__icon">
+                    <bwg-icon [name]="highlight.icon" [size]="18" />
                   </span>
-                  <h2 class="blocks__heading">{{ block.heading }}</h2>
-                  <p class="blocks__body">{{ block.body }}</p>
+                  <span class="glance__label">{{ highlight.label }}</span>
                 </li>
               }
             </ul>
-          }
-        </div>
+          </section>
+        }
       </div>
-
-      @if (item.highlights.length) {
-        <section class="glance" aria-labelledby="project-glance">
-          <h2 class="glance__heading" id="project-glance">At a Glance</h2>
-
-          <ul class="glance__grid" role="list">
-            @for (highlight of item.highlights; track highlight.label) {
-              <li class="glance__item">
-                <span class="glance__icon">
-                  <bwg-icon [name]="highlight.icon" [size]="18" />
-                </span>
-                <span class="glance__label">{{ highlight.label }}</span>
-              </li>
-            }
-          </ul>
-        </section>
-      }
-    </div>
-  </article>
+    </article>
+  }
 } @else {
   <article class="project project--missing">
     <div class="wrap">

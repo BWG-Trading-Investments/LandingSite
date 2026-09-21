@@ -1,0 +1,629 @@
+@use 'abstracts' as *;
+
+// FISH LINK's palette.
+//
+// Declared on :host and nowhere else, so it cannot reach another page: these are
+// `--fl-*`, not `--bwg-*`, and the group's ink-and-gold tokens are left exactly
+// as they are. The two device components inherit these through the DOM rather
+// than redeclaring them.
+//
+// The page is deliberately the same in both site themes — it is a product world
+// you step into, and a marine platform that inverted to cream would stop being
+// one.
+:host {
+  display: block;
+
+  --fl-abyss: #041526;
+  --fl-deep: #072a47;
+  --fl-navy: #0b3a5e;
+  --fl-blue: #1d6fa5;
+  --fl-bright: #37a0d8;
+  --fl-sky: #7ac8f0;
+  --fl-mist: #cfe6f5;
+  --fl-ice: #eef6fc;
+  --fl-paper: #fff;
+
+  --fl-ink: #0a2538;
+  --fl-ink-soft: #4a6b84;
+
+  --fl-hair: rgb(255 255 255 / 14%);
+  --fl-hair-dark: rgb(10 37 56 / 12%);
+
+  background: var(--fl-paper);
+}
+
+.wrap {
+  @include wrap;
+}
+
+.kicker {
+  color: var(--fl-blue);
+  font-family: var(--bwg-font-ui);
+  font-size: var(--bwg-fs-sm);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+.kicker--on-dark {
+  color: var(--fl-sky);
+}
+
+// ── HERO ──────────────────────────────────────────────────────────────
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: calc(var(--bwg-nav-h) + var(--bwg-sp-7)) var(--bwg-sp-10);
+  background:
+    radial-gradient(120% 90% at 78% 18%, rgb(29 111 165 / 55%), transparent 62%),
+    linear-gradient(168deg, var(--fl-deep) 0%, var(--fl-abyss) 62%, #03101d 100%);
+  color: #eaf4fb;
+}
+
+.hero__water {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+// A shaft of light through water, from the top right.
+.hero__beam {
+  position: absolute;
+  inset: -20% -10% auto 40%;
+  height: 130%;
+  background: linear-gradient(101deg, transparent 42%, rgb(122 200 240 / 11%) 50%, transparent 58%);
+  transform: rotate(-4deg);
+}
+
+.hero__net {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.55;
+}
+
+.hero__grid path {
+  fill: none;
+  stroke: rgb(122 200 240 / 9%);
+  stroke-width: 1;
+}
+
+.hero__rings circle {
+  fill: none;
+  stroke: rgb(122 200 240 / 15%);
+  stroke-width: 1;
+}
+
+.hero__shoal path {
+  fill: rgb(122 200 240 / 14%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__shoal {
+    animation: fl-drift 26s linear infinite;
+  }
+}
+
+@keyframes fl-drift {
+  from {
+    transform: translate3d(-40px, 0, 0);
+  }
+
+  to {
+    transform: translate3d(1240px, -28px, 0);
+  }
+}
+
+.hero__shell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bwg-sp-4);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero__lockup {
+  display: block;
+  width: auto;
+  height: 3rem;
+}
+
+// The way back, at the top of the page and again at the foot of it.
+.hero__back,
+.close__back {
+  color: var(--fl-mist);
+  letter-spacing: var(--bwg-tracking-wide);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color var(--bwg-dur-base) var(--bwg-ease-out);
+
+  &:hover,
+  &:focus-visible {
+    color: #fff;
+  }
+}
+
+.hero__back {
+  display: inline-flex;
+  gap: var(--bwg-sp-2);
+  align-items: center;
+  font-size: var(--bwg-fs-xs);
+}
+
+.hero__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--bwg-sp-8);
+  align-items: center;
+  margin-block-start: var(--bwg-sp-8);
+
+  @include up('lg') {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    gap: var(--bwg-sp-7);
+  }
+}
+
+.hero__word {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28em;
+  align-items: center;
+  margin-block-start: var(--bwg-sp-4);
+  font-family: var(--bwg-font-display);
+  font-size: clamp(2.6rem, 7.2vw, 4.6rem);
+  line-height: var(--bwg-lh-tight);
+  letter-spacing: var(--bwg-tracking-tight);
+}
+
+.hero__word-fish {
+  color: #fff;
+  font-weight: var(--bwg-fw-display-strong);
+}
+
+.hero__word-link {
+  color: var(--fl-sky);
+  font-weight: var(--bwg-fw-display);
+}
+
+.hero__fish {
+  width: clamp(2.6rem, 6vw, 3.9rem);
+  height: auto;
+  color: var(--fl-bright);
+}
+
+.hero__year {
+  display: inline-flex;
+  gap: var(--bwg-sp-2);
+  align-items: center;
+  margin-block-start: var(--bwg-sp-4);
+  padding: 0.35em 0.85em;
+  border: 1px solid var(--fl-hair);
+  border-radius: var(--bwg-r-pill);
+  color: var(--fl-mist);
+  font-size: var(--bwg-fs-sm);
+  letter-spacing: var(--bwg-tracking-wide);
+}
+
+.hero__lede {
+  max-width: 46ch;
+  margin-block-start: var(--bwg-sp-5);
+  color: #d5e8f5;
+  font-size: var(--bwg-fs-lg);
+  line-height: var(--bwg-lh-relaxed);
+}
+
+// The two gradient buttons: the hero's and the closing band's.
+.hero__cta,
+.close__visit {
+  border-radius: var(--bwg-r-pill);
+  background: linear-gradient(100deg, var(--fl-blue), var(--fl-bright));
+  color: #fff;
+  font-size: var(--bwg-fs-sm);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-wide);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.hero__cta {
+  display: inline-flex;
+  gap: var(--bwg-sp-3);
+  align-items: center;
+  margin-block-start: var(--bwg-sp-6);
+  padding: 0.85em 1.5em;
+  box-shadow: 0 0.6rem 1.6rem rgb(4 21 38 / 45%);
+  transition:
+    transform var(--bwg-dur-base) var(--bwg-ease-out),
+    box-shadow var(--bwg-dur-base) var(--bwg-ease-out);
+
+  svg {
+    transition: transform var(--bwg-dur-base) var(--bwg-ease-out);
+  }
+
+  &:hover,
+  &:focus-visible {
+    box-shadow: 0 0.9rem 2rem rgb(4 21 38 / 58%);
+
+    svg {
+      transform: translateX(3px);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover,
+    &:focus-visible {
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// The tide line that hands the page over to the light sections below.
+.hero__tide {
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 4.5rem;
+  background: linear-gradient(to bottom, transparent, rgb(238 246 252 / 85%) 78%, var(--fl-ice));
+  pointer-events: none;
+}
+
+// The rig positions the two device components; their internals are their own.
+.hero__rig {
+  position: relative;
+  padding-block-end: var(--bwg-sp-8);
+
+  @include up('lg') {
+    padding-block-end: 0;
+  }
+}
+
+.hero__phone {
+  position: absolute;
+  inset-block-end: -1.5rem;
+  inset-inline-end: -0.5rem;
+  width: 27%;
+  max-width: 11rem;
+}
+
+// ── CAPABILITIES ──────────────────────────────────────────────────────
+
+.chain {
+  padding-block: var(--bwg-sp-10);
+  background: linear-gradient(180deg, var(--fl-ice), var(--fl-paper) 62%);
+}
+
+// The two section headings, which differ only in measure and colour.
+.chain__h,
+.show__h {
+  margin-block-start: var(--bwg-sp-3);
+  font-family: var(--bwg-font-display);
+  font-size: var(--bwg-fs-2xl);
+  font-weight: var(--bwg-fw-display-strong);
+  line-height: var(--bwg-lh-tight);
+  letter-spacing: var(--bwg-tracking-tight);
+}
+
+.chain__h {
+  max-width: 22ch;
+  color: var(--fl-ink);
+}
+
+.chain__track {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin-block-start: var(--bwg-sp-8);
+  padding: 0;
+  list-style: none;
+
+  @include up('md') {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+// Each stage draws the rail arriving at it, so the line is continuous across the
+// row and needs no separate track element. The first draws none: nothing comes
+// before the catch.
+.stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    'node n'
+    'node label';
+  gap: 0 var(--bwg-sp-4);
+  align-items: center;
+  padding-block: var(--bwg-sp-4);
+
+  @include up('md') {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'node'
+      'n'
+      'label';
+    gap: var(--bwg-sp-3) 0;
+    justify-items: center;
+    padding-block: 0;
+    text-align: center;
+  }
+}
+
+.stage__rail {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 1.4rem;
+  width: 1px;
+  height: var(--bwg-sp-4);
+  background: linear-gradient(to bottom, transparent, var(--fl-mist));
+
+  @include up('md') {
+    inset: 1.7rem auto auto 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--fl-mist));
+    transform: translateX(-50%);
+  }
+}
+
+.stage:first-child .stage__rail {
+  display: none;
+}
+
+.stage__node {
+  grid-area: node;
+  display: grid;
+  place-items: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  border: 1px solid var(--fl-mist);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--fl-blue);
+  box-shadow: 0 0.35rem 0.9rem rgb(10 37 56 / 7%);
+
+  @include up('md') {
+    width: 3.4rem;
+    height: 3.4rem;
+  }
+}
+
+.stage__n {
+  grid-area: n;
+  color: var(--fl-bright);
+  font-family: var(--bwg-font-display);
+  font-size: var(--bwg-fs-xs);
+  font-weight: var(--bwg-fw-display-strong);
+  letter-spacing: var(--bwg-tracking-eyebrow);
+}
+
+.stage__label {
+  grid-area: label;
+  max-width: 16ch;
+  color: var(--fl-ink);
+  font-size: var(--bwg-fs-md);
+  font-weight: var(--bwg-fw-ui-medium);
+  line-height: var(--bwg-lh-snug);
+}
+
+// ── SHOWCASE ──────────────────────────────────────────────────────────
+
+.show {
+  padding-block: var(--bwg-sp-10);
+  background:
+    radial-gradient(90% 70% at 18% 20%, rgb(29 111 165 / 42%), transparent 60%),
+    linear-gradient(160deg, var(--fl-navy), var(--fl-abyss));
+  color: #e6f2fa;
+}
+
+.show__wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--bwg-sp-8);
+  align-items: center;
+
+  @include up('md') {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  }
+}
+
+.show__h {
+  max-width: 18ch;
+  color: #fff;
+}
+
+// The platform's own modules, set as a run of pills rather than a nav.
+.mods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bwg-sp-2);
+  margin-block-start: var(--bwg-sp-6);
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: 0.5em 1em;
+    border: 1px solid var(--fl-hair);
+    border-radius: var(--bwg-r-pill);
+    color: var(--fl-mist);
+    font-size: var(--bwg-fs-sm);
+    letter-spacing: var(--bwg-tracking-wide);
+  }
+}
+
+.show__device {
+  display: grid;
+  place-items: center;
+}
+
+// ── STRATEGIC VALUE ───────────────────────────────────────────────────
+
+.value {
+  padding-block: var(--bwg-sp-10);
+  background: var(--fl-paper);
+}
+
+// The deck's closing strip, kept as a strip: four columns held apart by
+// hairlines, not four cards. The rule is drawn on the item, so it never appears
+// before the first one in a row.
+.value__strip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin-block-start: var(--bwg-sp-7);
+  padding: 0;
+  border: 1px solid var(--fl-hair-dark);
+  border-radius: var(--bwg-r-lg);
+  background: linear-gradient(180deg, #fff, var(--fl-ice));
+  list-style: none;
+  overflow: hidden;
+
+  @include up('sm') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include up('lg') {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.val {
+  position: relative;
+  padding: var(--bwg-sp-6) var(--bwg-sp-5);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: var(--bwg-sp-5) auto var(--bwg-sp-5) 0;
+    width: 1px;
+    background: var(--fl-hair-dark);
+  }
+
+  &:first-child::before {
+    display: none;
+  }
+
+  // Below the four-up the divider lies along the top edge instead.
+  @include down('lg') {
+    &::before {
+      inset: 0 var(--bwg-sp-5) auto;
+      width: auto;
+      height: 1px;
+    }
+
+    &:nth-child(-n + 2)::before {
+      display: none;
+    }
+  }
+
+  @include down('sm') {
+    &:nth-child(2)::before {
+      display: block;
+    }
+  }
+}
+
+.val__icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: rgb(55 160 216 / 12%);
+  color: var(--fl-blue);
+}
+
+.val__h {
+  margin-block-start: var(--bwg-sp-4);
+  color: var(--fl-ink);
+  font-family: var(--bwg-font-display);
+  font-size: var(--bwg-fs-lg);
+  font-weight: var(--bwg-fw-display-strong);
+  line-height: var(--bwg-lh-snug);
+}
+
+.val__b {
+  margin-block-start: var(--bwg-sp-2);
+  color: var(--fl-ink-soft);
+  font-size: var(--bwg-fs-md);
+  line-height: var(--bwg-lh-relaxed);
+}
+
+// ── CLOSING ───────────────────────────────────────────────────────────
+
+.close {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: var(--bwg-sp-10);
+  background: linear-gradient(180deg, var(--fl-navy), var(--fl-abyss));
+  color: #e6f2fa;
+  text-align: center;
+}
+
+.close__deep {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(60% 100% at 50% 0%, rgb(55 160 216 / 26%), transparent 70%),
+    repeating-linear-gradient(90deg, transparent 0 58px, rgb(122 200 240 / 6%) 58px 59px);
+}
+
+.close__fish {
+  width: clamp(3.2rem, 9vw, 5rem);
+  height: auto;
+  color: var(--fl-sky);
+}
+
+.close__line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bwg-sp-3);
+  align-items: center;
+  justify-content: center;
+  margin-block-start: var(--bwg-sp-5);
+  color: #fff;
+  font-family: var(--bwg-font-display);
+  font-size: var(--bwg-fs-xl);
+  font-weight: var(--bwg-fw-display);
+
+  i {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--fl-bright);
+  }
+}
+
+.close__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bwg-sp-4);
+  align-items: center;
+  justify-content: center;
+  margin-block-start: var(--bwg-sp-7);
+}
+
+.close__visit {
+  padding: 0.85em 1.6em;
+}
+
+.close__back {
+  padding-block-end: 2px;
+  border-block-end: 1px solid rgb(122 200 240 / 35%);
+  font-size: var(--bwg-fs-sm);
+}
+
+// ── FALLBACK ──────────────────────────────────────────────────────────
+
+// Defensive only: the route exists because the slug does, so this branch is not
+// reachable while the record is. Left unstyled beyond the essentials.
+.fl--missing {
+  padding-block: calc(var(--bwg-nav-h) + var(--bwg-sp-10)) var(--bwg-sp-10);
+  color: var(--fl-ink);
+
+  a {
+    color: var(--fl-blue);
+  }
+}

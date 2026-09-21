@@ -1,0 +1,354 @@
+@use 'abstracts' as *;
+
+:host {
+  position: relative;
+  display: block;
+  filter: drop-shadow(0 1.4rem 2.6rem rgb(2 12 24 / 55%));
+}
+
+.screen {
+  padding: 0.5%;
+  border: 1px solid rgb(122 200 240 / 22%);
+  border-radius: 10px 10px 3px 3px;
+  background: #0d2338;
+  overflow: hidden;
+}
+
+.foot {
+  display: block;
+  width: 116%;
+  height: 0.75rem;
+  margin-inline-start: -8%;
+  border-radius: 0 0 8px 8px;
+  background: linear-gradient(to bottom, #123048, #07192b);
+}
+
+// One font-size drives the whole view: every measurement below is in `em`, so
+// the dashboard scales as one object instead of needing a breakpoint per part.
+.ui {
+  border-radius: 7px;
+  background: linear-gradient(180deg, #f7fbfe, #eaf3fa);
+  color: var(--fl-ink);
+  font-family: var(--bwg-font-ui);
+  font-size: clamp(3.5px, 0.66vw, 6.2px);
+  line-height: 1.35;
+  overflow: hidden;
+
+  @include up('lg') {
+    font-size: clamp(4.2px, 0.44vw, 6.6px);
+  }
+}
+
+.bar {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5em 2em;
+  border-block-end: 1px solid rgb(10 37 56 / 8%);
+  background: #fff;
+}
+
+.brand {
+  color: var(--fl-navy);
+  font-family: var(--bwg-font-display);
+  font-size: 2.1em;
+  font-weight: var(--bwg-fw-display-strong);
+  letter-spacing: -0.02em;
+}
+
+.chip {
+  padding: 0.5em 1.1em;
+  border-radius: var(--bwg-r-pill);
+  background: var(--fl-ice);
+  color: var(--fl-ink-soft);
+  font-size: 1.35em;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 13em minmax(0, 1fr);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  padding: 1.6em 1em;
+  border-inline-end: 1px solid rgb(10 37 56 / 8%);
+  background: #fff;
+}
+
+.nav__i {
+  padding: 0.75em 1em;
+  border-radius: 3px;
+  color: var(--fl-ink-soft);
+  font-size: 1.4em;
+  white-space: nowrap;
+
+  &.is-on {
+    background: var(--fl-blue);
+    color: #fff;
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  padding: 1.8em;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.2em;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  padding: 1.2em 1.3em;
+  border: 1px solid rgb(10 37 56 / 8%);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.tile__k {
+  color: var(--fl-ink-soft);
+  font-size: 1.3em;
+}
+
+.tile__v {
+  color: var(--fl-navy);
+  font-size: 2.5em;
+  font-weight: var(--bwg-fw-display-strong);
+  letter-spacing: -0.02em;
+}
+
+.tile__d {
+  color: #17916a;
+  font-size: 1.2em;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 1.2em;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9em;
+  padding: 1.3em;
+  border: 1px solid rgb(10 37 56 / 8%);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.panel__h {
+  color: var(--fl-navy);
+  font-size: 1.45em;
+  font-weight: var(--bwg-fw-ui-medium);
+}
+
+.panel--map {
+  position: relative;
+}
+
+.route {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 3px;
+  background: linear-gradient(160deg, #f2f8fd, #e2eff9);
+}
+
+.route__land {
+  fill: none;
+  stroke: rgb(29 111 165 / 16%);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.route__path {
+  fill: none;
+  stroke: var(--fl-blue);
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+  stroke-linecap: round;
+}
+
+.route__dot {
+  fill: #fff;
+  stroke: var(--fl-blue);
+  stroke-width: 2.2;
+}
+
+.route__dot--live {
+  fill: var(--fl-bright);
+  stroke: #fff;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .route__path {
+    animation: fl-flow 2.4s linear infinite;
+  }
+
+  .route__dot--live {
+    animation: fl-ping var(--bwg-dur-pulse) var(--bwg-ease-out) infinite;
+    transform-origin: 182px 47px;
+  }
+}
+
+@keyframes fl-flow {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+
+@keyframes fl-ping {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.72;
+    transform: scale(1.28);
+  }
+}
+
+.panel__tag {
+  position: absolute;
+  inset-block-end: 1.9em;
+  inset-inline-end: 1.9em;
+  padding: 0.45em 0.9em;
+  border-radius: var(--bwg-r-pill);
+  background: var(--fl-navy);
+  color: #fff;
+  font-size: 1.15em;
+}
+
+.ship {
+  display: flex;
+  gap: 0.8em;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 0.7em;
+  border-block-start: 1px solid rgb(10 37 56 / 7%);
+  font-size: 1.3em;
+
+  &:first-of-type {
+    border-block-start: 0;
+  }
+}
+
+.ship__id {
+  font-weight: var(--bwg-fw-ui-medium);
+}
+
+.ship__s {
+  padding: 0.3em 0.75em;
+  border-radius: var(--bwg-r-pill);
+  background: rgb(55 160 216 / 16%);
+  color: var(--fl-blue);
+  font-size: 0.92em;
+}
+
+.ship__s--done {
+  background: rgb(23 145 106 / 14%);
+  color: #17916a;
+}
+
+.wh {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.6em;
+}
+
+.wh__c {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1em;
+  align-items: center;
+  padding: 0.7em 0.3em;
+  border-radius: 3px;
+  background: var(--fl-ice);
+  color: var(--fl-ink-soft);
+  font-size: 1.15em;
+  text-align: center;
+
+  b {
+    color: var(--fl-navy);
+    font-size: 1.85em;
+    font-weight: var(--bwg-fw-display-strong);
+  }
+}
+
+.cat {
+  display: flex;
+  gap: 1.2em;
+  align-items: center;
+}
+
+.cat__ring {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 7.2em;
+  height: 7.2em;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--fl-blue) 0 60%,
+    var(--fl-bright) 60% 85%,
+    var(--fl-mist) 85% 100%
+  );
+
+  b {
+    display: grid;
+    place-items: center;
+    width: 4.8em;
+    height: 4.8em;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--fl-navy);
+    font-size: 1.25em;
+    font-weight: var(--bwg-fw-display-strong);
+  }
+}
+
+.cat__keys {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45em;
+  color: var(--fl-ink-soft);
+  font-size: 1.2em;
+
+  span {
+    display: flex;
+    gap: 0.6em;
+    align-items: center;
+  }
+
+  .k {
+    width: 0.85em;
+    height: 0.85em;
+    border-radius: 2px;
+  }
+
+  .k--a {
+    background: var(--fl-blue);
+  }
+
+  .k--b {
+    background: var(--fl-bright);
+  }
+
+  .k--c {
+    background: var(--fl-mist);
+  }
+}

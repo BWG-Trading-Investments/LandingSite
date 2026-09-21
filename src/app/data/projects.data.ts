@@ -24,12 +24,37 @@ export interface ProjectBlock {
   readonly icon: IconName;
   readonly heading: string;
   readonly body: string;
+  /**
+   * The group the supplied material files this capability under, where it
+   * groups them at all. Blocks carrying one are rendered together under that
+   * name, in the order they appear here; a project whose material is a flat list
+   * simply leaves it off, which is what all but TOMEYYA do.
+   */
+  readonly group?: string;
 }
 
 /** One item in a project's At a Glance grid. */
 export interface ProjectHighlight {
   readonly icon: IconName;
   readonly label: string;
+  /**
+   * The line under the label, where the material gives each item one. Most
+   * projects list their glance as bare labels and set nothing here.
+   */
+  readonly body?: string;
+}
+
+/**
+ * The line a slide closes its description on, set in two weights: the lead-in,
+ * and the part the slide emphasises.
+ *
+ * Two fields rather than one string with markup in it, so the copy stays plain
+ * text — the emphasis is then a decision the stylesheet makes, and the wording
+ * is still editable without touching a tag.
+ */
+export interface ProjectFocus {
+  readonly lead: string;
+  readonly emphasis: string;
 }
 
 export interface Project {
@@ -68,19 +93,30 @@ export interface Project {
   readonly imageWidth: number | null;
   readonly imageHeight: number | null;
   /**
-   * True when the file has no transparency.
+   * True when the mark needs a light ground under it.
    *
-   * A mark that arrives on an opaque white ground cannot sit straight on a dark
-   * card — it would read as a white slab — so it gets a light plate behind it
-   * instead, and the artwork itself is never recoloured or overlaid.
+   * Two kinds of file do. One arrives on an opaque white background and cannot
+   * sit straight on a dark card — it would read as a white slab. The other is
+   * transparent but drawn in an ink dark enough to disappear against the dark
+   * plate. Either way the answer is the same: a light plate behind it, with the
+   * artwork itself never recoloured or overlaid.
    *
-   * No project needs this today: every supplied mark has a real alpha channel.
-   * MA3DANHA used to be the exception and is not any more, so it now sits on the
-   * same ink plate as the rest. Set this only for a file that genuinely has no
-   * transparency, and check the file before you do — a stale `true` here is a
-   * white box on a dark card.
+   * FISH LINK and MOSHAREK are both the second kind — marks cut out of the
+   * lockups printed on their slides, in ink drawn for that white page. Set this
+   * only for a file that genuinely needs it, and look at the file before you do:
+   * a stale `true` on artwork that did not need it is a pale box on a dark card.
    */
   readonly imageOnPlate: boolean;
+  /**
+   * True when the artwork above belongs to the card and not to the detail page,
+   * which then keeps the project's icon in its own much larger frame.
+   *
+   * MOSHAREK is the one: its mark is the symbol cut out of the lockup printed on
+   * its slide, and at 128px across it carries a 68px square and nothing wider.
+   * A project whose artwork suits both places simply leaves this unset, which is
+   * what every other one does.
+   */
+  readonly imageCardOnly?: boolean;
   /** One line on the card, and the standfirst on the page. Client copy, verbatim. */
   readonly cardSummary: string;
   /** The opening line of the detail page, set larger than the body. */
@@ -88,6 +124,45 @@ export interface Project {
   readonly overview: readonly string[];
   readonly blocks: readonly ProjectBlock[];
   readonly highlights: readonly ProjectHighlight[];
+  /**
+   * The heading above the highlights grid, when the supplied material names
+   * that grid something of its own.
+   *
+   * Absent on every project that simply lists what it is at a glance, which is
+   * why the page falls back to "At a Glance" rather than requiring each record
+   * to repeat it. MA3DENHA sets it because its own material calls that row its
+   * ecosystem partners, and calling them a glance would lose what they are.
+   */
+  readonly glanceHeading?: string;
+  /**
+   * Who the platform is built for, where the supplied material names them as a
+   * list of its own rather than inside the prose.
+   *
+   * MADAAAD's slide does exactly that: its description ends on a colon and the
+   * four sectors are set out beneath it, so they are kept as a list here rather
+   * than folded back into a sentence they were never written as.
+   */
+  readonly serves?: readonly ProjectHighlight[];
+  /** The line that closes the description, where the material sets one. */
+  readonly focus?: ProjectFocus;
+  /**
+   * The supply categories the platform itself carries, where the material shows
+   * them. Only MADAAAD's does.
+   */
+  readonly categories?: readonly ProjectHighlight[];
+  /**
+   * The separate products a project is, where it is more than one thing.
+   *
+   * TOMEYYA is three: a point-of-sale system, a web menu and a mobile app. They
+   * are not capabilities of one product, so they are not `blocks`; a project
+   * that ships as a single thing leaves this unset.
+   */
+  readonly experiences?: readonly ProjectBlock[];
+  /**
+   * The chain the material draws through the ecosystem, in order, where it
+   * draws one. Rendered as a flow rather than as a grid.
+   */
+  readonly flow?: readonly ProjectHighlight[];
 }
 
 /** Shown in the homepage section, in this order. */
@@ -95,7 +170,12 @@ export const PROJECTS: readonly Project[] = [
   {
     slug: 'business-hub',
     name: 'BUSINESS HUB',
-    tagline: 'Connecting companies with global trade opportunities',
+    // Rewritten from the project's own slide, which is about a trade
+    // intelligence platform rather than the sourcing-and-representation service
+    // the earlier copy described. Nothing structural changed with it: the same
+    // fields fill the same slots, and the four capability blocks and five glance
+    // items keep the icons they already had.
+    tagline: 'Your Gateway to Global Trade Intelligence',
     sector: 'Business & Trade',
     icon: 'globe',
     url: null,
@@ -104,51 +184,56 @@ export const PROJECTS: readonly Project[] = [
     imageWidth: null,
     imageHeight: null,
     imageOnPlate: false,
+    // The slide's description is one sentence and it is the same sentence in
+    // both places, so the page states it once: the summary is skipped where it
+    // repeats the intro verbatim.
     cardSummary:
-      'International trade and business intelligence ecosystem connecting companies with global trade opportunities in raw and processed materials, products, machinery, services and systems.',
+      'Designed, developed, and operated a specialized digital platform focused on international trade intelligence and trade facilitation.',
     intro:
-      'An international trade and business intelligence ecosystem, built to connect companies with global trade opportunities.',
+      'Designed, developed, and operated a specialized digital platform focused on international trade intelligence and trade facilitation.',
     overview: [
-      'BUSINESS HUB is the trade side of the BWG ecosystem: an environment where companies looking to buy, sell, source or represent can find the counterpart, the market and the intelligence to act on an opportunity.',
-      'Its scope runs across the full breadth of what moves between markets — raw and processed materials, finished products, machinery, services and systems — rather than a single category, so a company can bring more than one line of business to the same relationship.',
-      "It draws on the Group's own capability in international trade, commercial representation, sourcing, procurement and market access, which is what separates a hub from a directory.",
+      'The platform covers information across countries, serving as a digital reference for businesses, investors, and international traders.',
     ],
+    // The slide's four positioning statements, in its order.
     blocks: [
       {
         icon: 'globe',
-        heading: 'Global Trade Opportunities',
-        body: 'Connecting companies with counterparts and opportunities across Egypt, the Middle East and international markets.',
+        heading: 'Global Coverage',
+        body: 'Reliable access to international trade intelligence and information across markets and countries.',
       },
       {
         icon: 'compass',
-        heading: 'Business Intelligence',
-        body: 'Market and sector intelligence that turns an opportunity into a decision a company can act on.',
+        heading: 'Trusted',
+        body: 'A reliable digital reference for businesses, investors, and international traders.',
       },
       {
         icon: 'layers',
-        heading: 'Sourcing & Procurement',
-        body: 'Sourcing and procurement across raw and processed materials, products, machinery, services and systems.',
+        heading: 'Business Enablement',
+        body: 'Supporting businesses with the information and intelligence needed to understand markets, regulations, and international trade opportunities.',
       },
       {
         icon: 'handshake',
-        heading: 'Commercial Representation',
-        body: 'Market access and commercial representation for companies entering a new territory or sector.',
+        heading: '24/7',
+        body: 'Access to global trade intelligence and business information.',
       },
     ],
+    // The slide names this list rather than leaving it a glance, and what it
+    // names is the line that introduces it.
+    glanceHeading: 'The platform provides access to:',
     highlights: [
-      { icon: 'layers', label: 'Raw & Processed Materials' },
-      { icon: 'tag', label: 'Products' },
-      { icon: 'gear', label: 'Machinery' },
-      { icon: 'briefcase', label: 'Services' },
-      { icon: 'chip', label: 'Systems' },
+      { icon: 'layers', label: 'Trade and regulations' },
+      { icon: 'tag', label: 'Customs procedures' },
+      { icon: 'gear', label: 'International trade agreements' },
+      { icon: 'briefcase', label: 'Import and export requirements' },
+      { icon: 'chip', label: 'Investment regulations and opportunities' },
     ],
   },
 
   {
     slug: 'ma3danha',
-    name: 'MA3DANHA',
-    tagline: 'Loyalty value, turned into real ownership',
-    sector: 'Loyalty & Precious Metals',
+    name: 'MA3DENHA',
+    tagline: 'Loyalty points and rewards, turned into precious metals',
+    sector: 'Loyalty & Financial Technology',
     icon: 'bullion',
     url: null,
     urlLabel: null,
@@ -158,91 +243,124 @@ export const PROJECTS: readonly Project[] = [
     imageHeight: 854,
     imageOnPlate: false,
     cardSummary:
-      'A digital loyalty ecosystem designed to transform loyalty value into tangible precious-metal ownership.',
+      'MA3DENHA is designed to connect consumers, merchants, loyalty programs, payment providers, and precious-metal suppliers within an integrated digital ecosystem.',
     intro:
-      'A digital loyalty ecosystem that turns the value customers earn into something they actually own.',
+      'Developed as an innovative B2B2C digital loyalty and financial technology platform that transforms customer loyalty points and rewards into precious metals, including gold, silver, and platinum.',
     overview: [
-      'Conventional loyalty gives a customer points: a balance that lives inside one programme, loses value over time and is worth nothing outside it. MA3DANHA is built on the opposite premise — that earned value should become an asset the customer holds.',
-      'The platform converts loyalty value into tangible precious-metal ownership, so a reward keeps its worth after the programme that issued it has moved on.',
-      'For the businesses issuing it, that changes what a loyalty programme is worth: a reward backed by a real asset is a reason to stay that a discount cannot match.',
+      'MA3DENHA introduces a new approach to customer loyalty by transforming conventional points and rewards into value-based assets, creating additional value for both businesses and consumers.',
+      'The platform is designed to support large-scale merchant networks, financial institutions, payment providers, and strategic precious-metal partners, positioning MA3DENHA as an innovative bridge between loyalty, digital payments, and precious-metals investment.',
     ],
     blocks: [
       {
         icon: 'coins',
-        heading: 'Tangible Ownership',
-        body: 'Loyalty value is converted into precious-metal ownership, not into points confined to a single programme.',
+        heading: 'Points into Metal',
+        body: 'Conversion of loyalty points into precious metals.',
       },
       {
-        icon: 'screen',
-        heading: 'Digital by Design',
-        body: 'A digital ecosystem, so earning, converting and holding all happen in one place.',
+        icon: 'bullion',
+        heading: 'Digital Ownership',
+        body: 'Digital gold, silver, and platinum ownership.',
       },
       {
         icon: 'handshake',
-        heading: 'For Issuing Businesses',
-        body: 'Gives brands a loyalty proposition backed by a real asset rather than by a discount.',
+        heading: 'Merchant Integration',
+        body: 'Merchant and loyalty-program integration.',
       },
       {
-        icon: 'shield',
-        heading: 'Value That Holds',
-        body: 'Precious metals are the store of value at the centre of the model, which is what keeps a reward worth something later.',
+        icon: 'spark',
+        heading: 'Rewards & Cashback',
+        body: 'Customer rewards and cashback mechanisms.',
+      },
+      {
+        icon: 'screen',
+        heading: 'Digital Wallet',
+        body: 'Digital wallet and transaction management.',
+      },
+      {
+        icon: 'chip',
+        heading: 'Payment & Financial Services',
+        body: 'Integration with payment and financial service providers.',
+      },
+      {
+        icon: 'layers',
+        heading: 'Supply & Fulfillment',
+        body: 'Precious-metal supply and fulfillment.',
+      },
+      {
+        icon: 'pulse',
+        heading: 'Analytics & Reporting',
+        body: 'Business analytics and transaction reporting.',
       },
     ],
+    glanceHeading: 'OUR ECOSYSTEM PARTNERS',
     highlights: [
-      { icon: 'diamond', label: 'Precious-Metal Backed' },
-      { icon: 'spark', label: 'Loyalty Conversion' },
-      { icon: 'screen', label: 'Digital Ecosystem' },
-      { icon: 'users', label: 'Customer Retention' },
+      { icon: 'handshake', label: 'Merchants' },
+      { icon: 'tag', label: 'Loyalty Programs' },
+      { icon: 'chip', label: 'Payment Providers' },
+      { icon: 'briefcase', label: 'Financial Institutions' },
+      { icon: 'bullion', label: 'Precious Metal Suppliers' },
+      { icon: 'users', label: 'Consumers' },
     ],
   },
 
   {
     slug: 'fish-link',
     name: 'FISH LINK',
-    tagline: 'Modernizing the wholesale seafood trade',
-    sector: 'Specialized Industries',
+    // The slide leads with the year under the wordmark, so the line that
+    // normally carries a tagline carries the year here.
+    tagline: '2026',
+    sector: '01 | Digital Transformation & Smart Platforms',
     icon: 'fish',
     url: 'https://www.fishlink.co/',
     urlLabel: 'fishlink.co',
-    image: null,
-    imageWidth: null,
-    imageHeight: null,
-    imageOnPlate: false,
+    // The symbol alone, cut from the lockup on the project's slide: the card
+    // slot is a small square, and the mark reads there where the wordmark beside
+    // it would not. Keyed off the near-white ground it is printed on, which is
+    // what the plate below is for.
+    //
+    // Only the card reads this. FISH LINK's page is its own component and sets
+    // the name in type rather than placing a file, so nothing here reaches it.
+    image: '/assets/images/fish-link-mark.png',
+    imageWidth: 108,
+    imageHeight: 75,
+    imageOnPlate: true,
+    // The slide carries one description and no second line. It is the same
+    // sentence in both places, and the detail page renders it once: the
+    // summary is skipped where it repeats the intro verbatim.
     cardSummary:
-      'A digital ecosystem designed to modernize and organize the wholesale seafood trade.',
-    intro: 'A digital ecosystem built to modernize and organize the wholesale seafood trade.',
-    overview: [
-      "Wholesale seafood is traded fast, in volume, and largely on relationships and phone calls. That works until it does not: pricing is opaque, supply is hard to plan against, and a buyer's real information reaches only as far as whoever they happen to know.",
-      'FISH LINK puts that trade on a digital footing — connecting the people who supply seafood with the people who buy it in volume, in one organized marketplace rather than across a scattering of private arrangements.',
-      'It is the clearest example of what BWG means by a specialized-industry venture: a sector-focused platform built around a market that is large, essential, and still largely undigitized.',
-    ],
+      'Designed and developed an integrated digital ecosystem for supply-chain tracking and distribution management under the Smart Supply Chain Initiative of the National Fisheries Company.',
+    intro:
+      'Designed and developed an integrated digital ecosystem for supply-chain tracking and distribution management under the Smart Supply Chain Initiative of the National Fisheries Company.',
+    overview: [],
     blocks: [
       {
-        icon: 'fish',
-        heading: 'Wholesale, Organized',
-        body: 'Brings the wholesale seafood trade into one digital marketplace instead of a scattering of private arrangements.',
+        icon: 'globe',
+        heading: 'End-to-End Visibility',
+        body: 'Full visibility across the supply chain.',
       },
       {
-        icon: 'handshake',
-        heading: 'Suppliers to Buyers',
-        body: 'Connects suppliers directly with the traders, wholesalers and businesses buying in volume.',
+        icon: 'gear',
+        heading: 'Efficiency & Control',
+        body: 'Optimize operations and reduce costs.',
       },
       {
-        icon: 'screen',
-        heading: 'A Digital Ecosystem',
-        body: 'Listings, counterparts and trade in one place, rather than over calls and messages.',
+        icon: 'shield',
+        heading: 'Quality Assured',
+        body: 'Ensure quality and compliance at every stage.',
       },
       {
         icon: 'growth',
-        heading: 'A Market Being Modernized',
-        body: 'A sector-focused venture built around a large, essential market that is still largely undigitized.',
+        heading: 'Data-Driven Decisions',
+        body: 'Real-time insights for smarter decisions.',
       },
     ],
+    glanceHeading: 'KEY CAPABILITIES INCLUDE:',
     highlights: [
-      { icon: 'fish', label: 'Seafood Trade' },
-      { icon: 'briefcase', label: 'Wholesale' },
-      { icon: 'screen', label: 'Digital Marketplace' },
-      { icon: 'globe', label: 'Live Platform' },
+      { icon: 'tag', label: 'Product tracking' },
+      { icon: 'layers', label: 'Warehouse management' },
+      { icon: 'compass', label: 'Transportation management' },
+      { icon: 'shield', label: 'Quality monitoring' },
+      { icon: 'pulse', label: 'Operational analytics' },
     ],
   },
 
@@ -254,10 +372,15 @@ export const PROJECTS: readonly Project[] = [
     icon: 'users',
     url: null,
     urlLabel: null,
-    image: null,
-    imageWidth: null,
-    imageHeight: null,
-    imageOnPlate: false,
+    // The symbol alone, cut from the lockup on the project's slide: the card
+    // slot is a small square, and a mark reads there where a wordmark beside it
+    // would not. Keyed off the near-white ground it is printed on, which is why
+    // it asks for the plate — see imageOnPlate.
+    image: '/assets/images/mosharek-mark.png',
+    imageWidth: 128,
+    imageHeight: 79,
+    imageOnPlate: true,
+    imageCardOnly: true,
     cardSummary: 'A platform focused on connecting businesses, opportunities and participation.',
     intro:
       'A platform built around three things: businesses, the opportunities in front of them, and the means to take part.',
@@ -292,9 +415,11 @@ export const PROJECTS: readonly Project[] = [
   {
     slug: 'madaaad',
     name: 'MADAAAD',
-    tagline: 'A digital platform for the education industry',
-    sector: 'Technology & Digital',
-    icon: 'screen',
+    // The slide sets the year beneath the wordmark, as FISH LINK's does, so the
+    // line that normally carries a tagline carries the year here.
+    tagline: '2025',
+    sector: '01 | Digital Transformation & Smart Platforms',
+    icon: 'cart',
     url: 'https://www.madaaad.com/',
     urlLabel: 'madaaad.com',
     // Genuinely transparent, so it sits straight on the card with no plate.
@@ -302,51 +427,56 @@ export const PROJECTS: readonly Project[] = [
     imageWidth: 1024,
     imageHeight: 1024,
     imageOnPlate: false,
+    // The slide's description runs on into the four sectors set out beneath it,
+    // which a card has no room for. The card names them inside the sentence; the
+    // page lists them the way the slide does.
     cardSummary:
-      'A digital business platform developed to fulfill the needs of basic players in the education industry.',
+      'Developed a specialized digital procurement platform for managing and supplying the operational requirements of schools, universities, educational institutions, and corporations.',
     intro:
-      "A digital business platform developed around the needs of the education industry's core players.",
-    overview: [
-      'Education runs on a supply chain most people never see: schools, centres, suppliers and service providers, all dependent on each other and most of them still transacting the long way round.',
-      'MADAAAD is built for exactly those players. It is a digital business platform aimed at the basic needs of the education industry rather than at the classroom — the commercial side of education, put on a platform.',
-      'It is live, and is one of two projects in the portfolio already open to the public.',
+      'Developed a specialized digital procurement platform for managing and supplying the operational requirements of:',
+    // The slide carries no prose beyond that description and the line closing
+    // it, and states its capabilities as labels rather than as paragraphs — so
+    // there is nothing for either of these, and the page renders neither.
+    overview: [],
+    blocks: [],
+    serves: [
+      { icon: 'school', label: 'Schools' },
+      { icon: 'cap', label: 'Universities' },
+      { icon: 'book', label: 'Educational institutions' },
+      { icon: 'building', label: 'Corporations' },
     ],
-    blocks: [
-      {
-        icon: 'book',
-        heading: 'Built for Education',
-        body: 'Developed specifically around the needs of the education industry, not adapted from a general-purpose tool.',
-      },
-      {
-        icon: 'users',
-        heading: 'The Basic Players',
-        body: 'Aimed at the players who make the sector work — the schools, centres, suppliers and providers behind it.',
-      },
-      {
-        icon: 'screen',
-        heading: 'A Digital Business Platform',
-        body: 'The commercial side of education handled in one place, rather than the long way round.',
-      },
-      {
-        icon: 'gear',
-        heading: 'Live and Operating',
-        body: 'One of two projects in the portfolio already open to the public.',
-      },
-    ],
+    focus: {
+      lead: 'The platform focuses on the sourcing and supply of',
+      emphasis: 'office equipment, stationery, and operational supplies.',
+    },
     highlights: [
-      { icon: 'book', label: 'Education Industry' },
-      { icon: 'screen', label: 'Digital Platform' },
-      { icon: 'briefcase', label: 'Business to Business' },
-      { icon: 'globe', label: 'Live Platform' },
+      { icon: 'cart', label: 'Smart Procurement' },
+      { icon: 'checklist', label: 'Wide Range of Products' },
+      { icon: 'truck', label: 'Reliable Supply Chain' },
+      { icon: 'shield', label: 'Quality Assurance' },
+      { icon: 'growth', label: 'Real-time Management' },
+    ],
+    // The categories the platform itself carries, as its own storefront lists
+    // them on the slide.
+    categories: [
+      { icon: 'printer', label: 'Office Equipment' },
+      { icon: 'pen', label: 'Stationery' },
+      { icon: 'layers', label: 'Paper Products' },
+      { icon: 'screen', label: 'Technology' },
+      { icon: 'spray', label: 'Cleaning Supplies' },
+      { icon: 'chair', label: 'Furniture' },
     ],
   },
 
   {
-    slug: 'akibagold',
-    name: 'AKIBAGOLD',
-    tagline: 'Precious-metal ownership, made accessible',
-    sector: 'Savings & Precious Metals',
-    icon: 'jar',
+    // TOMEYYA replaced AKIBAGOLD in this slot. Nothing of that project is left
+    // here or anywhere else in the build — it was a savings concept, this is a
+    // restaurant platform, and the two share no copy, palette or artwork.
+    slug: 'tomeyya',
+    name: 'TOMEYYA',
+    tagline: 'A Complete Digital Restaurant Management & Ordering Ecosystem',
+    sector: 'Digital Restaurant Technology',
+    icon: 'cutlery',
     url: null,
     urlLabel: null,
     image: null,
@@ -354,41 +484,150 @@ export const PROJECTS: readonly Project[] = [
     imageHeight: null,
     imageOnPlate: false,
     cardSummary:
-      'A smart savings concept designed to make precious-metal ownership accessible through digital saving.',
+      'Connecting restaurant operations, point-of-sale, digital menus, and customer ordering across desktop, web, and mobile.',
     intro:
-      'A smart savings concept that brings precious-metal ownership within reach through digital saving.',
+      'Tomeyya is an integrated restaurant technology ecosystem that connects in-store operations, digital ordering, and customer experiences across desktop, web, and mobile platforms.',
     overview: [
-      'Precious metals have always been the fallback store of value, and have always had the same barrier in front of them: you need a large sum before you can own any.',
-      'AKIBAGOLD removes that barrier by making ownership something reached through saving rather than through a single purchase — digital saving, accumulated toward a holding in real metal.',
-      'It shares its conviction with MA3DANHA, approached from the other side: MA3DANHA converts loyalty value into metal, AKIBAGOLD builds a holding out of ordinary saving.',
+      'The platform is designed to support restaurants through a complete Point-of-Sale and cashier system, while providing customers with seamless digital menu and ordering experiences through both web and mobile applications.',
+      'Tomeyya brings restaurant operations into one connected digital ecosystem — from managing products, categories, branches, staff, and daily operations to handling customer menus, carts, orders, and checkout.',
     ],
-    blocks: [
+    // One platform, three experiences. These are products, not features, which
+    // is why they are not in `blocks` with the capabilities.
+    experiences: [
       {
-        icon: 'jar',
-        heading: 'Saving, Not Buying',
-        body: 'Ownership reached through accumulated digital saving rather than through one large purchase.',
+        icon: 'register',
+        heading: 'POS & Cashier System',
+        body: 'A desktop-focused restaurant management and point-of-sale experience designed for staff and day-to-day restaurant operations.',
       },
       {
-        icon: 'users',
-        heading: 'Accessible by Design',
-        body: 'Built to put precious-metal ownership within reach of savers who could not previously access it.',
+        icon: 'screen',
+        heading: 'Digital Menu Website',
+        body: 'A customer-facing web experience where users can browse categories and products, view product details, build their cart, and place orders digitally.',
+      },
+      {
+        icon: 'phone',
+        heading: 'Mobile Menu Application',
+        body: 'A mobile-first menu and ordering experience designed to make browsing and ordering convenient for customers on mobile devices.',
+      },
+    ],
+    // The twelve capabilities, in the six groups the supplied material files
+    // them under. Kept in group order: the page renders them in the order they
+    // appear here and takes each group's name from the first block in it.
+    blocks: [
+      {
+        icon: 'register',
+        group: 'Restaurant Operations',
+        heading: 'Point of Sale & Cashier',
+        body: 'Manage restaurant sales and day-to-day cashier operations through a dedicated POS experience.',
       },
       {
         icon: 'coins',
-        heading: 'A Real Holding',
-        body: 'Saving accumulates toward ownership of the metal itself, not toward a balance in a wallet.',
+        group: 'Restaurant Operations',
+        heading: 'Expenses & Operations',
+        body: 'Support operational expense management and other day-to-day restaurant administration.',
+      },
+      {
+        icon: 'book',
+        group: 'Menu & Products',
+        heading: 'Product & Menu Management',
+        body: 'Manage products, categories, pricing, product images, and menu content from a centralized system.',
+      },
+      {
+        icon: 'image',
+        group: 'Menu & Products',
+        heading: 'Product Images',
+        body: 'Manage and upload product imagery to maintain a rich and engaging digital menu.',
+      },
+      {
+        icon: 'checklist',
+        group: 'Orders',
+        heading: 'Order Management',
+        body: "Track and manage incoming orders across the restaurant's operational workflow.",
+      },
+      {
+        icon: 'truck',
+        group: 'Kitchen & Delivery',
+        heading: 'Kitchen & Delivery Operations',
+        body: 'Dedicated operational views help staff manage orders through kitchen and delivery stages.',
+      },
+      {
+        icon: 'cart',
+        group: 'Customers',
+        heading: 'Digital Ordering',
+        body: 'Allow customers to browse the restaurant menu, add products to their cart, and complete the ordering process digitally.',
+      },
+      {
+        icon: 'tag',
+        group: 'Customers',
+        heading: 'Cart & Checkout',
+        body: 'Provide a complete customer ordering flow from product selection through cart management and checkout.',
+      },
+      {
+        icon: 'building',
+        group: 'Management',
+        heading: 'Branch Management',
+        body: 'Support restaurant branches and their operational data through a centralized management system.',
+      },
+      {
+        icon: 'users',
+        group: 'Management',
+        heading: 'Staff & User Management',
+        body: 'Manage restaurant users and staff with controlled access to the platform.',
       },
       {
         icon: 'shield',
-        heading: 'A Store of Value',
-        body: 'Built on the asset people have always fallen back on when they wanted to keep what they had.',
+        group: 'Management',
+        heading: 'Authentication & Access Control',
+        body: 'Secure login and protected access across the different system experiences.',
+      },
+      {
+        icon: 'gear',
+        group: 'Management',
+        heading: 'Settings & Configuration',
+        body: 'Centralized settings for managing the restaurant platform and its operational configuration.',
       },
     ],
+    // The connected ecosystem, in the order the material draws it: staff at one
+    // end, the people eating at the other, and the platform in between.
+    flow: [
+      { icon: 'users', label: 'Restaurant Staff' },
+      { icon: 'register', label: 'POS & Cashier' },
+      { icon: 'chef', label: 'Kitchen & Operations' },
+      { icon: 'truck', label: 'Orders & Delivery' },
+      { icon: 'book', label: 'Digital Menu' },
+      { icon: 'cutlery', label: 'Customers' },
+    ],
     highlights: [
-      { icon: 'coins', label: 'Digital Saving' },
-      { icon: 'diamond', label: 'Precious Metals' },
-      { icon: 'users', label: 'Accessible Ownership' },
-      { icon: 'shield', label: 'Store of Value' },
+      {
+        icon: 'register',
+        label: 'POS & Cashier System',
+        body: 'Desktop restaurant operations and point-of-sale.',
+      },
+      {
+        icon: 'screen',
+        label: 'Web Ordering',
+        body: 'Digital menu and online ordering experience.',
+      },
+      {
+        icon: 'phone',
+        label: 'Mobile Ordering',
+        body: 'Mobile menu and customer ordering experience.',
+      },
+      {
+        icon: 'gear',
+        label: 'Restaurant Management',
+        body: 'Products, branches, staff, expenses, settings, and operational management.',
+      },
+      {
+        icon: 'checklist',
+        label: 'Order Operations',
+        body: 'Order tracking, kitchen workflows, and delivery management.',
+      },
+      {
+        icon: 'users',
+        label: 'Digital Customer Experience',
+        body: 'A modern, responsive interface for browsing menus and placing orders.',
+      },
     ],
   },
 ];

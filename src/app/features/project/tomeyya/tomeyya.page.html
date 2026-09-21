@@ -1,0 +1,495 @@
+@if (project(); as item) {
+  <article class="tm">
+    <!--
+      HERO — Tomeyya's own room. Everything above the fold is the product's,
+      apart from the BWG lockup and the way back, which are what keep this a page
+      inside the group's site rather than a different site entirely.
+    -->
+    <header class="hero">
+      <span class="hero__ground" aria-hidden="true"></span>
+
+      <div class="wrap">
+        <div class="hero__shell">
+          <img
+            class="hero__lockup"
+            [src]="lockup.src"
+            [attr.alt]="lockup.alt"
+            [width]="lockup.width"
+            [height]="lockup.height"
+            fetchpriority="high"
+            decoding="async"
+          />
+
+          <a class="back" routerLink="/" fragment="projects">
+            <svg
+              viewBox="0 0 20 20"
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M16 10H5M9 6l-4 4 4 4" />
+            </svg>
+            Our Projects
+          </a>
+        </div>
+
+        <div class="hero__layout">
+          <div class="hero__copy">
+            <p class="kicker">{{ item.sector }}</p>
+
+            <!--
+              The wordmark is set rather than placed: there is no Tomeyya logo
+              file in the repo. `name` is the card's uppercase form and cannot be
+              case-folded back to the brand's own spelling, so the name is
+              typeset here and the mark drawn beside it.
+            -->
+            <h1 class="hero__word">
+              <span class="hero__name">Tomeyya</span>
+              <span class="hero__mark" aria-hidden="true">
+                <bwg-icon name="cutlery" [size]="34" />
+              </span>
+            </h1>
+
+            <p class="hero__tag">{{ item.tagline }}</p>
+
+            <p class="hero__lede">{{ item.cardSummary }}</p>
+
+            <!-- The three products, named here and opened up in the next section. -->
+            @if (item.experiences; as experiences) {
+              <ul class="hero__chips" role="list">
+                @for (experience of experiences; track experience.heading) {
+                  <li class="chip">
+                    <bwg-icon [name]="experience.icon" [size]="16" />
+                    {{ experience.heading }}
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+
+          <!--
+            The till, as staff see it. Decorative, like all four screens on this
+            page: the figures and menu items in them are placeholders standing in
+            for a restaurant's own data, not Tomeyya's.
+          -->
+          <div class="hero__rig" aria-hidden="true">
+            <div class="pos">
+              <div class="pos__bar">
+                <span class="brand">
+                  <span class="brand__name">Tomeyya</span>
+                  <span class="brand__tag">POS</span>
+                </span>
+                <span class="pos__branch">Branch 01 · Cashier</span>
+              </div>
+
+              <div class="pos__body">
+                <div class="pos__rail">
+                  <span class="pos__cat is-on">All</span>
+                  <span class="pos__cat">Grills</span>
+                  <span class="pos__cat">Pizza</span>
+                  <span class="pos__cat">Pasta</span>
+                  <span class="pos__cat">Salads</span>
+                  <span class="pos__cat">Desserts</span>
+                  <span class="pos__cat">Drinks</span>
+                </div>
+
+                <div class="pos__grid">
+                  <span class="dish">
+                    <span class="dish__art"></span>
+                    <span class="dish__name">Mixed Grill</span>
+                    <span class="dish__price">EGP 340</span>
+                  </span>
+                  <span class="dish">
+                    <span class="dish__art dish__art--b"></span>
+                    <span class="dish__name">Shawarma Plate</span>
+                    <span class="dish__price">EGP 180</span>
+                  </span>
+                  <span class="dish">
+                    <span class="dish__art dish__art--c"></span>
+                    <span class="dish__name">Beef Burger</span>
+                    <span class="dish__price">EGP 165</span>
+                  </span>
+                  <span class="dish">
+                    <span class="dish__art dish__art--b"></span>
+                    <span class="dish__name">Pasta Alfredo</span>
+                    <span class="dish__price">EGP 150</span>
+                  </span>
+                  <span class="dish">
+                    <span class="dish__art dish__art--c"></span>
+                    <span class="dish__name">Caesar Salad</span>
+                    <span class="dish__price">EGP 120</span>
+                  </span>
+                  <span class="dish">
+                    <span class="dish__art"></span>
+                    <span class="dish__name">Lemon Mint</span>
+                    <span class="dish__price">EGP 45</span>
+                  </span>
+                </div>
+
+                <div class="ticket">
+                  <span class="ticket__h">Order #1042</span>
+                  <span class="ticket__line">
+                    <span>2 × Mixed Grill</span>
+                    <span>680</span>
+                  </span>
+                  <span class="ticket__line">
+                    <span>1 × Beef Burger</span>
+                    <span>165</span>
+                  </span>
+                  <span class="ticket__line">
+                    <span>3 × Lemon Mint</span>
+                    <span>135</span>
+                  </span>
+                  <span class="ticket__total">
+                    <span>Total</span>
+                    <span>EGP 980</span>
+                  </span>
+                  <span class="ticket__cta">Charge</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="app app--tucked">
+              <span class="app__notch"></span>
+              <div class="app__screen">
+                <span class="app__bar">
+                  <span class="brand">
+                    <span class="brand__name">Tomeyya</span>
+                  </span>
+                  <span class="app__cart"><bwg-icon name="cart" [size]="12" /></span>
+                </span>
+                <span class="app__chips">
+                  <span class="is-on">Grills</span>
+                  <span>Pizza</span>
+                  <span>Salads</span>
+                </span>
+                <span class="app__row">
+                  <span class="app__art"></span>
+                  <span class="app__copy">
+                    <span class="app__name">Mixed Grill</span>
+                    <span class="app__price">EGP 340</span>
+                  </span>
+                  <span class="app__add">+</span>
+                </span>
+                <span class="app__row">
+                  <span class="app__art app__art--b"></span>
+                  <span class="app__copy">
+                    <span class="app__name">Shawarma Plate</span>
+                    <span class="app__price">EGP 180</span>
+                  </span>
+                  <span class="app__add">+</span>
+                </span>
+                <span class="app__checkout">View Cart · 3 items</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!--
+      THE ECOSYSTEM — the three products, numbered and strung together, because
+      what the material claims is that they are one thing rather than three.
+    -->
+    <section class="eco" aria-labelledby="tm-eco">
+      <div class="wrap">
+        <p class="kicker kicker--ink">One Platform. Multiple Experiences.</p>
+        <h2 class="eco__h" id="tm-eco">Tomeyya consists of three connected experiences</h2>
+
+        @if (item.overview.length) {
+          <div class="eco__intro">
+            @for (paragraph of item.overview; track $index) {
+              <p>{{ paragraph }}</p>
+            }
+          </div>
+        }
+
+        @if (item.experiences; as experiences) {
+          <ol class="eco__set" role="list">
+            @for (experience of experiences; track experience.heading; let i = $index) {
+              <li class="exp">
+                <span class="exp__rail" aria-hidden="true"></span>
+                <span class="exp__n">0{{ i + 1 }}</span>
+                <span class="exp__icon">
+                  <bwg-icon [name]="experience.icon" [size]="24" />
+                </span>
+                <h3 class="exp__h">{{ experience.heading }}</h3>
+                <p class="exp__b">{{ experience.body }}</p>
+              </li>
+            }
+          </ol>
+        }
+      </div>
+    </section>
+
+    <!--
+      PRODUCT SHOWCASE — the platform actually running: the orders board staff
+      work from, the menu customers browse on the web, and the same menu in the
+      hand. All three are decorative.
+    -->
+    <section class="show" aria-labelledby="tm-show">
+      <div class="wrap">
+        <p class="kicker kicker--ink">The Product</p>
+        <h2 class="show__h" id="tm-show">Desktop, web and mobile — one connected system</h2>
+
+        <div class="show__set">
+          <figure class="stage stage--wide">
+            <div class="stage__device" aria-hidden="true">
+              <div class="board">
+                <div class="board__bar">
+                  <span class="brand">
+                    <span class="brand__name">Tomeyya</span>
+                    <span class="brand__tag">Orders</span>
+                  </span>
+                  <span class="board__live">Live · 12 open</span>
+                </div>
+
+                <div class="board__cols">
+                  <div class="col">
+                    <span class="col__h">New</span>
+                    <span class="tkt"><b>#1042</b> 3 items</span>
+                    <span class="tkt"><b>#1043</b> 1 item</span>
+                  </div>
+                  <div class="col">
+                    <span class="col__h">Kitchen</span>
+                    <span class="tkt tkt--work"><b>#1039</b> 5 items</span>
+                  </div>
+                  <div class="col">
+                    <span class="col__h">Ready</span>
+                    <span class="tkt tkt--done"><b>#1037</b> 2 items</span>
+                  </div>
+                  <div class="col">
+                    <span class="col__h">Delivery</span>
+                    <span class="tkt tkt--out"><b>#1035</b> On the way</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <figcaption class="stage__cap">
+              <span class="stage__eyebrow">Desktop</span>
+              <span class="stage__name">POS, kitchen and delivery operations</span>
+            </figcaption>
+          </figure>
+
+          <figure class="stage">
+            <div class="stage__device" aria-hidden="true">
+              <div class="web">
+                <span class="web__chrome">
+                  <i></i><i></i><i></i>
+                  <span class="web__url">Digital Menu</span>
+                </span>
+
+                <div class="web__screen">
+                  <span class="web__hero">
+                    <span class="web__hero-h">Browse the menu</span>
+                    <span class="web__hero-b">Categories, products, cart and checkout.</span>
+                  </span>
+
+                  <span class="web__chips">
+                    <span class="is-on">Grills</span>
+                    <span>Pizza</span>
+                    <span>Pasta</span>
+                    <span>Desserts</span>
+                  </span>
+
+                  <span class="web__grid">
+                    <span class="card">
+                      <span class="card__art"></span>
+                      <span class="card__name">Mixed Grill</span>
+                      <span class="card__foot"><span>EGP 340</span><i>Add</i></span>
+                    </span>
+                    <span class="card">
+                      <span class="card__art card__art--b"></span>
+                      <span class="card__name">Shawarma Plate</span>
+                      <span class="card__foot"><span>EGP 180</span><i>Add</i></span>
+                    </span>
+                    <span class="card">
+                      <span class="card__art card__art--c"></span>
+                      <span class="card__name">Beef Burger</span>
+                      <span class="card__foot"><span>EGP 165</span><i>Add</i></span>
+                    </span>
+                  </span>
+
+                  <span class="web__cart">Cart · 3 items · EGP 980</span>
+                </div>
+              </div>
+            </div>
+
+            <figcaption class="stage__cap">
+              <span class="stage__eyebrow">Web</span>
+              <span class="stage__name">Digital menu and online ordering</span>
+            </figcaption>
+          </figure>
+
+          <figure class="stage stage--phone">
+            <div class="stage__device" aria-hidden="true">
+              <div class="app app--large">
+                <span class="app__notch"></span>
+                <div class="app__screen">
+                  <span class="app__bar">
+                    <span class="brand">
+                      <span class="brand__name">Tomeyya</span>
+                    </span>
+                    <span class="app__cart"><bwg-icon name="cart" [size]="14" /></span>
+                  </span>
+                  <span class="app__search">Search the menu</span>
+                  <span class="app__chips">
+                    <span class="is-on">Grills</span>
+                    <span>Pizza</span>
+                    <span>Salads</span>
+                  </span>
+                  <span class="app__row">
+                    <span class="app__art"></span>
+                    <span class="app__copy">
+                      <span class="app__name">Mixed Grill</span>
+                      <span class="app__price">EGP 340</span>
+                    </span>
+                    <span class="app__add">+</span>
+                  </span>
+                  <span class="app__row">
+                    <span class="app__art app__art--b"></span>
+                    <span class="app__copy">
+                      <span class="app__name">Shawarma Plate</span>
+                      <span class="app__price">EGP 180</span>
+                    </span>
+                    <span class="app__add">+</span>
+                  </span>
+                  <span class="app__row">
+                    <span class="app__art app__art--c"></span>
+                    <span class="app__copy">
+                      <span class="app__name">Caesar Salad</span>
+                      <span class="app__price">EGP 120</span>
+                    </span>
+                    <span class="app__add">+</span>
+                  </span>
+                  <span class="app__checkout">View Cart · 3 items</span>
+                </div>
+              </div>
+            </div>
+
+            <figcaption class="stage__cap">
+              <span class="stage__eyebrow">Mobile</span>
+              <span class="stage__name">Menu and ordering in the hand</span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!--
+      CAPABILITIES — twelve of them, under the six headings the material files
+      them under, so the page reads as six areas of a platform rather than as
+      twelve tiles of identical weight.
+    -->
+    @if (capabilityGroups().length) {
+      <section class="caps" aria-labelledby="tm-caps">
+        <div class="wrap">
+          <p class="kicker kicker--ink">Key Capabilities</p>
+          <h2 class="caps__h" id="tm-caps">What the platform runs</h2>
+
+          <div class="caps__set">
+            @for (group of capabilityGroups(); track group.label) {
+              <section class="grp">
+                <h3 class="grp__h">{{ group.label }}</h3>
+
+                <ul class="grp__items" role="list">
+                  @for (capability of group.items; track capability.heading) {
+                    <li class="cap">
+                      <span class="cap__icon">
+                        <bwg-icon [name]="capability.icon" [size]="20" />
+                      </span>
+                      <h4 class="cap__h">{{ capability.heading }}</h4>
+                      <p class="cap__b">{{ capability.body }}</p>
+                    </li>
+                  }
+                </ul>
+              </section>
+            }
+          </div>
+        </div>
+      </section>
+    }
+
+    <!--
+      CONNECTED WORKFLOW — the chain the material draws, kept as a chain. The
+      closing line under it is the client's own, and is the point of the section.
+    -->
+    @if (item.flow; as flow) {
+      <section class="chain" aria-labelledby="tm-chain">
+        <div class="wrap">
+          <p class="kicker kicker--on-dark">Connected Restaurant Ecosystem</p>
+          <h2 class="chain__h" id="tm-chain">From the floor to the customer, on one platform</h2>
+
+          <ol class="chain__track" role="list">
+            @for (step of flow; track step.label; let i = $index) {
+              <li class="step">
+                <span class="step__rail" aria-hidden="true"></span>
+                <span class="step__node">
+                  <bwg-icon [name]="step.icon" [size]="22" />
+                </span>
+                <span class="step__n">0{{ i + 1 }}</span>
+                <span class="step__label">{{ step.label }}</span>
+              </li>
+            }
+          </ol>
+
+          <p class="chain__close">
+            This creates a connected experience between restaurant operations and customer ordering,
+            rather than treating the cashier system and digital menu as separate products.
+          </p>
+        </div>
+      </section>
+    }
+
+    <!-- AT A GLANCE — the closing summary, six items, each with its own line. -->
+    @if (item.highlights.length) {
+      <section class="glance" aria-labelledby="tm-glance">
+        <div class="wrap">
+          <p class="kicker kicker--ink">At a Glance</p>
+          <h2 class="visually-hidden" id="tm-glance">At a glance</h2>
+
+          <ul class="glance__grid" role="list">
+            @for (highlight of item.highlights; track highlight.label) {
+              <li class="gl">
+                <span class="gl__icon">
+                  <bwg-icon [name]="highlight.icon" [size]="20" />
+                </span>
+                <h3 class="gl__h">{{ highlight.label }}</h3>
+                @if (highlight.body) {
+                  <p class="gl__b">{{ highlight.body }}</p>
+                }
+              </li>
+            }
+          </ul>
+        </div>
+      </section>
+    }
+
+    <!-- CLOSING — the line the whole page has been making, and the way back. -->
+    <section class="close">
+      <span class="close__ground" aria-hidden="true"></span>
+
+      <div class="wrap">
+        <p class="close__line">
+          <span>One platform.</span>
+          <span class="close__line-alt">Multiple experiences.</span>
+        </p>
+
+        <a class="close__back" routerLink="/" fragment="projects">All BWG projects</a>
+      </div>
+    </section>
+  </article>
+} @else {
+  <article class="tm tm--missing">
+    <div class="wrap">
+      <h1>Project not found</h1>
+      <a routerLink="/" fragment="projects">Our Projects</a>
+    </div>
+  </article>
+}

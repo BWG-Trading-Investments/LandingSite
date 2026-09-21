@@ -28,7 +28,27 @@ export type IconName =
   | 'coins'
   | 'bullion'
   | 'fish'
-  | 'jar';
+  | 'jar'
+  // Drawn for MADAAAD: the sectors its slide names, the capabilities it lists
+  // and the supply categories the platform itself carries. Generic enough to be
+  // reused — a school is a school — but nothing else asks for them yet.
+  | 'school'
+  | 'cap'
+  | 'building'
+  | 'cart'
+  | 'checklist'
+  | 'truck'
+  | 'printer'
+  | 'pen'
+  | 'spray'
+  | 'chair'
+  // Drawn for TOMEYYA: a restaurant platform needs a till, a kitchen, a place
+  // setting, a handset and a picture frame, and none of those were here.
+  | 'register'
+  | 'chef'
+  | 'cutlery'
+  | 'phone'
+  | 'image';
 
 /**
  * A line icon from the site's set.
@@ -174,6 +194,88 @@ export type IconName =
           <path d="M5 5.2h10v2.2H5z" />
           <path d="M5.6 7.4h8.8l.9 8.1a1.4 1.4 0 0 1-1.4 1.5H6.1a1.4 1.4 0 0 1-1.4-1.5z" />
           <circle cx="10" cy="12" r="2.2" />
+        }
+        @case ('school') {
+          <path d="m2.8 8 7.2-4.2L17.2 8" />
+          <path d="M4.6 8v8.4h10.8V8" />
+          <path d="M8.2 16.4v-3.8h3.6v3.8" />
+          <path d="M10 3.8V2.2h2.4l-1 1 1 1H10" />
+        }
+        @case ('cap') {
+          <path d="m10 3.6-7.2 3.5L10 10.6l7.2-3.5z" />
+          <path d="M6 8.8v3.8c0 1.3 1.8 2.4 4 2.4s4-1.1 4-2.4V8.8" />
+          <path d="M17.2 7.1v4.5" />
+        }
+        @case ('building') {
+          <path d="M3.4 16.6V5a1.2 1.2 0 0 1 1.2-1.2h5.2A1.2 1.2 0 0 1 11 5v11.6" />
+          <path d="M11 8.6h4.4a1.2 1.2 0 0 1 1.2 1.2v6.8" />
+          <path d="M5.8 6.8h2.8M5.8 9.6h2.8M5.8 12.4h2.8M13 11.4h1.4M13 14h1.4" />
+          <path d="M2.4 16.6h15.2" />
+        }
+        @case ('cart') {
+          <path d="M2.6 3.8h2l1.9 8.4h7.6l1.8-6.2H6.3" />
+          <path d="m8.8 8.4 1.3 1.3 2.7-2.9" />
+          <circle cx="8.4" cy="15.6" r="1.3" />
+          <circle cx="13.8" cy="15.6" r="1.3" />
+        }
+        @case ('checklist') {
+          <rect x="4.2" y="2.9" width="11.6" height="14.2" rx="1.4" />
+          <path d="m7 7 1 1 1.8-2" />
+          <path d="m7 11.4 1 1 1.8-2" />
+          <path d="M11.6 7.2h1.8M11.6 11.6h1.8" />
+        }
+        @case ('truck') {
+          <rect x="2.4" y="5.4" width="8.4" height="7.8" rx="1.1" />
+          <path d="M10.8 8.4h3l2.8 2.6v2.2h-5.8z" />
+          <circle cx="6.2" cy="15.4" r="1.4" />
+          <circle cx="13.8" cy="15.4" r="1.4" />
+        }
+        @case ('printer') {
+          <path d="M6 7.4V3.8h8v3.6" />
+          <rect x="2.8" y="7.4" width="14.4" height="5.8" rx="1.2" />
+          <path d="M6 12h8v4.6H6z" />
+          <circle cx="14.6" cy="9.6" r="0.6" fill="currentColor" stroke="none" />
+        }
+        @case ('pen') {
+          <path d="m3.4 16.6 1-3.5 8-8 2.5 2.5-8 8z" />
+          <path d="m12.4 5.1 1.9-1.9a1.2 1.2 0 0 1 1.7 0l.8.8a1.2 1.2 0 0 1 0 1.7l-1.9 1.9" />
+          <path d="m4.4 13.1 2.5 2.5" />
+        }
+        @case ('spray') {
+          <path d="M7.4 7.6h4.8a1.3 1.3 0 0 1 1.3 1.3v6.9a1.3 1.3 0 0 1-1.3 1.3H7.4a1.3 1.3 0 0 1-1.3-1.3V8.9a1.3 1.3 0 0 1 1.3-1.3z" />
+          <path d="M8.4 7.6V5h3v2.6" />
+          <path d="M8.4 5H6.2L4.6 3.4" />
+          <path d="M6.1 11.4h7.4" />
+        }
+        @case ('chair') {
+          <path d="M5.6 9.4V5.4a1.6 1.6 0 0 1 1.6-1.6h5.6a1.6 1.6 0 0 1 1.6 1.6v4" />
+          <path d="M4.4 9.4h11.2a1.2 1.2 0 0 1 1.2 1.2v1.4a1.2 1.2 0 0 1-1.2 1.2H4.4a1.2 1.2 0 0 1-1.2-1.2v-1.4a1.2 1.2 0 0 1 1.2-1.2z" />
+          <path d="M5.6 13.2v3.2M14.4 13.2v3.2" />
+        }
+        @case ('register') {
+          <rect x="3.4" y="3.4" width="13.2" height="7.8" rx="1.2" />
+          <path d="M6.4 6.2h7.2M6.4 8.6h4.2" />
+          <path d="M7.4 11.2v2.2h5.2v-2.2" />
+          <path d="M3.6 13.4h12.8a1.1 1.1 0 0 1 1.1 1.1v1.1a1.1 1.1 0 0 1-1.1 1.1H3.6a1.1 1.1 0 0 1-1.1-1.1v-1.1a1.1 1.1 0 0 1 1.1-1.1z" />
+        }
+        @case ('chef') {
+          <path d="M6.2 11.2a3.3 3.3 0 1 1 1.6-6.2 3.2 3.2 0 0 1 4.4 0 3.3 3.3 0 1 1 1.6 6.2z" />
+          <path d="M6.2 11.2h7.6v4.4a1.2 1.2 0 0 1-1.2 1.2H7.4a1.2 1.2 0 0 1-1.2-1.2z" />
+          <path d="M8.4 13.2v1.6M11.6 13.2v1.6" />
+        }
+        @case ('cutlery') {
+          <path d="M4.6 3v4a2.2 2.2 0 0 0 4.4 0V3" />
+          <path d="M6.8 3v4M6.8 9.2V17" />
+          <path d="M15.2 17V3c-1.7 0-2.6 1.4-2.6 3.4s.9 3.4 2.6 3.4" />
+        }
+        @case ('phone') {
+          <rect x="5.6" y="2.6" width="8.8" height="14.8" rx="1.8" />
+          <path d="M8.6 4.8h2.8M9 15.2h2" />
+        }
+        @case ('image') {
+          <rect x="2.8" y="4.4" width="14.4" height="11.2" rx="1.4" />
+          <circle cx="7.2" cy="8.4" r="1.2" />
+          <path d="m3.4 13.9 3.8-3.5 2.6 2.3 3.1-3.3 3.5 4.5" />
         }
       }
     </svg>

@@ -1,0 +1,596 @@
+@use 'abstracts' as *;
+
+// =============================================================================
+// TOMEYYA — the four screens
+//
+// The till and the handset in the hero, and the orders board, the web menu and
+// the handset again in the showcase. Split off from tomeyya.page.scss because
+// they are one object each and a component stylesheet is measured per file.
+//
+// Each is built in markup rather than dropped in as a screenshot: there is no
+// Tomeyya UI artwork in the repo, and a flat image would neither survive a theme
+// nor scale down to a phone. Everything inside a device is sized in `em` off one
+// font-size, so it scales as a single object instead of needing a breakpoint per
+// part, and every device is aria-hidden in the template — the menu items and
+// figures are placeholders standing in for a restaurant's own data.
+//
+// A screen is emissive, so all four keep the product's light surface in both
+// themes. They do that by re-pinning the `--tm-*` tokens their parts read rather
+// than by restating colours part by part.
+// =============================================================================
+
+.pos,
+.board,
+.web,
+.app__screen {
+  --tm-paper: #fffdf9;
+  --tm-cream: #f7efe3;
+  --tm-sand: #ecdfc9;
+  --tm-ink: #241b18;
+  --tm-ink-soft: #7a6a61;
+  --tm-line: rgb(36 27 24 / 11%);
+  --tm-red: #8f2233;
+
+  background: var(--tm-paper);
+  color: var(--tm-ink);
+  font-family: var(--bwg-font-ui);
+}
+
+.pos,
+.board,
+.web {
+  // Width comes from the column, not from the content: a grid cell that centres
+  // its child would otherwise let these shrink to whatever their text measures.
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgb(36 27 24 / 14%);
+  border-radius: var(--tm-r-lg);
+  box-shadow: 0 1.5rem 3.2rem rgb(36 27 24 / 20%);
+  line-height: 1.35;
+  // The one size each view scales from.
+  font-size: clamp(3.8px, 0.72vw, 6.4px);
+
+  @include up('lg') {
+    font-size: clamp(4.4px, 0.46vw, 6.9px);
+  }
+}
+
+// The orders board runs the full width of the page and the web menu shares a
+// row with the handset, so both carry more type than the till does.
+.board {
+  @include up('lg') {
+    font-size: clamp(5px, 0.62vw, 9.5px);
+  }
+}
+
+.web {
+  @include up('lg') {
+    font-size: clamp(4.4px, 0.62vw, 8px);
+  }
+}
+
+// ── SHARED PARTS ─────────────────────────────────────────────────────────────
+
+.pos__bar,
+.board__bar {
+  display: flex;
+  gap: 1.4em;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5em 2em;
+  border-block-end: 1px solid var(--tm-line);
+}
+
+.brand {
+  display: flex;
+  gap: 0.7em;
+  align-items: baseline;
+}
+
+.brand__name {
+  color: var(--tm-red);
+  font-family: var(--bwg-font-display);
+  font-size: 2em;
+  font-weight: var(--bwg-fw-display-strong);
+  letter-spacing: -0.01em;
+}
+
+.brand__tag {
+  padding: 0.35em 0.8em;
+  background: rgb(143 34 51 / 10%);
+  border-radius: var(--bwg-r-pill);
+  color: var(--tm-red);
+  font-size: 1.05em;
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pos__branch,
+.board__live,
+.col__h {
+  color: var(--tm-ink-soft);
+  font-size: 1.2em;
+}
+
+// Plate stand-ins. Warm gradients rather than stock photography: there is no
+// food shot in this repo, and a placeholder that admits it is one reads better
+// than someone else's dinner.
+.dish__art,
+.card__art,
+.app__art {
+  background: linear-gradient(135deg, #ecd3b6, #d7a382);
+  border-radius: 0.7em;
+}
+
+.dish__art--b,
+.card__art--b,
+.app__art--b {
+  background: linear-gradient(135deg, #f2dfc6, #c99a74);
+}
+
+.dish__art--c,
+.card__art--c,
+.app__art--c {
+  background: linear-gradient(135deg, #e3c1a3, #bd8462);
+}
+
+// ── THE TILL ─────────────────────────────────────────────────────────────────
+
+.pos__body {
+  display: grid;
+  grid-template-columns: 11em minmax(0, 1fr) 17em;
+}
+
+.pos__rail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  padding: 1.4em 1em;
+  background: var(--tm-cream);
+  border-inline-end: 1px solid var(--tm-line);
+}
+
+.pos__cat {
+  padding: 0.75em 1em;
+  border-radius: 0.8em;
+  color: var(--tm-ink-soft);
+  font-size: 1.25em;
+
+  &.is-on {
+    background: var(--tm-red);
+    color: #fffdf9;
+    font-weight: var(--bwg-fw-ui-medium);
+  }
+}
+
+.pos__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1em;
+  padding: 1.5em;
+}
+
+.dish {
+  display: grid;
+  gap: 0.4em;
+  padding: 0.8em;
+  background: var(--tm-paper);
+  border: 1px solid var(--tm-line);
+  border-radius: 0.9em;
+}
+
+.dish__art {
+  aspect-ratio: 16 / 10;
+}
+
+.dish__name,
+.card__name,
+.app__name {
+  font-size: 1.2em;
+  font-weight: var(--bwg-fw-ui-medium);
+  line-height: 1.2;
+}
+
+.dish__price,
+.app__price {
+  color: var(--tm-red);
+  font-size: 1.1em;
+  font-weight: var(--bwg-fw-ui-medium);
+}
+
+.ticket {
+  display: grid;
+  align-content: start;
+  gap: 0.7em;
+  padding: 1.5em;
+  background: var(--tm-cream);
+  border-inline-start: 1px solid var(--tm-line);
+}
+
+.ticket__h {
+  font-family: var(--bwg-font-display);
+  font-size: 1.5em;
+  font-weight: var(--bwg-fw-display);
+}
+
+.ticket__line,
+.ticket__total {
+  display: flex;
+  gap: 1em;
+  justify-content: space-between;
+}
+
+.ticket__line {
+  color: var(--tm-ink-soft);
+  font-size: 1.2em;
+}
+
+.ticket__total {
+  margin-block-start: 0.3em;
+  padding-block-start: 0.9em;
+  border-block-start: 1px solid var(--tm-line);
+  font-family: var(--bwg-font-display);
+  font-size: 1.5em;
+  font-weight: var(--bwg-fw-display-strong);
+}
+
+.ticket__cta,
+.app__checkout,
+.app__add,
+.web__cart i {
+  background: var(--tm-red);
+  color: #fffdf9;
+  font-weight: var(--bwg-fw-ui-medium);
+  text-align: center;
+}
+
+.ticket__cta {
+  margin-block-start: 0.4em;
+  padding: 0.95em;
+  border-radius: 0.8em;
+  font-size: 1.3em;
+}
+
+// ── THE ORDERS BOARD ─────────────────────────────────────────────────────────
+
+.board__cols {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.2em;
+  padding: 1.6em;
+  background: var(--tm-cream);
+}
+
+.col {
+  display: grid;
+  align-content: start;
+  gap: 0.7em;
+}
+
+.col__h {
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.tkt {
+  display: grid;
+  gap: 0.25em;
+  padding: 0.9em 1em;
+  background: var(--tm-paper);
+  border: 1px solid var(--tm-line);
+  border-inline-start: 3px solid var(--tm-ink-soft);
+  border-radius: 0.7em;
+  color: var(--tm-ink-soft);
+  font-size: 1.15em;
+
+  b {
+    color: var(--tm-ink);
+    font-weight: var(--bwg-fw-ui-medium);
+  }
+}
+
+// The four states of an order, told apart by the edge rather than by four
+// different card colours.
+.tkt--work {
+  border-inline-start-color: #c8862f;
+}
+
+.tkt--done {
+  border-inline-start-color: #3f7d52;
+}
+
+.tkt--out {
+  border-inline-start-color: var(--tm-red);
+}
+
+// ── THE WEB MENU ─────────────────────────────────────────────────────────────
+
+.web__chrome {
+  display: flex;
+  gap: 0.6em;
+  align-items: center;
+  padding: 1.1em 1.3em;
+  background: var(--tm-cream);
+  border-block-end: 1px solid var(--tm-line);
+
+  i {
+    width: 0.9em;
+    height: 0.9em;
+    background: rgb(36 27 24 / 16%);
+    border-radius: var(--bwg-r-circle);
+  }
+}
+
+.web__url {
+  flex: 1;
+  margin-inline-start: 0.8em;
+  padding: 0.5em 1.1em;
+  background: var(--tm-paper);
+  border-radius: var(--bwg-r-pill);
+  color: var(--tm-ink-soft);
+  font-size: 1.1em;
+}
+
+.web__screen {
+  display: grid;
+  gap: 1.2em;
+  padding: 1.5em;
+}
+
+.web__hero {
+  display: grid;
+  gap: 0.4em;
+  padding: 1.7em;
+  background: var(--tm-band);
+  border-radius: 1em;
+  color: #fdf4ea;
+}
+
+.web__hero-h {
+  font-family: var(--bwg-font-display);
+  font-size: 1.9em;
+  font-weight: var(--bwg-fw-display-strong);
+}
+
+.web__hero-b {
+  font-size: 1.15em;
+  opacity: 0.82;
+}
+
+.web__chips,
+.app__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55em;
+
+  span {
+    padding: 0.5em 1em;
+    background: var(--tm-cream);
+    border-radius: var(--bwg-r-pill);
+    color: var(--tm-ink-soft);
+    font-size: 1.05em;
+  }
+
+  .is-on {
+    background: var(--tm-red);
+    color: #fffdf9;
+    font-weight: var(--bwg-fw-ui-medium);
+  }
+}
+
+.web__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1em;
+}
+
+.card {
+  display: grid;
+  gap: 0.5em;
+  padding: 0.8em;
+  background: var(--tm-paper);
+  border: 1px solid var(--tm-line);
+  border-radius: 0.9em;
+}
+
+.card__art {
+  aspect-ratio: 16 / 11;
+}
+
+.card__foot {
+  display: flex;
+  gap: 0.6em;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--tm-red);
+  font-size: 1.1em;
+  font-weight: var(--bwg-fw-ui-medium);
+
+  i {
+    padding: 0.45em 0.9em;
+    background: var(--tm-red);
+    border-radius: var(--bwg-r-pill);
+    color: #fffdf9;
+    font-size: 0.95em;
+    font-style: normal;
+  }
+}
+
+.web__cart {
+  padding: 0.95em 1.2em;
+  background: var(--tm-cream);
+  border: 1px solid var(--tm-line);
+  border-radius: 0.8em;
+  font-size: 1.15em;
+  font-weight: var(--bwg-fw-ui-medium);
+  text-align: center;
+}
+
+// ── THE HANDSET ──────────────────────────────────────────────────────────────
+
+.app {
+  padding: 0.55rem 0.4rem;
+  background: #1b1310;
+  border: 1px solid rgb(253 244 234 / 18%);
+  border-radius: 22px;
+  box-shadow: 0 1.2rem 2.6rem rgb(36 27 24 / 34%);
+}
+
+// In the hero it tucks into the corner of the till; in the showcase it stands
+// on its own at a size the menu can actually be read at.
+.app--tucked {
+  position: absolute;
+  // Far enough past the till's corner to clear the order ticket: the handset is
+  // meant to stand beside the till, not on top of what it is ringing up.
+  inset-block-end: -13%;
+  inset-inline-end: -5%;
+  width: 20%;
+  min-width: 4.25rem;
+}
+
+.app--large {
+  width: min(15rem, 62vw);
+  padding: 0.7rem 0.5rem;
+  border-radius: 26px;
+}
+
+.app__notch {
+  display: block;
+  width: 28%;
+  height: 3px;
+  margin: 0 auto 0.4rem;
+  background: rgb(253 244 234 / 26%);
+  border-radius: var(--bwg-r-pill);
+}
+
+.app__screen {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+  padding: 1.1em 0.9em 1.2em;
+  border-radius: 16px;
+  font-size: clamp(3.4px, 0.8vw, 5.4px);
+  line-height: 1.3;
+}
+
+.app--large .app__screen {
+  gap: 1em;
+  padding: 1.3em 1.1em 1.4em;
+  font-size: clamp(5.5px, 1.4vw, 9px);
+
+  @include up('lg') {
+    font-size: clamp(7px, 0.7vw, 10px);
+  }
+}
+
+.app__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block-end: 0.8em;
+  border-block-end: 1px solid var(--tm-line);
+}
+
+.app__bar .brand__name {
+  font-size: 1.7em;
+}
+
+.app__cart {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 2.3em;
+  height: 2.3em;
+  background: var(--tm-cream);
+  border-radius: var(--bwg-r-circle);
+  color: var(--tm-red);
+
+  // The only fixed-pixel thing inside a device; sized in `em` so it scales with
+  // the handset rather than swamping it.
+  svg {
+    width: 1.3em;
+    height: 1.3em;
+  }
+}
+
+.app__search {
+  padding: 0.7em 1em;
+  background: var(--tm-cream);
+  border-radius: var(--bwg-r-pill);
+  color: var(--tm-ink-soft);
+  font-size: 1.1em;
+}
+
+.app__row {
+  display: flex;
+  gap: 0.8em;
+  align-items: center;
+  padding: 0.7em;
+  border: 1px solid var(--tm-line);
+  border-radius: 0.9em;
+}
+
+.app__art {
+  flex: 0 0 auto;
+  width: 2.9em;
+  height: 2.9em;
+}
+
+.app__copy {
+  display: grid;
+  flex: 1;
+  gap: 0.15em;
+}
+
+.app__add {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 2em;
+  height: 2em;
+  border-radius: 0.55em;
+  font-size: 1.1em;
+}
+
+.app__checkout {
+  padding: 0.85em;
+  border-radius: 0.8em;
+  font-size: 1.15em;
+}
+
+// ── PLACEMENT ────────────────────────────────────────────────────────────────
+
+.hero__rig {
+  position: relative;
+}
+
+.stage__device {
+  display: grid;
+  place-items: center;
+}
+
+// What each stage is, set beside the device rather than over it.
+.stage__cap {
+  display: grid;
+  gap: var(--bwg-sp-1);
+  margin-block-start: var(--bwg-sp-5);
+  padding-inline-start: var(--bwg-sp-4);
+  border-inline-start: 3px solid var(--tm-red);
+}
+
+.stage__eyebrow {
+  color: var(--tm-red);
+  font-size: var(--bwg-fs-xs);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+.stage__name {
+  font-family: var(--bwg-font-display);
+  font-size: var(--bwg-fs-lg);
+  font-weight: var(--bwg-fw-display);
+  line-height: var(--bwg-lh-snug);
+}
