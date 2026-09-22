@@ -207,11 +207,19 @@
   }
 
   // A phone has the same labels to place but half the width to place them in,
-  // and the words do not scale with the screen. The circle gives up the
-  // difference, so the text still passes outside the disc rather than across
-  // it — which is what the desktop composition does, at a size that affords it.
+  // and the words do not scale with the screen: MARKETING's ink is the same
+  // 105px beside a 320px stage as beside a 460px one, and it has to end before
+  // the widest point of the circle. The circle gives up the difference, so the
+  // text passes outside the disc rather than across it — which is what the
+  // desktop composition does, at a size that affords it.
   @include down('sm') {
-    inset: 20%;
+    inset: 23%;
+  }
+
+  // Narrower still and the stage has shrunk by another 40px while the words
+  // have not moved at all. Same trade, one step down.
+  @include down('xs') {
+    inset: 28%;
   }
 }
 
@@ -253,6 +261,12 @@
   inset-inline-end: 0;
 }
 
+// Clear of the disc, not beside it. Below the desktop layout the labels have
+// no column of their own and stand over the stage itself, so this one sits
+// where the circle has already passed: at its own inline extent the disc
+// reaches 63% of the stage, and this begins just under that. Higher up — 43%,
+// where the desktop puts it — is the widest part of the circle, and the label
+// lands on the ball.
 .cap[data-slot='lower-start'] {
   inset-block-start: 64%;
   inset-inline-start: 0;
@@ -359,6 +373,46 @@
   }
 }
 
+// --- The start side, against the stage itself -------------------------------
+//
+// Below the desktop column MARKETING sits where it sits on desktop: centred on
+// the globe's equator, on the inline-start side, its text ending just outside
+// the sphere and its connector running onto the rim. Nothing here scales with
+// the stage, because the thing being fitted does not either — the icon, the
+// gap and the two lines of text are the same 105px at every width. So the room
+// is found in px: the column steps out into the page gutter, and the box stops
+// just past its own ink instead of running on to 42% of the stage, which would
+// have left the connector stranded in the middle of the disc.
+@include down('lg') {
+  // The gutter is 20px at 360px and the icon stands in it, as it does out in
+  // the desktop margin. 14 leaves 6px between the icon and the screen edge.
+  .cap[data-slot='upper-start'],
+  .cap[data-slot='lower-start'],
+  .cap[data-slot='mid-end'] {
+    inset-inline-start: -14px;
+  }
+
+  // 12px of padding and gap that the desktop can afford and a phone cannot:
+  // every one of them pushes the text further across the disc.
+  .cap__link {
+    gap: var(--bwg-sp-2);
+    padding: 0;
+  }
+
+  // Follows the icon up, now that the padding above it is gone.
+  .cap::after {
+    inset-block-start: 10px;
+  }
+
+  .cap[data-slot='lower-start'] {
+    inset-block-start: 43%;
+    // Its own ink plus the 13px that lets the connector start outside the
+    // sphere and finish on the rim. A share of the stage cannot do this: at
+    // 768px, 42% would put the connector 23px inside the disc.
+    width: 118px;
+  }
+}
+
 // --- The same slots, against the desktop column -----------------------------
 @include up('lg') {
   .cap {
@@ -404,6 +458,16 @@
 
 // From 1440px the column is wide enough to give the labels their full measure
 // and push them clear of the globe's limb.
+// From 1280 the gutter is finally deep enough to hold this label beside the
+// globe rather than under it, and the start side reads as three evenly spaced
+// tiers: TECHNOLOGY, MARKETING, INVESTMENT. Measured, not chosen: at 1200 the
+// label clears the disc by 6px and at 1100 it is 6px over it.
+@include up('wide') {
+  .cap[data-slot='lower-start'] {
+    inset-block-start: 43%;
+  }
+}
+
 @include up('xl') {
   .cap {
     width: 184px;
