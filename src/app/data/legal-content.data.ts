@@ -183,7 +183,7 @@ const PRIVACY: LegalDocument = {
         entity: 'Business World Group (BWG)',
         email: 'info@bwg-trading.com',
         addressLines: [
-          'Sama Towers, Tower 9, 9th Floor, Office 91',
+          'Sama Towers, Tower Z, 9th Floor, Office 91',
           'Zahraa El Maadi, Maadi Ring Road',
           'Cairo, Egypt',
         ],

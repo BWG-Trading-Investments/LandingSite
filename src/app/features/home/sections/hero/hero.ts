@@ -23,13 +23,13 @@ const WEBGL_MIN_CORES = 4;
  * The headline, split into the two lines it is set on. Each rises out of its own
  * clipping mask, so the split is structural rather than a line break.
  */
-const HEADLINE = ['BUSINESS.', 'CONNECTED.'] as const;
+const HEADLINE = ['BUSINESS', 'CONNECTED'] as const;
 
 const COPY = {
-  subline: 'Because We Generate Value.',
+  subline: 'Because We Generate Value',
   paragraph:
-    'We build, connect and scale businesses through an integrated ecosystem of technology, trade, marketing, investment and strategic partnerships.',
-  tagline: 'One Group. Multiple Capabilities. One Vision.',
+    'We build, connect and scale businesses through an integrated ecosystem of technology, trade, marketing, investment and strategic partnerships',
+  tagline: 'One Group. Multiple Capabilities. One Vision',
 } as const;
 
 interface HeroAction {
@@ -72,8 +72,8 @@ interface Capability {
 const CAPABILITIES: readonly Capability[] = [
   {
     label: 'TECHNOLOGY',
-    lineOne: 'Driving Innovation.',
-    lineTwo: 'Building Solutions.',
+    lineOne: 'Driving Innovation',
+    lineTwo: 'Building Solutions',
     icon: 'chip',
     side: 'start',
     slot: 'upper-start',
@@ -81,8 +81,8 @@ const CAPABILITIES: readonly Capability[] = [
   },
   {
     label: 'TRADE',
-    lineOne: 'Connecting Markets.',
-    lineTwo: 'Creating Opportunities.',
+    lineOne: 'Connecting Markets',
+    lineTwo: 'Creating Opportunities',
     icon: 'globe',
     side: 'end',
     slot: 'upper-end',
@@ -90,8 +90,8 @@ const CAPABILITIES: readonly Capability[] = [
   },
   {
     label: 'INVESTMENT',
-    lineOne: 'Funding Growth.',
-    lineTwo: 'Building Value.',
+    lineOne: 'Funding Growth',
+    lineTwo: 'Building Value',
     icon: 'growth',
     side: 'end',
     slot: 'mid-end',
@@ -99,8 +99,8 @@ const CAPABILITIES: readonly Capability[] = [
   },
   {
     label: 'MARKETING',
-    lineOne: 'Building Brands.',
-    lineTwo: 'Creating Impact.',
+    lineOne: 'Building Brands',
+    lineTwo: 'Creating Impact',
     icon: 'megaphone',
     side: 'start',
     slot: 'lower-start',
@@ -108,8 +108,8 @@ const CAPABILITIES: readonly Capability[] = [
   },
   {
     label: 'STRATEGIC PARTNERSHIPS',
-    lineOne: 'Stronger Together.',
-    lineTwo: 'Greater Impact.',
+    lineOne: 'Stronger Together',
+    lineTwo: 'Greater Impact',
     icon: 'handshake',
     side: 'end',
     slot: 'lower-end',

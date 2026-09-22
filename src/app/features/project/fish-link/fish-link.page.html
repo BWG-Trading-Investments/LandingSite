@@ -59,46 +59,31 @@
             <p class="kicker kicker--on-dark">{{ item.sector }}</p>
 
             <!--
-              The brand line: the group's lockup, a hairline, then the product's
-              own. The BWG mark used to sit on its own in the corner above, with
-              nothing to tie it to what the page is about; here the two read as
-              one lockup — BWG, and the project it built — and the way back keeps
-              the corner it already had.
-
-              The wordmark itself is still set rather than placed, because the
+              The wordmark. The name is set rather than placed, because the
               supplied lockup is a wide one drawn for a white slide. The mark
               after it is the product's own, cut from that lockup and placed
               unaltered; its ink is navy on a page of deep water, which is what
               the plate in the stylesheet is for. It carries no alt text: the
-              heading beside it already says the name.
+              heading it sits in already says the name.
+
+              The group's lockup used to stand beside this, tied to it by a
+              rule. It has gone the way of the one every other project page
+              carried: the navbar above has BWG's mark, and this line is the
+              product's.
             -->
-            <div class="hero__brand">
+            <h1 class="hero__word">
+              <span class="hero__word-fish">Fish</span>
+              <span class="hero__word-link">Link</span>
               <img
-                class="hero__lockup"
-                [src]="lockup.src"
-                [attr.alt]="lockup.alt"
-                [width]="lockup.width"
-                [height]="lockup.height"
+                class="hero__fish"
+                src="/assets/images/fish-link-mark.png"
+                alt=""
+                width="108"
+                height="75"
                 fetchpriority="high"
                 decoding="async"
               />
-
-              <span class="hero__brand-rule" aria-hidden="true"></span>
-
-              <h1 class="hero__word">
-                <span class="hero__word-fish">Fish</span>
-                <span class="hero__word-link">Link</span>
-                <img
-                  class="hero__fish"
-                  src="/assets/images/fish-link-mark.png"
-                  alt=""
-                  width="108"
-                  height="75"
-                  fetchpriority="high"
-                  decoding="async"
-                />
-              </h1>
-            </div>
+            </h1>
 
             <p class="hero__year">
               <svg

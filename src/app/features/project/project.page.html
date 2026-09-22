@@ -18,18 +18,13 @@
         <span class="md-hero__wash" aria-hidden="true"></span>
 
         <div class="wrap">
-          <!-- The BWG shell: still a page inside the group's site. -->
+          <!--
+            The way back. The group's lockup used to stand beside it, but the
+            navbar above already carries one and a project page is no place for
+            a second: it is the product's room, and the mark that belongs at the
+            head of it is the product's own.
+          -->
           <div class="md-hero__shell">
-            <img
-              class="md-hero__lockup"
-              [src]="lockup.src"
-              [attr.alt]="lockup.alt"
-              [width]="lockup.width"
-              [height]="lockup.height"
-              fetchpriority="high"
-              decoding="async"
-            />
-
             <a class="md-back" routerLink="/" fragment="projects">
               <svg
                 viewBox="0 0 20 20"
@@ -314,20 +309,11 @@
     <article class="project">
       <div class="wrap">
         <!--
-          The lockup, top left, on every detail page, exactly as on a leader
-          profile. Height is set in CSS and the width left to follow, so it can
-          never be stretched.
+          The way back, and the first thing on the page. The group's lockup used
+          to stand above it — the same one a leader profile carries — but the
+          navbar already has one, and a second at full size only pushed the
+          project's own mark and name down the page.
         -->
-        <img
-          class="project__lockup"
-          [src]="lockup.src"
-          [attr.alt]="lockup.alt"
-          [width]="lockup.width"
-          [height]="lockup.height"
-          fetchpriority="high"
-          decoding="async"
-        />
-
         <a class="project__back" routerLink="/" fragment="projects">
           <svg
             viewBox="0 0 20 20"
@@ -382,11 +368,12 @@
               slide sets it beside the wordmark. It carries no alt text: the
               heading it sits in already says the name.
             -->
-            <h1 class="project__name">
+            <h1 class="project__name" [class.project__name--lockup]="item.markIsLockup">
               {{ item.name }}
               @if (item.image && item.smallMark) {
                 <img
                   class="project__mark"
+                  [class.project__mark--lockup]="item.markIsLockup"
                   [src]="item.image"
                   alt=""
                   [width]="item.imageWidth"
@@ -492,7 +479,7 @@
   <article class="project project--missing">
     <div class="wrap">
       <h1 class="project__name">Project not found</h1>
-      <p class="project__tagline">That project does not exist.</p>
+      <p class="project__tagline">That project does not exist</p>
       <a class="project__back" routerLink="/" fragment="projects">Our Projects</a>
     </div>
   </article>

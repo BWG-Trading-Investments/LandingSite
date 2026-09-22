@@ -29,10 +29,10 @@ interface ProjectsCopy {
 const COPY: ProjectsCopy = {
   eyebrow: 'OUR PROJECTS',
   heading: 'FROM IDEAS TO IMPACT',
-  subhead: 'WE TURN OPPORTUNITIES INTO BUSINESSES.',
-  lead: 'Across our ecosystem, BWG develops and supports businesses, platforms and strategic initiatives designed to solve real market challenges.',
-  closingLead: 'MORE THAN PROJECTS.',
-  closingAccent: 'These are building blocks of a larger ecosystem.',
+  subhead: 'WE TURN OPPORTUNITIES INTO BUSINESSES',
+  lead: 'Across our ecosystem, BWG develops and supports businesses, platforms and strategic initiatives designed to solve real market challenges',
+  closingLead: 'MORE THAN PROJECTS',
+  closingAccent: 'These are building blocks of a larger ecosystem',
 };
 
 /**

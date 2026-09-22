@@ -20,12 +20,12 @@ interface PartnerAim {
 
 /** The six, in order. All copy verbatim. */
 const AIMS: readonly PartnerAim[] = [
-  { label: 'Enter new markets.', icon: 'globe' },
-  { label: 'Develop new products.', icon: 'cube' },
-  { label: 'Build digital ecosystems.', icon: 'nodes' },
-  { label: 'Create new revenue streams.', icon: 'bars' },
-  { label: 'Connect businesses with opportunities.', icon: 'handshake' },
-  { label: 'Scale successful concepts.', icon: 'trend' },
+  { label: 'Enter new markets', icon: 'globe' },
+  { label: 'Develop new products', icon: 'cube' },
+  { label: 'Build digital ecosystems', icon: 'nodes' },
+  { label: 'Create new revenue streams', icon: 'bars' },
+  { label: 'Connect businesses with opportunities', icon: 'handshake' },
+  { label: 'Scale successful concepts', icon: 'trend' },
 ];
 
 /**
@@ -94,10 +94,10 @@ const COPY: PartnershipsCopy = {
   eyebrow: 'PARTNERSHIP SECTION',
   headingLead: 'PARTNER',
   headingAccent: 'WITH BWG',
-  subheadLines: ['GREAT BUSINESSES', 'ARE BUILT TOGETHER.'],
+  subheadLines: ['GREAT BUSINESSES', 'ARE BUILT TOGETHER'],
   paragraphs: [
-    'We believe strategic partnerships create opportunities that individual businesses cannot achieve alone.',
-    'BWG works with corporations, investors, technology companies, financial institutions, suppliers, government entities and entrepreneurs to develop mutually valuable opportunities.',
+    'We believe strategic partnerships create opportunities that individual businesses cannot achieve alone',
+    'BWG works with corporations, investors, technology companies, financial institutions, suppliers, government entities and entrepreneurs to develop mutually valuable opportunities',
   ],
   gridLabel: 'WE PARTNER TO:',
 };

@@ -192,21 +192,14 @@
   }
 }
 
+// Only the way back stands in this row now that the group's lockup has left it,
+// so it is hung on the end rather than spread across nothing.
 .hero__shell {
   display: flex;
   flex-wrap: wrap;
   gap: var(--bwg-sp-4);
   align-items: center;
-  justify-content: space-between;
-}
-
-// The supplied lockup is the ink variant, which would disappear into this red.
-// The original white artwork is what belongs here, in both themes.
-.hero__lockup {
-  display: block;
-  width: auto;
-  height: 3rem;
-  content: url('/assets/bwg-lockup.png');
+  justify-content: flex-end;
 }
 
 .hero__layout {
@@ -239,15 +232,29 @@
   letter-spacing: var(--bwg-tracking-tight);
 }
 
+// The logo's own plate, beside the name. A little larger than the square that
+// held the line icon before it: the supplied artwork is a full lockup — the
+// mark, the name and the Arabic beneath it — and below about this size the two
+// smaller parts of it stop being readable.
 .hero__mark {
   display: grid;
   place-items: center;
-  width: 3.4rem;
-  height: 3.4rem;
+  width: clamp(4.2rem, 8vw, 5.4rem);
+  height: clamp(4.2rem, 8vw, 5.4rem);
+  padding: 0.45rem;
   background: rgb(255 255 255 / 12%);
   border: 1px solid rgb(255 255 255 / 22%);
   border-radius: var(--tm-r);
-  color: #fdf4ea;
+}
+
+// Sized by max-*, so the whole lockup is always inside the plate with air
+// around it and its proportions are never touched.
+.hero__logo {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }
 
 .hero__tag {

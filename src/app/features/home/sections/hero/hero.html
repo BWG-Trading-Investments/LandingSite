@@ -5,16 +5,11 @@
   <div class="hero__inner">
     <!-- z2 — copy overlay. -->
     <div class="hero__copy">
-      <img
-        class="hero__mark"
-        src="/assets/bwg-logo-v2.png"
-        alt="BWG — Business World Group"
-        width="63"
-        height="72"
-        decoding="async"
-        fetchpriority="high"
-      />
-
+      <!--
+        The group's mark stood here, above the headline. The navbar directly
+        above it already carries one, so the hero opened on the same logo twice;
+        the headline is the first thing now.
+      -->
       <h1 class="hero__headline">
         @for (line of headline; track line; let i = $index) {
           <span class="hero__line" [class.hero__line--gold]="i > 0" [style.--line-index]="i">
@@ -79,11 +74,7 @@
             [attr.data-slot]="cap.slot"
             [style.--cap-index]="i"
           >
-            <a
-              class="cap__link"
-              [href]="'#' + cap.target"
-              (click)="onAnchor($event, cap.target)"
-            >
+            <a class="cap__link" [href]="'#' + cap.target" (click)="onAnchor($event, cap.target)">
               <span class="cap__icon" aria-hidden="true">
                 @switch (cap.icon) {
                   @case ('chip') {
@@ -114,7 +105,9 @@
                       stroke-linejoin="round"
                     >
                       <circle cx="10" cy="10" r="7" />
-                      <path d="M10 3c1.9 2 2.9 4.4 2.9 7s-1 5-2.9 7c-1.9-2-2.9-4.4-2.9-7s1-5 2.9-7Z" />
+                      <path
+                        d="M10 3c1.9 2 2.9 4.4 2.9 7s-1 5-2.9 7c-1.9-2-2.9-4.4-2.9-7s1-5 2.9-7Z"
+                      />
                       <path d="M3.3 8h13.4M3.3 12h13.4" />
                     </svg>
                   }
@@ -142,7 +135,9 @@
                       stroke-linecap="round"
                       stroke-linejoin="round"
                     >
-                      <path d="M13.2 5.2 6.6 8.4H4.4A1.4 1.4 0 0 0 3 9.8v.4a1.4 1.4 0 0 0 1.4 1.4h2.2l6.6 3.2z" />
+                      <path
+                        d="M13.2 5.2 6.6 8.4H4.4A1.4 1.4 0 0 0 3 9.8v.4a1.4 1.4 0 0 0 1.4 1.4h2.2l6.6 3.2z"
+                      />
                       <path d="M15.6 8.4a2.8 2.8 0 0 1 0 3.2" />
                       <path d="M6.8 11.8v2.6a1.5 1.5 0 0 0 3 0v-1.2" />
                     </svg>
@@ -157,8 +152,12 @@
                       stroke-linecap="round"
                       stroke-linejoin="round"
                     >
-                      <path d="M10 7.6 12.1 5.5a1.9 1.9 0 0 1 2.7 0L17 7.7v4.4l-2.4 2.4a1.4 1.4 0 0 1-2 0L10 12.5" />
-                      <path d="M10 7.6 7.9 5.5a1.9 1.9 0 0 0-2.7 0L3 7.7v4.4l2.4 2.4a1.4 1.4 0 0 0 2 0L10 12.5" />
+                      <path
+                        d="M10 7.6 12.1 5.5a1.9 1.9 0 0 1 2.7 0L17 7.7v4.4l-2.4 2.4a1.4 1.4 0 0 1-2 0L10 12.5"
+                      />
+                      <path
+                        d="M10 7.6 7.9 5.5a1.9 1.9 0 0 0-2.7 0L3 7.7v4.4l2.4 2.4a1.4 1.4 0 0 0 2 0L10 12.5"
+                      />
                     </svg>
                   }
                 }

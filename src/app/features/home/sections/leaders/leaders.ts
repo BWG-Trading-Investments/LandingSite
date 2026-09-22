@@ -19,7 +19,7 @@ import { Icon } from '../../../../shared/ui/icon/icon';
 const COPY = {
   eyebrow: 'Our Leaders',
   heading: 'The People Behind The Group',
-  lead: 'BWG is led by a team whose experience spans international trade, technology, investment and strategic partnerships.',
+  lead: 'BWG is led by a team whose experience spans international trade, technology, investment and strategic partnerships',
 } as const;
 
 /**

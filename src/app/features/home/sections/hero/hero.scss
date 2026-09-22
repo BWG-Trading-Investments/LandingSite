@@ -66,12 +66,6 @@
 // =============================================================================
 // Copy
 // =============================================================================
-.hero__mark {
-  height: 72px;
-  width: auto;
-  margin-block-end: var(--bwg-sp-5);
-}
-
 .hero__headline {
   margin: 0;
   font-family: var(--bwg-font-display);
@@ -387,8 +381,8 @@
 
     // 200ms — the globe drifts in from the inline-end edge over 1400ms.
     .hero__globe {
-      animation: bwg-hero-globe-in var(--bwg-dur-globe) var(--bwg-ease-drift)
-        var(--bwg-delay-globe) both;
+      animation: bwg-hero-globe-in var(--bwg-dur-globe) var(--bwg-ease-drift) var(--bwg-delay-globe)
+        both;
     }
 
     // 600ms — headline lines rise from their masks, 90ms apart.
@@ -402,9 +396,7 @@
     // 900ms — subline, rule, paragraph, tagline, then the two buttons, 80ms apart.
     .hero__reveal {
       animation: bwg-hero-lift var(--bwg-dur-reveal) var(--bwg-ease-out) both;
-      animation-delay: calc(
-        var(--bwg-delay-copy) + var(--copy-index, 0) * var(--bwg-stagger-copy)
-      );
+      animation-delay: calc(var(--bwg-delay-copy) + var(--copy-index, 0) * var(--bwg-stagger-copy));
     }
 
     // 1500ms — the labels slide in toward the globe, 120ms apart.
@@ -434,4 +426,3 @@
 .cap[data-side='end'] {
   --cap-from: 20px;
 }
-

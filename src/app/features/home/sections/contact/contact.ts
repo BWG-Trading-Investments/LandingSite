@@ -49,14 +49,14 @@ interface ContactCopy {
 
 const COPY: ContactCopy = {
   eyebrow: 'CONTACT US',
-  headingLines: ['THE NEXT OPPORTUNITY', 'COULD START HERE.'],
-  body: 'Whether you are looking for a strategic partner, entering a new market, developing a new business, investing in an opportunity, or transforming an existing operation — BWG is ready to build it with you.',
-  closing: "LET'S GENERATE VALUE TOGETHER.",
+  headingLines: ['THE NEXT OPPORTUNITY', 'COULD START HERE'],
+  body: 'Whether you are looking for a strategic partner, entering a new market, developing a new business, investing in an opportunity, or transforming an existing operation — BWG is ready to build it with you',
+  closing: "LET'S GENERATE VALUE TOGETHER",
   addressLabel: 'Head office',
   addressLines: [
-    'Sama Towers, Tower 9, 9th Floor, Office 91',
+    'Sama Towers, Tower Z, 9th Floor, Office 91',
     'Zahraa El Maadi, Maadi Ring Road',
-    'Cairo, Egypt.',
+    'Cairo, Egypt',
   ],
 };
 

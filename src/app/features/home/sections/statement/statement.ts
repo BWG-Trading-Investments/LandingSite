@@ -106,14 +106,14 @@ interface StatementCopy {
  */
 const COPY: StatementCopy = {
   eyebrow: 'THE BWG STATEMENT',
-  headingLines: ["WE DON'T JUST BUILD BUSINESSES.", 'WE BUILD VALUE ECOSYSTEMS.'],
+  headingLines: ["WE DON'T JUST BUILD BUSINESSES", 'WE BUILD VALUE ECOSYSTEMS'],
   lead: 'BWG is a diversified business group built around one fundamental principle:',
-  pull: 'Every business should create measurable value.',
+  pull: 'Every business should create measurable value',
   paragraphs: [
-    'From strategic marketing and international trade to technology, digital platforms, business development and investment, BWG brings complementary capabilities together to transform opportunities into sustainable businesses.',
-    'We connect people, markets, capital, technology and ideas to create opportunities that move businesses forward.',
+    'From strategic marketing and international trade to technology, digital platforms, business development and investment, BWG brings complementary capabilities together to transform opportunities into sustainable businesses',
+    'We connect people, markets, capital, technology and ideas to create opportunities that move businesses forward',
   ],
-  closing: 'This is how we generate value.',
+  closing: 'This is how we generate value',
   strip: [
     'ONE VISION',
     'COMPLEMENTARY CAPABILITIES',

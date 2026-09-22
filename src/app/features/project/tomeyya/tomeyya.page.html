@@ -9,17 +9,12 @@
       <span class="hero__ground" aria-hidden="true"></span>
 
       <div class="wrap">
+        <!--
+          The way back, alone at the head of the page. The group's lockup used to
+          stand opposite it; the navbar above already carries one, and the mark
+          that belongs at the top of a product's own room is the product's.
+        -->
         <div class="hero__shell">
-          <img
-            class="hero__lockup"
-            [src]="lockup.src"
-            [attr.alt]="lockup.alt"
-            [width]="lockup.width"
-            [height]="lockup.height"
-            fetchpriority="high"
-            decoding="async"
-          />
-
           <a class="back" routerLink="/" fragment="projects">
             <svg
               viewBox="0 0 20 20"
@@ -43,15 +38,24 @@
             <p class="kicker">{{ item.sector }}</p>
 
             <!--
-              The wordmark is set rather than placed: there is no Tomeyya logo
-              file in the repo. `name` is the card's uppercase form and cannot be
-              case-folded back to the brand's own spelling, so the name is
-              typeset here and the mark drawn beside it.
+              The name is set rather than placed — `name` is the card's uppercase
+              form and cannot be case-folded back to the brand's own spelling —
+              and the product's own logo stands beside it, in the place the line
+              icon used to hold. The logo carries the name itself, so it takes no
+              alt text: the heading it sits in has already said it.
             -->
             <h1 class="hero__word">
               <span class="hero__name">Tomeyya</span>
               <span class="hero__mark" aria-hidden="true">
-                <bwg-icon name="cutlery" [size]="34" />
+                <img
+                  class="hero__logo"
+                  src="/assets/images/tomeyya-logo.png"
+                  alt=""
+                  width="2453"
+                  height="2570"
+                  fetchpriority="high"
+                  decoding="async"
+                />
               </span>
             </h1>
 
@@ -198,7 +202,7 @@
     -->
     <section class="eco" aria-labelledby="tm-eco">
       <div class="wrap">
-        <p class="kicker kicker--ink">One Platform. Multiple Experiences.</p>
+        <p class="kicker kicker--ink">One Platform. Multiple Experiences</p>
         <h2 class="eco__h" id="tm-eco">Tomeyya consists of three connected experiences</h2>
 
         @if (item.overview.length) {
@@ -441,7 +445,7 @@
 
           <p class="chain__close">
             This creates a connected experience between restaurant operations and customer ordering,
-            rather than treating the cashier system and digital menu as separate products.
+            rather than treating the cashier system and digital menu as separate products
           </p>
         </div>
       </section>
@@ -477,8 +481,8 @@
 
       <div class="wrap">
         <p class="close__line">
-          <span>One platform.</span>
-          <span class="close__line-alt">Multiple experiences.</span>
+          <span>One platform</span>
+          <span class="close__line-alt">Multiple experiences</span>
         </p>
 
         <a class="close__back" routerLink="/" fragment="projects">All BWG projects</a>

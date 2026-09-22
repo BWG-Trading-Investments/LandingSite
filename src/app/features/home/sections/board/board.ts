@@ -33,14 +33,10 @@ interface Director {
   readonly height: number;
 }
 
+// Rendered in this order, left to right, and staggered into view in it too:
+// the section's markup is a straight loop over this list and nothing in the
+// stylesheet keys off a card's position.
 const DIRECTORS: readonly Director[] = [
-  {
-    name: 'Dr. Yasser Ghahem',
-    role: 'Board Member',
-    photo: '/assets/images/board-yasser.webp',
-    width: 558,
-    height: 900,
-  },
   {
     name: 'Dr. Basem Hashaad',
     role: 'Chief Executive Officer (CEO)',
@@ -53,6 +49,13 @@ const DIRECTORS: readonly Director[] = [
     role: 'Board Member',
     photo: '/assets/images/board-mohamed.webp',
     width: 576,
+    height: 900,
+  },
+  {
+    name: 'Dr. Yasser Ghanem',
+    role: 'Board Member',
+    photo: '/assets/images/board-yasser.webp',
+    width: 558,
     height: 900,
   },
 ];

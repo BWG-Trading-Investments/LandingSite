@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { BWG_LOCKUP } from '../../data/leaders.data';
 import { type Project, findProject } from '../../data/projects.data';
 import { Icon } from '../../shared/ui/icon/icon';
 
@@ -52,9 +51,6 @@ import { Icon } from '../../shared/ui/icon/icon';
 export class ProjectPage {
   /** Bound from the `:slug` route param by withComponentInputBinding(). */
   readonly slug = input.required<string>();
-
-  /** The lockup is the group's, not the leadership section's — shared from there. */
-  protected readonly lockup = BWG_LOCKUP;
 
   /** The resolved project, or null when the slug is not one of ours. */
   protected readonly project = computed<Project | null>(() => findProject(this.slug()) ?? null);

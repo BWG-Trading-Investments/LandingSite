@@ -93,27 +93,27 @@ const CONTENT: Spotlight = {
   bio: [
     {
       icon: 'briefcase',
-      text: 'Dr. Basem Hashaad is a distinguished international trade and business development executive with more than 25 years of experience in trade policy, trade compliance, trade facilitation, economic analysis, international negotiations, and strategic development across Egypt, the MENA region, and the GCC.',
+      text: 'Dr. Basem Hashaad is a distinguished international trade and business development executive with more than 25 years of experience in trade policy, trade compliance, trade facilitation, economic analysis, international negotiations, and strategic development across Egypt, the MENA region, and the GCC',
     },
     {
       icon: 'bank',
-      text: "Prior to joining BWG, Dr. Hashaad spent more than 15 years within Egypt's Ministry of Trade and Industry, where he held senior responsibilities within the Foreign Trade Sector. He played a key role in international trade negotiations and the development of trade policy, with particular expertise in Rules of Origin and the technical preparation of bilateral and multilateral trade protocols and agreements.",
+      text: "Prior to joining BWG, Dr. Hashaad spent more than 15 years within Egypt's Ministry of Trade and Industry, where he held senior responsibilities within the Foreign Trade Sector. He played a key role in international trade negotiations and the development of trade policy, with particular expertise in Rules of Origin and the technical preparation of bilateral and multilateral trade protocols and agreements",
     },
     {
       icon: 'handshake',
-      text: 'His professional experience includes engagement with prominent international and regional organizations and trade institutions, including the WTO, WCO, EU, EFTA, COMESA, COMCEC, and MERCOSUR.',
+      text: 'His professional experience includes engagement with prominent international and regional organizations and trade institutions, including the WTO, WCO, EU, EFTA, COMESA, COMCEC, and MERCOSUR',
     },
     {
       icon: 'chart',
-      text: 'Dr. Hashaad is recognized for his strategic thinking, analytical capabilities, negotiation expertise, and strong stakeholder-management skills. He has worked closely with government institutions, international organizations, corporate stakeholders, funding partners, and senior decision-makers.',
+      text: 'Dr. Hashaad is recognized for his strategic thinking, analytical capabilities, negotiation expertise, and strong stakeholder-management skills. He has worked closely with government institutions, international organizations, corporate stakeholders, funding partners, and senior decision-makers',
     },
     {
       icon: 'people',
-      text: 'In addition to his expertise in international trade, he has significant experience in economic research, trade facilitation, institutional development, change management, crisis communication, sustainability, and community development. He is an accomplished presenter and communicator, with the ability to translate complex issues into practical strategic directions.',
+      text: 'In addition to his expertise in international trade, he has significant experience in economic research, trade facilitation, institutional development, change management, crisis communication, sustainability, and community development. He is an accomplished presenter and communicator, with the ability to translate complex issues into practical strategic directions',
     },
     {
       icon: 'target',
-      text: "At BWG, Dr. Basem Hashaad leads the Group's strategic vision and growth agenda, leveraging his extensive international trade expertise, institutional relationships, and entrepreneurial mindset to expand BWG's regional and international presence and develop high-value business opportunities and strategic partnerships.",
+      text: "At BWG, Dr. Basem Hashaad leads the Group's strategic vision and growth agenda, leveraging his extensive international trade expertise, institutional relationships, and entrepreneurial mindset to expand BWG's regional and international presence and develop high-value business opportunities and strategic partnerships",
     },
   ],
 

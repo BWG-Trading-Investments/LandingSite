@@ -21,7 +21,7 @@ export const routes: Routes = [
   {
     path: '',
     component: HomePage,
-    title: 'BWG — Business World Group | Build. Grow. Invest.',
+    title: 'BWG — Business World Group | Build. Grow. Invest',
   },
   {
     // Our Leaders was a page of its own until it became a homepage section. This

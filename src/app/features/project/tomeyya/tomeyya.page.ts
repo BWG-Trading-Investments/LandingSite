@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { BWG_LOCKUP } from '../../../data/leaders.data';
 import { type ProjectBlock, findProject } from '../../../data/projects.data';
 import { Icon } from '../../../shared/ui/icon/icon';
 
@@ -45,9 +44,6 @@ interface CapabilityGroup {
   styleUrls: ['./tomeyya.page.scss', './tomeyya-devices.scss'],
 })
 export class TomeyyaPage {
-  /** Kept from the shared shell: this is still a BWG page, entered from a BWG card. */
-  protected readonly lockup = BWG_LOCKUP;
-
   /**
    * The record behind the homepage card. It is always present — the route only
    * exists because the slug does — but findProject returns undefined for an

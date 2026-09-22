@@ -51,7 +51,7 @@ const ICON_SCALE = 2;
 /** Clearance between a node's disc and its satellite label. */
 const LABEL_GAP = 16;
 
-type CapabilityIcon = 'globe' | 'chip' | 'megaphone' | 'growth' | 'seedling' | 'factory';
+type CapabilityIcon = 'globe' | 'chip' | 'pulse' | 'cap' | 'megaphone' | 'growth';
 
 /** Where a satellite label sits relative to its node, at the widest layout. */
 type LabelSide = 'top' | 'end' | 'bottom' | 'start';
@@ -73,39 +73,39 @@ interface CapabilitySeed {
 const CAPABILITIES: readonly CapabilitySeed[] = [
   {
     index: '01',
-    title: 'BUSINESS & TRADE',
-    body: 'International trade, commercial representation, sourcing, procurement and market access.',
+    title: 'BWG TRADING',
+    body: 'Sourcing, import & export, distribution, market access, and commercial opportunities',
     icon: 'globe',
   },
   {
     index: '02',
-    title: 'TECHNOLOGY & DIGITAL',
-    body: 'Digital platforms, business applications, technology-enabled ecosystems and smart business solutions.',
+    title: 'BWG TECH',
+    body: 'Digital transformation, technology platforms, applications, and innovative solutions',
     icon: 'chip',
   },
   {
     index: '03',
-    title: 'MARKETING & BRANDING',
-    body: 'Brand strategy, marketing, communications, advertising, activations and experiences.',
-    icon: 'megaphone',
+    title: 'BWG MEDICAL',
+    body: 'Healthcare products, medical solutions, distribution, and strategic healthcare partnerships',
+    icon: 'pulse',
   },
   {
     index: '04',
-    title: 'BUSINESS DEVELOPMENT',
-    body: 'Market entry, strategic growth, partnerships, commercial development and expansion.',
-    icon: 'growth',
+    title: 'BWG EDUCATION',
+    body: 'Education solutions, training, professional development, and strategic partnerships',
+    icon: 'cap',
   },
   {
     index: '05',
-    title: 'INVESTMENT & VENTURES',
-    body: 'Identifying opportunities, developing business models and connecting businesses with strategic capital.',
-    icon: 'seedling',
+    title: 'BWG MARKETING',
+    body: 'Strategic marketing, branding, communications, market positioning, and business development',
+    icon: 'megaphone',
   },
   {
     index: '06',
-    title: 'SPECIALIZED INDUSTRIES',
-    body: 'Sector-focused ventures and platforms developed around emerging market opportunities.',
-    icon: 'factory',
+    title: 'BWG ADVISORY',
+    body: 'Business consulting, market entry, strategic planning, partnerships, and growth advisory',
+    icon: 'growth',
   },
 ];
 
@@ -188,7 +188,7 @@ interface EcosystemCopy {
 
 const COPY: EcosystemCopy = {
   heading: 'OUR BUSINESS ECOSYSTEM',
-  subhead: 'ONE GROUP. MULTIPLE CAPABILITIES.',
+  subhead: 'ONE GROUP. MULTIPLE CAPABILITIES',
   leadLead: 'Our businesses are connected by one objective — ',
   leadAccent: 'creating value',
 };

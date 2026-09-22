@@ -61,53 +61,55 @@ export const LEADERS: readonly Leader[] = [
     height: 980,
     cardIcon: 'megaphone',
     cardSummary:
-      'Marketing, branding and business development leader with more than 25 years of experience.',
-    quote: ['BWG — Where We Generate Value.'],
+      'Driving growth through strategic partnerships, market expansion, and business development excellence',
+    quote: ['BWG — Where We Generate Value'],
     intro:
-      'A seasoned marketing, branding and business development professional with more than 25 years of experience.',
+      'A seasoned business development and strategic partnerships leader with more than 25 years of experience',
     bio: [
-      "As Group Marketing Director, Adel Eskander leads BWG's marketing and branding strategy, developing integrated marketing strategies, building brands and creating measurable business value across the Group.",
-      'His work spans strategic partnerships and business development, driving market expansion into new sectors and territories, and leading operations and cross-functional teams.',
+      'As Group Marketing Director, Adel Eskander drives growth across BWG through strategic partnerships, market expansion, and business development excellence',
+      'His work spans marketing and branding strategy, integrated campaigns, and leading operations and cross-functional teams across the Group',
     ],
+    // Business development leads, as the profile does: the rest of the blocks
+    // keep their own copy and their own icons and simply follow it.
     blocks: [
+      {
+        icon: 'growth',
+        heading: 'Business Development',
+        body: 'Driving strategic partnerships, market expansion, trade, and new business growth opportunities',
+      },
       {
         icon: 'compass',
         heading: 'Strategic Marketing Leadership',
-        body: 'Leading strategic planning and business development across multiple sectors.',
+        body: 'Leading strategic planning and business development across multiple sectors',
       },
       {
         icon: 'megaphone',
         heading: 'Branding & Communications',
-        body: 'Expertise in brand management, corporate identity, advertising, digital marketing, and integrated marketing strategies.',
-      },
-      {
-        icon: 'growth',
-        heading: 'Business Development',
-        body: 'Driving strategic partnerships, market expansion, trade, and new business growth opportunities.',
+        body: 'Expertise in brand management, corporate identity, advertising, digital marketing, and integrated marketing strategies',
       },
       {
         icon: 'spark',
         heading: 'Events & Activations',
-        body: 'Designing and executing impactful events, experiences, and activation campaigns that build brands and drive engagement.',
+        body: 'Designing and executing impactful events, experiences, and activation campaigns that build brands and drive engagement',
       },
       {
         icon: 'screen',
         heading: 'Digital Transformation',
-        body: 'Leveraging digital platforms, data-driven marketing, and technology solutions to create measurable impact and business value.',
+        body: 'Leveraging digital platforms, data-driven marketing, and technology solutions to create measurable impact and business value',
       },
       {
         icon: 'bulb',
         heading: 'Innovation & New Business',
-        body: 'Developing innovative business platforms, ventures, and new commercial opportunities.',
+        body: 'Developing innovative business platforms, ventures, and new commercial opportunities',
       },
     ],
     expertise: [
-      { icon: 'compass', label: 'Marketing Strategy' },
-      { icon: 'tag', label: 'Brand Management' },
-      { icon: 'diamond', label: 'Corporate Identity' },
       { icon: 'briefcase', label: 'Business Development' },
       { icon: 'handshake', label: 'Strategic Partnerships' },
       { icon: 'globe', label: 'Market Expansion' },
+      { icon: 'compass', label: 'Marketing Strategy' },
+      { icon: 'tag', label: 'Brand Management' },
+      { icon: 'diamond', label: 'Corporate Identity' },
       { icon: 'coins', label: 'Trade & Commercial Development' },
       { icon: 'spark', label: 'Events & Activations' },
       { icon: 'screen', label: 'Digital Marketing' },
@@ -125,13 +127,13 @@ export const LEADERS: readonly Leader[] = [
     height: 824,
     cardIcon: 'briefcase',
     cardSummary:
-      'General Manager with more than 20 years in operations, international trading and brand development.',
-    quote: ['Driving Excellence.', 'Building Brands.', 'Creating Value.'],
+      'Leading operations with excellence, ensuring efficiency, collaboration, and sustainable business success',
+    quote: ['Driving Excellence', 'Building Brands', 'Creating Value'],
     intro:
-      'An experienced management professional with more than 20 years of experience in business operations, international trading, fashion, brand management, and commercial development.',
+      'An experienced management professional with more than 20 years of experience in business operations, international trading, fashion, brand management, and commercial development',
     bio: [
-      'Sarah Hassan has held senior management and leadership positions across international trading companies and fashion and lifestyle brands, working across business operations and brand development.',
-      "At BWG she supports the Group's operational excellence, strategic partnerships and continued growth.",
+      'Sarah Hassan has held senior management and leadership positions across international trading companies and fashion and lifestyle brands, working across business operations and brand development',
+      "At BWG she supports the Group's operational excellence, strategic partnerships and continued growth",
     ],
     // NOTE: the brief also called for an "Education & Specialized Studies" block.
     // Her academic background was not supplied and is recorded nowhere in this
@@ -141,22 +143,22 @@ export const LEADERS: readonly Leader[] = [
       {
         icon: 'briefcase',
         heading: 'Seasoned Management Professional',
-        body: 'More than 20 years of experience in management, business operations, international trading, fashion, and brand development.',
+        body: 'More than 20 years of experience in management, business operations, international trading, fashion, and brand development',
       },
       {
         icon: 'globe',
         heading: 'Extensive Industry Experience',
-        body: 'Senior management experience across international trading companies, fashion and lifestyle brands, operations, and brand development.',
+        body: 'Senior management experience across international trading companies, fashion and lifestyle brands, operations, and brand development',
       },
       {
         icon: 'growth',
         heading: 'Driving Growth & Excellence',
-        body: "Supporting BWG's operational excellence, strategic partnerships, and continued growth.",
+        body: "Supporting BWG's operational excellence, strategic partnerships, and continued growth",
       },
       {
         icon: 'users',
         heading: 'Leadership Approach',
-        body: 'Combining strategic thinking, commercial awareness, operational discipline, and strong understanding of brands and consumer markets.',
+        body: 'Combining strategic thinking, commercial awareness, operational discipline, and strong understanding of brands and consumer markets',
       },
     ],
     expertise: [
@@ -175,45 +177,45 @@ export const LEADERS: readonly Leader[] = [
   {
     slug: 'dr-ahmed-bayoumy-elgabry',
     name: 'Dr. Ahmed Bayoumy ElGabry',
-    title: 'Executive & Strategic Expert | Family Medicine Consultant | Author',
+    title: 'Business Development Director',
     org: 'BWG (Business World Group)',
     photo: '/assets/images/leader-ahmed.webp',
     width: 471,
     height: 980,
     cardIcon: 'pulse',
     cardSummary:
-      'Executive and strategic expert with more than 30 years of multidisciplinary experience.',
+      'Building strong brands and impactful marketing strategies that connect businesses with markets and create lasting value',
     quote: [],
-    intro: 'More than 30 years of multidisciplinary experience.',
+    intro: 'More than 30 years of multidisciplinary experience',
     bio: [
-      'Dr. Ahmed Bayoumy ElGabry is a distinguished executive and strategic professional whose experience spans healthcare, business development, strategic management, corporate communications, marketing, media, and philanthropy.',
-      'He has held senior leadership positions across Egypt and Saudi Arabia, contributing to organizational development, healthcare management, business growth, strategic partnerships, and leadership.',
+      'Dr. Ahmed Bayoumy ElGabry is a distinguished executive and strategic professional whose experience spans healthcare, business development, strategic management, corporate communications, marketing, media, and philanthropy',
+      'He has held senior leadership positions across Egypt and Saudi Arabia, contributing to organizational development, healthcare management, business growth, strategic partnerships, and leadership',
     ],
     blocks: [
       {
         icon: 'compass',
         heading: 'Distinguished Executive and Strategic Professional',
-        body: 'More than 30 years of multidisciplinary experience spanning healthcare, business development, strategic management, corporate communications, marketing, media, and philanthropy.',
+        body: 'More than 30 years of multidisciplinary experience spanning healthcare, business development, strategic management, corporate communications, marketing, media, and philanthropy',
       },
       {
         icon: 'pulse',
         heading: 'Medical Education & Qualifications',
-        body: 'MBBS from Cairo University (1994), the Egyptian Fellowship in Family Medicine, and Membership of the Royal College of General Practitioners.',
+        body: 'MBBS from Cairo University (1994), the Egyptian Fellowship in Family Medicine, and Membership of the Royal College of General Practitioners',
       },
       {
         icon: 'users',
         heading: 'Senior Leadership Experience',
-        body: 'Senior leadership positions across Egypt and Saudi Arabia, contributing to organizational development, healthcare management, business growth, strategic partnerships, and leadership.',
+        body: 'Senior leadership positions across Egypt and Saudi Arabia, contributing to organizational development, healthcare management, business growth, strategic partnerships, and leadership',
       },
       {
         icon: 'book',
         heading: 'Author & Knowledge Creator',
-        body: 'An author and knowledge creator who has developed studies, books, and training programs.',
+        body: 'An author and knowledge creator who has developed studies, books, and training programs',
       },
       {
         icon: 'handshake',
         heading: 'BWG Leadership Contribution',
-        body: 'His extensive expertise contributes to Business World Group (BWG), supporting organizational strategy, business expansion, partnerships, and new investment opportunities.',
+        body: 'His extensive expertise contributes to Business World Group (BWG), supporting organizational strategy, business expansion, partnerships, and new investment opportunities',
       },
     ],
     expertise: [
@@ -236,29 +238,28 @@ export const LEADERS: readonly Leader[] = [
     height: 980,
     cardIcon: 'chip',
     cardSummary:
-      'Technology leader driving digital transformation, innovation and scalable platforms.',
-    quote: ['Driving Technology.', 'Enabling Innovation.', 'Creating Value.'],
-    intro:
-      "Leading BWG Tech's technology vision, technology strategy, and digital transformation.",
+      'Innovating and implementing technology solutions that drive digital transformation and business growth',
+    quote: ['Driving Technology', 'Enabling Innovation', 'Creating Value'],
+    intro: "Leading BWG Tech's technology vision, technology strategy, and digital transformation",
     bio: [
-      'Eng. Saleh Hashaad leads the development of innovative technology solutions and scalable, high-performing digital platforms, keeping business and technology aligned behind one long-term technology strategy.',
-      'His approach combines strong leadership and problem-solving with a focus on innovation, security, agility, and excellence.',
+      'Eng. Saleh Hashaad leads the development of innovative technology solutions and scalable, high-performing digital platforms, keeping business and technology aligned behind one long-term technology strategy',
+      'His approach combines strong leadership and problem-solving with a focus on innovation, security, agility, and excellence',
     ],
     blocks: [
       {
         icon: 'bulb',
         heading: 'Technology Visionary',
-        body: 'Leading technology strategy, digital transformation, and innovation across BWG.',
+        body: 'Leading technology strategy, digital transformation, and innovation across BWG',
       },
       {
         icon: 'layers',
         heading: 'Innovation & Solutions',
-        body: 'Developing scalable, secure, and high-performance technology solutions.',
+        body: 'Developing scalable, secure, and high-performance technology solutions',
       },
       {
         icon: 'compass',
         heading: 'Strategic Leadership',
-        body: 'Building technology ecosystems that combine innovation, business value, scalability, and user experience.',
+        body: 'Building technology ecosystems that combine innovation, business value, scalability, and user experience',
       },
     ],
     expertise: [
@@ -293,18 +294,20 @@ export const FEATURED_LEADER: Leader = {
   height: 920,
   cardIcon: 'compass',
   cardSummary:
-    'Chief Executive Officer, with more than 25 years in international trade and business development.',
-  quote: ['Building bridges for a stronger, more connected and sustainable world.'],
+    'Chief Executive Officer, with more than 25 years in international trade and business development',
+  quote: [
+    'Transforming strategic opportunities into sustainable growth and building connections that create value across markets',
+  ],
   intro:
-    'A distinguished international trade and business development executive with more than 25 years of experience in trade policy, compliance, facilitation and strategic development across Egypt, the MENA region and the GCC.',
+    'A distinguished international trade and business development executive with more than 25 years of experience in trade policy, compliance, facilitation and strategic development across Egypt, the MENA region and the GCC',
   bio: [
-    'Dr. Basem Hashaad is a distinguished international trade and business development executive with more than 25 years of experience in trade policy, trade compliance, trade facilitation, economic analysis, international negotiations, and strategic development across Egypt, the MENA region, and the GCC.',
-    'As Chief Executive Officer of Business World Group (BWG), Dr. Hashaad brings extensive governmental, institutional, and private-sector experience to the Group, with a strong focus on transforming strategic opportunities into sustainable business growth, developing international partnerships, and creating value across markets.',
-    "Prior to joining BWG, Dr. Hashaad spent more than 15 years within Egypt's Ministry of Trade and Industry, where he held senior responsibilities within the Foreign Trade Sector. Throughout his tenure, he played a key role in international trade negotiations and trade-policy development, with particular expertise in Rules of Origin and the technical preparation of bilateral and multilateral trade protocols and agreements.",
-    "His professional experience includes engagement with prominent international and regional organizations and trade institutions, including the World Trade Organization (WTO), World Customs Organization (WCO), European Union (EU), European Free Trade Association (EFTA), Common Market for Eastern and Southern Africa (COMESA), Organisation of Islamic Cooperation's Standing Committee for Economic and Commercial Cooperation (COMCEC), and MERCOSUR.",
-    'Dr. Hashaad is recognized for his strategic thinking, analytical capabilities, negotiation expertise, and strong stakeholder-management skills. His career has involved working closely with government institutions, international organizations, corporate stakeholders, funding partners, and senior decision-makers, enabling him to navigate complex economic, operational, regulatory, and organizational environments effectively.',
-    'In addition to his expertise in international trade, he has significant experience in economic research, trade facilitation, institutional development, change management, crisis communication, sustainability, and community development. He is also an accomplished presenter and communicator, with the ability to translate complex economic and trade issues into practical strategic directions.',
-    "At BWG, Dr. Basem Hashaad leads the Group's strategic vision and growth agenda, leveraging his extensive international trade expertise, institutional relationships, and entrepreneurial mindset to expand BWG's regional and international presence and develop high-value business opportunities and strategic partnerships.",
+    'Dr. Basem Hashaad is a distinguished international trade and business development executive with more than 25 years of experience in trade policy, trade compliance, trade facilitation, economic analysis, international negotiations, and strategic development across Egypt, the MENA region, and the GCC',
+    'As Chief Executive Officer of Business World Group (BWG), Dr. Hashaad brings extensive governmental, institutional, and private-sector experience to the Group, with a strong focus on transforming strategic opportunities into sustainable business growth, developing international partnerships, and creating value across markets',
+    "Prior to joining BWG, Dr. Hashaad spent more than 15 years within Egypt's Ministry of Trade and Industry, where he held senior responsibilities within the Foreign Trade Sector. Throughout his tenure, he played a key role in international trade negotiations and trade-policy development, with particular expertise in Rules of Origin and the technical preparation of bilateral and multilateral trade protocols and agreements",
+    "His professional experience includes engagement with prominent international and regional organizations and trade institutions, including the World Trade Organization (WTO), World Customs Organization (WCO), European Union (EU), European Free Trade Association (EFTA), Common Market for Eastern and Southern Africa (COMESA), Organisation of Islamic Cooperation's Standing Committee for Economic and Commercial Cooperation (COMCEC), and MERCOSUR",
+    'Dr. Hashaad is recognized for his strategic thinking, analytical capabilities, negotiation expertise, and strong stakeholder-management skills. His career has involved working closely with government institutions, international organizations, corporate stakeholders, funding partners, and senior decision-makers, enabling him to navigate complex economic, operational, regulatory, and organizational environments effectively',
+    'In addition to his expertise in international trade, he has significant experience in economic research, trade facilitation, institutional development, change management, crisis communication, sustainability, and community development. He is also an accomplished presenter and communicator, with the ability to translate complex economic and trade issues into practical strategic directions',
+    "At BWG, Dr. Basem Hashaad leads the Group's strategic vision and growth agenda, leveraging his extensive international trade expertise, institutional relationships, and entrepreneurial mindset to expand BWG's regional and international presence and develop high-value business opportunities and strategic partnerships",
   ],
   blocks: [],
   expertise: [

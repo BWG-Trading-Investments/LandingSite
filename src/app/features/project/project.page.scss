@@ -14,25 +14,10 @@
   @include wrap;
 }
 
-.project__lockup {
-  display: block;
-  width: auto;
-  height: 3.5rem;
-
-  @include up('md') {
-    height: 4.5rem;
-  }
-}
-
-:host-context([data-theme='dark']) .project__lockup {
-  content: url('/assets/bwg-lockup.png');
-}
-
 .project__back {
   display: inline-flex;
   align-items: center;
   gap: var(--bwg-sp-2);
-  margin-block-start: var(--bwg-sp-6);
   color: var(--bwg-gold);
   font-size: var(--bwg-fs-xs);
   font-weight: var(--bwg-fw-ui-medium);
@@ -159,6 +144,28 @@
   height: 1.05em;
   margin-inline-start: 0.4em;
   vertical-align: -0.18em;
+}
+
+// A lockup is the symbol with the project's name stacked under it, so the mark
+// itself is only a fraction of the file's height. Taller than a bare symbol by
+// roughly the share the type takes up, which is what keeps that type readable
+// beside a heading; still sized in `em`, so it tracks the name it stands with.
+//
+// A box this much taller than the line it sits on would hang out of the heading
+// and over the line beneath, so the heading holding one becomes a flex row and
+// centres the two against each other instead. Only a heading with a lockup does
+// — every other name is laid out exactly as it was.
+.project__name--lockup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  align-items: center;
+}
+
+.project__mark--lockup {
+  height: 1.9em;
+  margin-inline-start: 0;
+  vertical-align: baseline;
 }
 
 .project__tagline {

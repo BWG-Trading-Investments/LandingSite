@@ -116,17 +116,10 @@
   justify-content: space-between;
 }
 
-.md-hero__lockup {
-  display: block;
-  width: auto;
-  height: 3rem;
-}
-
-// The supplied wordmark is white, which is invisible on this page's wash, so the
-// file in the markup is the ink variant; this swaps the original back in once
-// the page itself is dark. The same trade the leader profiles make.
-:host-context([data-theme='dark']) .md-hero__lockup {
-  content: url('/assets/bwg-lockup.png');
+// The row holds only the way back now that the group's lockup has gone from it,
+// so it is hung on the end rather than spread across nothing.
+.md-hero__shell {
+  justify-content: flex-end;
 }
 
 // The way back, at the head of the page and again at the foot of it.

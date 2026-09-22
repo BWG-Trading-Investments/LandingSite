@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { BWG_LOCKUP } from '../../../data/leaders.data';
 import { findProject } from '../../../data/projects.data';
 import { FishLinkDashboard } from './fish-link-dashboard';
 import { FishLinkPhone } from './fish-link-phone';
@@ -37,9 +36,6 @@ import { FishLinkPhone } from './fish-link-phone';
   styleUrl: './fish-link.page.scss',
 })
 export class FishLinkPage {
-  /** Kept from the shared shell: this is still a BWG page, entered from a BWG card. */
-  protected readonly lockup = BWG_LOCKUP;
-
   /**
    * The record behind the homepage card. It is always present — the route only
    * exists because the slug does — but findProject returns undefined for an
