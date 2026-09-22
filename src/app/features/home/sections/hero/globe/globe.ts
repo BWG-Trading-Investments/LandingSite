@@ -26,6 +26,15 @@ const ROTATION_SPEED = 0.05;
 /** Maximum cursor parallax, in CSS pixels. */
 const PARALLAX_PX = 8;
 
+/**
+ * What the arcs hold at when nothing is animating.
+ *
+ * They breathe between nothing and 0.95 while the loop runs; stopped at either
+ * end the network would read as either missing or shouting, so the still frame
+ * takes the middle of the swell.
+ */
+const STILL_ARC_OPACITY = 0.6;
+
 /** Axial tilt, matching the SVG fallback so the two globes look like one globe. */
 const AXIAL_TILT = -0.31;
 
@@ -185,10 +194,17 @@ const SHELL_FRAGMENT = `
 /**
  * The globe, in WebGL.
  *
- * Loaded lazily by the hero after first paint and only when the device is worth
- * spending a GPU context on — never below 768px, never on four cores or fewer,
- * never under reduced motion. If a context cannot be created it emits `failed`
- * and the hero falls back to the SVG globe.
+ * Loaded lazily by the hero after first paint, on every device. It used to be
+ * gated on width, core count and the motion preference, and each of those turned
+ * out to be a way of showing some readers a different globe rather than the same
+ * one: WebKit reports four cores or fewer whatever the hardware, so every iPhone
+ * and iPad was getting the SVG fallback and its readable map. If a context
+ * cannot be created it emits `failed` and the hero falls back to that globe,
+ * which is now the only thing the fallback is for.
+ *
+ * Reduced motion is honoured here rather than by swapping the picture: the loop
+ * does not run, nothing rotates, no pulse travels and the pointer is ignored —
+ * see settle(). Frames are drawn on start, on resize and on a theme change.
  *
  * The entrance animation is deliberately NOT here: the hero transforms the
  * wrapping element in CSS. Moving the camera instead would cost more and would
@@ -262,6 +278,15 @@ export class Globe implements OnDestroy {
   private inViewport = true;
   private running = false;
   private destroyed = false;
+
+  /**
+   * Whether the reader has asked for less motion.
+   *
+   * Watched rather than read once: the preference can be turned on mid-session,
+   * and when it is, the globe has to stop where it is rather than carry on until
+   * the next reload.
+   */
+  private reduced = false;
 
   private lastFrame = 0;
   private elapsed = 0;
@@ -368,6 +393,7 @@ export class Globe implements OnDestroy {
     this.watchResize();
     this.watchVisibility();
     this.watchPointer();
+    this.watchMotionPreference();
     this.resume();
   }
 
@@ -425,11 +451,11 @@ export class Globe implements OnDestroy {
       apply(this.palette, light, three);
     }
 
-    // The loop is stopped whenever the hero is off screen or the tab is hidden.
-    // Draw one frame so the canvas is already correct if it is looked at again
-    // before anything resumes it.
-    if (!this.running && this.renderer && this.scene && this.camera) {
-      this.renderer.render(this.scene, this.camera);
+    // The loop is stopped whenever the hero is off screen, the tab is hidden,
+    // or the reader has asked for less motion. Draw one frame so the canvas is
+    // already correct the next time it is looked at.
+    if (!this.running) {
+      this.renderOnce();
     }
   }
 
@@ -823,11 +849,64 @@ export class Globe implements OnDestroy {
     renderer.render(scene, camera);
   };
 
+  /**
+   * Draw the scene once, wherever it currently stands.
+   *
+   * This is what a globe under reduced motion is: the same scene, the same
+   * materials and the same camera as everyone else's, rendered when something
+   * changes rather than sixty times a second.
+   */
+  private renderOnce(): void {
+    if (this.renderer && this.scene && this.camera) {
+      this.renderer.render(this.scene, this.camera);
+    }
+  }
+
+  /**
+   * Put the animated values where they belong when nothing moves, and draw.
+   *
+   * Rotation is left at the orientation the scene was built with, the parallax
+   * offset goes back to centre, the pulses are not drawn at all — they only
+   * exist as travelling dots — and the arcs hold STILL_ARC_OPACITY, so the
+   * network still reads as a cage around the globe.
+   */
+  private settle(): void {
+    if (!this.root) {
+      return;
+    }
+
+    this.offsetX = 0;
+    this.offsetY = 0;
+    this.targetX = 0;
+    this.targetY = 0;
+    this.root.position.set(0, 0, 0);
+
+    for (const arc of this.arcs) {
+      arc.material.opacity = STILL_ARC_OPACITY;
+    }
+    for (const pulse of this.pulses) {
+      pulse.material.opacity = 0;
+    }
+
+    this.renderOnce();
+  }
+
   private resume(): void {
-    if (this.running || this.destroyed || !this.renderer) {
+    if (this.destroyed || !this.renderer) {
       return;
     }
     if (!this.inViewport || this.document.hidden) {
+      return;
+    }
+
+    // Reduced motion gets the scene, not the loop.
+    if (this.reduced) {
+      this.pause();
+      this.settle();
+      return;
+    }
+
+    if (this.running) {
       return;
     }
     this.running = true;
@@ -858,6 +937,11 @@ export class Globe implements OnDestroy {
     this.renderer.setSize(width, height, false);
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
+
+    // A still globe has no next frame to pick the new size up in.
+    if (!this.running) {
+      this.renderOnce();
+    }
   }
 
   private watchResize(): void {
@@ -892,12 +976,12 @@ export class Globe implements OnDestroy {
 
   private watchPointer(): void {
     const view = this.document.defaultView;
-    if (!view || view.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (!view) {
       return;
     }
 
     const onPointerMove = (event: PointerEvent) => {
-      if (event.pointerType !== 'mouse') {
+      if (event.pointerType !== 'mouse' || this.reduced) {
         return;
       }
       // -1 → 1 across the viewport.
@@ -944,6 +1028,37 @@ export class Globe implements OnDestroy {
   private fail(): void {
     this.teardown();
     this.failed.emit();
+  }
+
+  /**
+   * Follow the motion preference for as long as the globe is alive.
+   *
+   * Turning it on stops the loop and settles the scene; turning it off starts
+   * the loop again from where it stands. The picture is the same either way —
+   * the same sphere, the same land, the same network in the same colours — so
+   * nobody is shown a different globe on account of the setting.
+   */
+  private watchMotionPreference(): void {
+    const view = this.document.defaultView;
+    if (!view) {
+      return;
+    }
+
+    const query = view.matchMedia('(prefers-reduced-motion: reduce)');
+    this.reduced = query.matches;
+
+    const onChange = () => {
+      this.reduced = query.matches;
+      this.resume();
+    };
+
+    query.addEventListener('change', onChange);
+
+    const previous = this.detachListeners;
+    this.detachListeners = () => {
+      previous?.();
+      query.removeEventListener('change', onChange);
+    };
   }
 
   private teardown(): void {

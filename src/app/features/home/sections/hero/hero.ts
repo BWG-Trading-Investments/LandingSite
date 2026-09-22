@@ -1,20 +1,8 @@
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  PLATFORM_ID,
-  afterNextRender,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, afterNextRender, inject, signal } from '@angular/core';
 
 import { ScrollSpyService } from '../../../../core/scroll-spy.service';
 import { Globe } from './globe/globe';
 import { GlobeStatic } from './globe/globe-static';
-
-/** Four cores or fewer is not worth a GPU context for a decorative globe. */
-const WEBGL_MIN_CORES = 4;
 
 /**
  * The headline, split into the two lines it is set on. Each rises out of its own
@@ -123,8 +111,7 @@ const CAPABILITIES: readonly Capability[] = [
  *
  * The globe starts as the SVG fallback on both the server and the first client
  * render, which keeps hydration matching and guarantees the prerendered HTML is
- * never an empty box. WebGL replaces it after first paint, and only when the
- * device warrants it.
+ * never an empty box. WebGL replaces it after first paint, on every device.
  */
 @Component({
   selector: 'bwg-hero',
@@ -137,9 +124,6 @@ const CAPABILITIES: readonly Capability[] = [
 })
 export class Hero {
   private readonly spy = inject(ScrollSpyService);
-  private readonly document = inject(DOCUMENT);
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   protected readonly headline = HEADLINE;
   protected readonly copy = COPY;
@@ -148,8 +132,8 @@ export class Hero {
 
   /**
    * False on the server and on the first client render, so the hydrated DOM
-   * matches the prerendered DOM. Flipped after first paint if the device is
-   * suitable, which is also what keeps Three.js off the critical path.
+   * matches the prerendered DOM. Flipped after first paint, which is also what
+   * keeps Three.js off the critical path.
    */
   protected readonly useWebgl = signal(false);
 
@@ -157,7 +141,10 @@ export class Hero {
   private webglFailed = false;
 
   constructor() {
-    afterNextRender(() => this.watchCapability());
+    // afterNextRender is browser-only and runs after the hydrated DOM has
+    // matched the prerendered one, which is the whole reason the SVG goes first.
+    // From here the canvas takes over, on every device.
+    afterNextRender(() => this.useWebgl.set(!this.webglFailed));
   }
 
   protected onGlobeFailed(): void {
@@ -171,40 +158,5 @@ export class Hero {
     }
     event.preventDefault();
     this.spy.goToSection(target);
-  }
-
-  /**
-   * Decide between WebGL and the SVG globe, and keep deciding.
-   *
-   * A reduced-motion preference switched on mid-session drops back to the
-   * fallback rather than keeping a canvas alive that the reader has just said
-   * they do not want.
-   *
-   * Width is deliberately not part of this. It used to be — anything under
-   * 768px got the SVG globe — and the two are not the same picture: the SVG
-   * carries a visible graticule and far heavier land dots, so a phone was
-   * showing a different globe from a desktop rather than a smaller one. The
-   * canvas is the same cost at 270px as it is at 550px, and cheaper: it is a
-   * decorative sphere, paused by an IntersectionObserver the moment it leaves
-   * the viewport. What remains is a judgement about the device, not the window.
-   */
-  private watchCapability(): void {
-    const view = this.document.defaultView;
-    if (!this.isBrowser || !view) {
-      return;
-    }
-
-    const reduced = view.matchMedia('(prefers-reduced-motion: reduce)');
-    // Core count cannot change, so it is read once.
-    const cores = view.navigator.hardwareConcurrency ?? 8;
-
-    const evaluate = () => {
-      this.useWebgl.set(!this.webglFailed && !reduced.matches && cores > WEBGL_MIN_CORES);
-    };
-
-    reduced.addEventListener('change', evaluate);
-    this.destroyRef.onDestroy(() => reduced.removeEventListener('change', evaluate));
-
-    evaluate();
   }
 }
