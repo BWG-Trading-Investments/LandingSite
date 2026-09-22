@@ -98,6 +98,17 @@
   // Each original was cropped mid-thigh; this walks the cut into the page.
   -webkit-mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
   mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
+
+  // The mask above is the reason this has to go here. A mask clips the
+  // element to its own box, filter included, and his arm runs to the edge of
+  // that box — so the 2rem blur has nowhere to fall and stops dead in a
+  // vertical line beside him. At 412px it reads as a grey band about 15px
+  // wide against the page. The shadow is what goes, not the mask: the cut at
+  // the bottom still fades. Dark keeps its halo, which is a separate rule and
+  // wins on specificity — on a near-black page it is what stands him up.
+  @include down('lg') {
+    filter: none;
+  }
 }
 
 // A navy suit on a near-black page needs a halo, not a shadow.
