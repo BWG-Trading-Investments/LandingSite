@@ -298,3 +298,29 @@
     }
   }
 }
+
+// --- The five, on a phone ------------------------------------------------------
+//
+// The strip is a wrapping row, which is what it should be once there is width
+// for it: four across and one under them at the desktop layout. On a phone the
+// wrap falls where the words happen to run out — ONE VISION and COMPLEMENTARY
+// CAPABILITIES sharing the first line while the three below them each take
+// their own — so it reads as an accident rather than as a list. Below 768px it
+// is a column instead: one to a line, all flush to the same edge, evenly
+// spaced. Nothing about the type or the colour changes, and the row above this
+// width is untouched.
+@include down('md') {
+  .statement__strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--bwg-sp-4);
+  }
+
+  .statement__strip-item {
+    // The divider and the indent belong to the row; in a column the first item
+    // sets the edge and the rest line up on it.
+    padding-inline: 0;
+    padding-block: 0;
+    border-inline-start: 0;
+  }
+}

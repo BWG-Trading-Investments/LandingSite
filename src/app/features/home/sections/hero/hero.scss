@@ -253,24 +253,6 @@
   inset-inline-end: 0;
 }
 
-// INVESTMENT sits at the globe's equator, where the sphere is widest and its
-// silhouette reaches furthest out — measured, that edge falls at 90% of the
-// globe's box rather than at the box's own edge, which is why this one slot had
-// the disc under its first letters. Below 640px the page gutter is the only room
-// there is, and the label takes 12px of it: more, and its icon would be standing
-// on the edge of the screen.
-.cap[data-slot='mid-end'] {
-  inset-block-start: 42%;
-  inset-inline-end: -12px;
-
-  // From 640px the stage is capped at 460px while the page around it keeps
-  // growing, so there is room to set the text down beside the sphere, clear of
-  // it, rather than on its limb.
-  @include between('sm', 'lg') {
-    inset-inline-end: -26px;
-  }
-}
-
 .cap[data-slot='lower-start'] {
   inset-block-start: 64%;
   inset-inline-start: 0;
@@ -299,6 +281,37 @@
 .cap[data-side='end']::after {
   inset-inline-end: 100%;
   transform-origin: var(--bwg-origin-inline-end) center;
+}
+
+// --- INVESTMENT ----------------------------------------------------------------
+//
+// It used to stand at the globe's equator, on the inline-end side, where the
+// silhouette is widest and reaches furthest out — and where, at every width
+// from 320px to about 1100px, it had nowhere to go: the label is 125px of word
+// and mark and the gap between the sphere's edge and the window is less than
+// that, so it could only sit on the disc or leave the screen.
+//
+// It stands in the corner the arrangement leaves empty instead — below
+// MARKETING, level with STRATEGIC PARTNERSHIPS — and is set the way that side
+// of the ring is set: mark first, text ranged left, connector reaching back
+// toward the globe from its inline-end. Percentages of the stage, like every
+// other slot, so it holds at any width rather than at one, and the same at
+// every width rather than one arrangement on a phone and another on a desktop.
+.cap[data-slot='mid-end'] {
+  inset-block-start: 82%;
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+  text-align: start;
+}
+
+.cap[data-slot='mid-end'] .cap__link {
+  flex-direction: row;
+}
+
+.cap[data-slot='mid-end']::after {
+  inset-inline-start: 100%;
+  inset-inline-end: auto;
+  transform-origin: var(--bwg-origin-inline-start) center;
 }
 
 .cap__link {
@@ -374,13 +387,10 @@
     inset-inline-end: max(-6%, -20px);
   }
 
-  // Out as far as the gutter can take it. The two-column layout gives the stage
-  // half the page here and the sphere grows with it while the word does not, so
-  // below 1440px the label cannot get entirely clear of the disc without leaving
-  // the screen; this is the distance that buys the most daylight and still keeps
-  // a margin between the label and the window.
+  // It stands under MARKETING, so it hangs out over the same edge by the same
+  // amount: one column of labels, not one column and an exception.
   .cap[data-slot='mid-end'] {
-    inset-inline-end: max(-10%, -46px);
+    inset-inline-start: -10%;
   }
 
   .cap[data-slot='lower-start'] {
@@ -389,16 +399,6 @@
 
   .cap[data-slot='lower-end'] {
     inset-inline-end: max(-4%, -14px);
-  }
-}
-
-// Above 1280px the wrap stops widening and the page margins take the growth
-// instead. INVESTMENT follows them out until it stands clear of the sphere — at
-// 76px its first letter passes the silhouette — and then holds, rather than
-// drifting away from the globe as the window keeps opening.
-@include up('wide') {
-  .cap[data-slot='mid-end'] {
-    inset-inline-end: max(-76px, calc(-46px - (100vw - 1280px) / 2));
   }
 }
 
@@ -418,7 +418,7 @@
   }
 
   .cap[data-slot='mid-end'] {
-    inset-inline-end: -18%;
+    inset-inline-start: -18%;
   }
 
   .cap[data-slot='lower-start'] {

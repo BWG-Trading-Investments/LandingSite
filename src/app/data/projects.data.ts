@@ -285,14 +285,15 @@ export const PROJECTS: readonly Project[] = [
     icon: 'globe',
     url: null,
     urlLabel: null,
-    // The supplied file, whole and untouched: the framed square, the two-line
-    // wordmark and the line under it, on the black it was drawn on. It carries
-    // its own ground, so it needs no plate behind it — the plate is for marks
-    // that arrive as bare ink.
-    image: '/assets/images/white-square-logo.jpeg',
-    imageWidth: 800,
-    imageHeight: 423,
-    imageOnPlate: false,
+    // The supplied lockup with its black ground keyed out: the framed square,
+    // the two-line wordmark and the line under it, and nothing else — the file
+    // is now the artwork rather than a picture of it. Bare ink, so it takes the
+    // plate behind it, which is what keeps the navy half of it legible on a
+    // dark card.
+    image: '/assets/images/white-square-logo.png',
+    imageWidth: 780,
+    imageHeight: 376,
+    imageOnPlate: true,
     smallMark: true,
     markIsLockup: true,
     // The slide's description is one sentence and it is the same sentence in
