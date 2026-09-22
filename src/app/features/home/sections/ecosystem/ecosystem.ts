@@ -59,8 +59,26 @@ type LabelSide = 'top' | 'end' | 'bottom' | 'start';
 interface CapabilitySeed {
   readonly index: string;
   readonly title: string;
+  /** What the division covers, in the profile's own words. Sits under the name. */
+  readonly subtitle: string;
   readonly body: string;
   readonly icon: CapabilityIcon;
+}
+
+/** The marks the advantage band draws, copied from shared/ui/icon/icon.ts. */
+type AdvantageIcon = 'users' | 'layers' | 'globe' | 'target';
+
+interface Advantage {
+  readonly label: string;
+  readonly icon: AdvantageIcon;
+  /**
+   * What stands between this item and the one before it: three sums and a
+   * result. The first carries none, and it is decoration — the meaning is the
+   * four labels, so the operators are hidden from the accessibility tree.
+   */
+  readonly operator: string | null;
+  /** The one the sum arrives at, set in gold. */
+  readonly accent?: boolean;
 }
 
 /**
@@ -74,39 +92,58 @@ const CAPABILITIES: readonly CapabilitySeed[] = [
   {
     index: '01',
     title: 'BWG TRADING',
+    subtitle: 'International Trade & Market Development',
     body: 'Sourcing, import & export, distribution, market access, and commercial opportunities',
     icon: 'globe',
   },
   {
     index: '02',
     title: 'BWG TECH',
+    subtitle: 'Technology & Digital Solutions',
     body: 'Digital transformation, technology platforms, applications, and innovative solutions',
     icon: 'chip',
   },
   {
     index: '03',
     title: 'BWG MEDICAL',
+    subtitle: 'Healthcare & Medical Solutions',
     body: 'Healthcare products, medical solutions, distribution, and strategic healthcare partnerships',
     icon: 'pulse',
   },
   {
     index: '04',
     title: 'BWG EDUCATION',
+    subtitle: 'Education & Professional Development',
     body: 'Education solutions, training, professional development, and strategic partnerships',
     icon: 'cap',
   },
   {
     index: '05',
     title: 'BWG MARKETING',
+    subtitle: 'Marketing, Branding & Business Growth',
     body: 'Strategic marketing, branding, communications, market positioning, and business development',
     icon: 'megaphone',
   },
   {
     index: '06',
     title: 'BWG ADVISORY',
+    subtitle: 'Strategic Business & Market Advisory',
     body: 'Business consulting, market entry, strategic planning, partnerships, and growth advisory',
     icon: 'growth',
   },
+];
+
+/**
+ * The BWG Advantage: three things added together, and what they come to.
+ *
+ * Read as a sum, which is why the operators are in the data rather than in the
+ * template — the band is four labels and the relation between them.
+ */
+const ADVANTAGES: readonly Advantage[] = [
+  { label: 'Specialized Expertise', icon: 'users', operator: null },
+  { label: 'Integrated Capabilities', icon: 'layers', operator: '+' },
+  { label: 'Strategic Network', icon: 'globe', operator: '+' },
+  { label: 'One Vision', icon: 'target', operator: '=', accent: true },
 ];
 
 interface CapabilityNode extends CapabilitySeed {
@@ -184,13 +221,15 @@ interface EcosystemCopy {
   readonly subhead: string;
   readonly leadLead: string;
   readonly leadAccent: string;
+  readonly advantageEyebrow: string;
 }
 
 const COPY: EcosystemCopy = {
-  heading: 'OUR BUSINESS ECOSYSTEM',
+  heading: 'OUR BUSINESS DIVISIONS',
   subhead: 'ONE GROUP. MULTIPLE CAPABILITIES',
-  leadLead: 'Our businesses are connected by one objective — ',
-  leadAccent: 'creating value',
+  leadLead: 'Specialized business divisions, backed by the strength, network and resources of ',
+  leadAccent: 'one integrated group',
+  advantageEyebrow: 'THE BWG ADVANTAGE',
 };
 
 /**
@@ -220,6 +259,13 @@ export class Ecosystem {
 
   protected readonly copy = COPY;
   protected readonly nodes = NODES;
+  protected readonly advantages = ADVANTAGES;
+
+  /**
+   * Where the advantage band picks the stagger up. The six nodes are indexed 0
+   * to 5, so the band follows them rather than arriving alongside the ring.
+   */
+  protected readonly advantageOrder = CAPABILITIES.length;
 
   protected readonly viewBox = `0 0 ${VIEW_W} ${VIEW_H}`;
   protected readonly cx = CX;

@@ -18,10 +18,13 @@
 // =============================================================================
 // Header
 // =============================================================================
-// Source order is header, diagram, aims — which is exactly how it should stack
-// below the desktop layout, with the diagram above the grid. At >=1024px named
-// areas move the diagram into its own column, spanning both rows so it has room
-// to stick while the copy beside it scrolls.
+// Copy on the inline-start, the composition beside it on the inline-end, in one
+// row. The six aims used to be a separate grid of rectangles in the copy column,
+// which left the drawing illustrating a list rather than carrying it; they now
+// stand around the ring, so the column beside the copy is the whole of it.
+//
+// Below 1024px there is not enough width for both, so they stack in source
+// order — copy first, composition under it.
 .pt__grid-outer {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -29,26 +32,9 @@
   align-items: start;
 
   @include up('lg') {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-    grid-template-areas:
-      'header diagram'
-      'aims   diagram';
-    column-gap: var(--bwg-sp-9);
-    row-gap: var(--bwg-sp-8);
-  }
-}
-
-@include up('lg') {
-  .pt__header {
-    grid-area: header;
-  }
-
-  .pt__diagram {
-    grid-area: diagram;
-  }
-
-  .pt__aims {
-    grid-area: aims;
+    grid-template-columns: minmax(0, 0.62fr) minmax(0, 1fr);
+    column-gap: var(--bwg-sp-8);
+    align-items: center;
   }
 }
 
@@ -113,80 +99,97 @@
   }
 }
 
+// The last line of the copy: it introduces the six statements standing around
+// the ring beside it.
 .pt__label {
+  margin-block-start: var(--bwg-sp-7);
   color: var(--bwg-gold);
 }
 
 // =============================================================================
-// The six
+// The six, around the ring
 //
-// Rules only: no card, no fill, no outer border. Every cell draws just its own
-// inline-start and block-start hairline, which is what keeps the outer edges
-// clean and leaves no trailing rule on the last cell of a row. Each column count
-// below restates which cells open a row.
+// No rules, no cells, no border: each statement is text standing outside its own
+// satellite. Positions come from the component, which derives them from the
+// angles the satellites themselves are drawn at, so the two cannot drift apart.
+// Percentages of the composition throughout — scaling the composition scales
+// the arrangement with it.
 // =============================================================================
-.pt__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  margin: var(--bwg-sp-5) 0 0;
+.pt__aims {
+  margin: 0;
   padding: 0;
   list-style: none;
-
-  // Two-up from 640px and it stays there: at the desktop layout this grid only
-  // owns half the width, so a third column would squeeze the labels.
-  @include up('sm') {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
-// One column: every cell opens its own row, so none carries a vertical rule and
-// only the first has no rule above it.
-.pt__item {
-  padding: var(--bwg-sp-6) var(--bwg-sp-5);
-  border-block-start: 1px solid var(--bwg-hairline);
-
-  &:first-child {
-    border-block-start: 0;
-  }
-}
-
-// Two columns: odd cells open a row; the first two are the top row.
-@include up('sm') {
-  .pt__item {
-    border-inline-start: 1px solid var(--bwg-hairline);
-  }
-
-  .pt__item:nth-child(2n + 1) {
-    border-inline-start: 0;
-  }
-
-  .pt__item:nth-child(-n + 2) {
-    border-block-start: 0;
-  }
-}
-
-// 28px inside a gold hairline circle. Colour and opacity only on highlight, so
-// the ring never resizes and the grid never shifts.
-.pt__icon {
-  display: grid;
-  place-items: center;
-  width: 3.5rem;
-  height: 3.5rem;
-  border: 1px solid var(--bwg-rule-strong);
-  border-radius: var(--bwg-r-circle);
-  color: var(--bwg-gold-bright);
-  transition:
-    color var(--bwg-dur-base) var(--bwg-ease-out),
-    border-color var(--bwg-dur-base) var(--bwg-ease-out);
-}
-
-.pt__item-label {
-  display: block;
-  max-width: 18rem;
-  margin-block-start: var(--bwg-sp-4);
+.pt__aim {
+  position: absolute;
+  // Sized against the composition rather than in pixels: the width that leaves
+  // the ring its room at 1280px leaves it the same share at 375px.
+  width: 29%;
   color: var(--bwg-text);
-  font-size: var(--bwg-fs-md);
+  // Between the small-caps measure and body copy, following the composition up
+  // as it grows and stopping where it is still comfortably readable.
+  // Reaches body size at about the width where the composition stops growing,
+  // and holds at the small-caps measure below that rather than following the
+  // ring down into illegibility.
+  font-size: clamp(var(--bwg-fs-sm), 1.6vw, var(--bwg-fs-md));
   line-height: var(--bwg-lh-snug);
+  cursor: default;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+// Under 360px the two statements on each side are 50px apart and the longest of
+// them wants four lines at the measure above. One step down is what keeps them
+// off each other; the arrangement itself does not change.
+@include down('xs') {
+  .pt__aim {
+    font-size: var(--bwg-fs-xs);
+  }
+}
+
+.pt__aim[data-side='end'] {
+  inset-inline-start: var(--inset-inline);
+  inset-block-start: var(--inset-block);
+  translate: 0 -50%;
+}
+
+.pt__aim[data-side='start'] {
+  inset-inline-end: var(--inset-inline);
+  inset-block-start: var(--inset-block);
+  translate: 0 -50%;
+  text-align: end;
+}
+
+.pt__aim[data-side='top'],
+.pt__aim[data-side='bottom'] {
+  // translate has no logical form, so the centring shift is a variable the RTL
+  // block below flips rather than a hard-coded direction.
+  --centre-shift: -50%;
+
+  // The statements on the vertical axis have the whole width beside them, so
+  // they take a little more of it and sit on one line for longer.
+  width: 38%;
+  inset-inline-start: var(--inset-inline);
+  translate: var(--centre-shift) 0;
+  text-align: center;
+}
+
+.pt__aim[data-side='top'] {
+  inset-block-end: var(--inset-block);
+}
+
+.pt__aim[data-side='bottom'] {
+  inset-block-start: var(--inset-block);
+}
+
+:host-context([dir='rtl']) {
+  .pt__aim[data-side='top'],
+  .pt__aim[data-side='bottom'] {
+    --centre-shift: 50%;
+  }
 }
 
 // =============================================================================
@@ -206,8 +209,8 @@
       animation-delay: calc(var(--reveal-index, 0) * var(--bwg-stagger-copy));
     }
 
-    .pt__item {
-      animation: bwg-lift-in var(--bwg-dur-reveal) var(--bwg-ease-out) both;
+    .pt__aim {
+      animation: bwg-fade-in var(--bwg-dur-reveal) var(--bwg-ease-out) both;
       animation-delay: calc(
         var(--bwg-delay-orbit) + var(--item-index, 0) * var(--bwg-stagger-orbit)
       );
@@ -218,28 +221,43 @@
 // =============================================================================
 // The convergence diagram
 // =============================================================================
-.pt__diagram {
-  // Below 640px it would have to shrink past legibility, so it goes entirely
-  // rather than becoming decoration nobody can read.
-  display: none;
-
-  @include up('sm') {
-    display: block;
-  }
+.pt__composition {
+  margin-block-start: var(--bwg-sp-7);
 
   @include up('lg') {
-    // Holds its place while the copy beside it scrolls past.
-    position: sticky;
-    inset-block-start: calc(var(--bwg-nav-h) + var(--bwg-sp-6));
+    margin-block-start: 0;
   }
 }
 
-.pt__diagram-inner {
+// The composition. Square, centred, and capped so it stays a diagram rather
+// than becoming a wall at 1920px; everything inside is a percentage of it, so
+// this one measurement is what the whole arrangement scales by.
+.pt__stage {
   position: relative;
   width: 100%;
-  max-width: 30rem;
+  max-width: 52rem;
+  margin-block-start: var(--bwg-sp-6);
   margin-inline: auto;
+
+  @include up('lg') {
+    margin-block-start: 0;
+  }
+  // The ratio comes from the component, which is also what the statements'
+  // vertical percentages are computed against.
+  aspect-ratio: 1 / var(--stage-ratio);
+}
+
+// The drawing takes the middle of it. Width against the stage's width and a
+// square of its own, so the ring stays a ring whatever height the stage has;
+// centred in the block axis rather than inset from both ends, for the same
+// reason.
+.pt__diagram {
+  position: absolute;
+  inset-inline-start: 24%;
+  inset-block-start: 50%;
+  width: 52%;
   aspect-ratio: 1;
+  translate: 0 -50%;
 }
 
 .pt__canvas {
@@ -300,7 +318,9 @@
   display: block;
 
   img {
-    height: 2.25rem;
+    // Same share of the hub at every size: a fixed 2.25rem nearly filled the
+    // ring once the composition came down to a phone's width.
+    height: clamp(1.05rem, 4.1vw, 2.25rem);
     width: auto;
   }
 }
@@ -334,25 +354,18 @@
 // Colour and opacity only — nothing here changes a size, a position or a border
 // width, so the grid cannot shift while a highlight moves.
 // =============================================================================
-.pt__item {
-  transition: opacity var(--bwg-dur-base) var(--bwg-ease-out);
+.pt__aim {
+  transition:
+    color var(--bwg-dur-base) var(--bwg-ease-out),
+    opacity var(--bwg-dur-base) var(--bwg-ease-out);
 
   &.is-dimmed {
     opacity: 0.4;
   }
 
-  &.is-active .pt__icon {
-    color: var(--bwg-gold-bright);
-    border-color: var(--bwg-gold);
-  }
-
-  &.is-active .pt__item-label {
+  &.is-active {
     color: var(--bwg-gold-bright);
   }
-}
-
-.pt__item-label {
-  transition: color var(--bwg-dur-base) var(--bwg-ease-out);
 }
 
 .pt__node.is-active {

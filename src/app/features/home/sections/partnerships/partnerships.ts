@@ -47,6 +47,38 @@ const ICON_SCALE = 1.8;
 const SPOKE_START = CX + HUB_RADIUS;
 const SPOKE_END = CX + RING_RADIUS - NODE_RADIUS;
 
+/**
+ * How much of the composition the drawing itself takes.
+ *
+ * The SVG above is framed tight around its ring; the six statements stand
+ * outside it, in the space this leaves. Everything below is expressed as a
+ * fraction of the composition's own width, so the ring, the satellites and the
+ * statements are one object: give the composition a width and every part of it
+ * follows, which is what lets a phone show the same arrangement as a desktop
+ * rather than a rearranged one.
+ */
+const DIAGRAM_SCALE = 0.52;
+
+/** Centre to satellite centre, and the satellite's own radius, in those terms. */
+const ORBIT_F = (RING_RADIUS / VIEW) * DIAGRAM_SCALE;
+const NODE_F = (NODE_RADIUS / VIEW) * DIAGRAM_SCALE;
+
+/** Clearance between a satellite's edge and the statement it carries. */
+const LABEL_GAP_F = 0.022;
+
+/**
+ * The composition's height, as a share of its width.
+ *
+ * It is wider than it is tall: the statements to the sides reach the edges,
+ * while the ones above and below stop a line or two past the ring. Square, a
+ * third of the height was empty. Every vertical fraction below is divided by
+ * this, so the arrangement does not move — the air around it does.
+ */
+const STAGE_RATIO = 0.74;
+
+/** Which side of its satellite a statement opens away from. */
+type AimSide = 'top' | 'end' | 'bottom' | 'start';
+
 interface DiagramNode extends PartnerAim {
   /** Centre of the satellite, in viewBox units. */
   readonly x: number;
@@ -55,6 +87,14 @@ interface DiagramNode extends PartnerAim {
   readonly angle: number;
   /** Places the 20-unit icon centred on the satellite and scales it to fit. */
   readonly iconTransform: string;
+  readonly side: AimSide;
+  /**
+   * Where the statement sits, as percentages of the composition. Which inset
+   * each one applies to depends on `side`, so the template binds them by side —
+   * the same arrangement the ecosystem diagram places its divisions with.
+   */
+  readonly insetInline: number;
+  readonly insetBlock: number;
 }
 
 /**
@@ -67,8 +107,23 @@ interface DiagramNode extends PartnerAim {
 const NODES: readonly DiagramNode[] = AIMS.map((aim, index) => {
   const degrees = -90 + index * (360 / AIMS.length);
   const radians = (degrees * Math.PI) / 180;
-  const x = CX + RING_RADIUS * Math.cos(radians);
-  const y = CY + RING_RADIUS * Math.sin(radians);
+  const cos = Math.cos(radians);
+  const sin = Math.sin(radians);
+  const x = CX + RING_RADIUS * cos;
+  const y = CY + RING_RADIUS * sin;
+
+  // The same satellite, now as a point in the composition rather than in the
+  // viewBox: half of it, plus however far along the orbit this one sits.
+  const fx = 0.5 + ORBIT_F * cos;
+  // Vertical fractions are of the height, which is STAGE_RATIO of the width.
+  const fy = 0.5 + (ORBIT_F / STAGE_RATIO) * sin;
+  const clear = NODE_F + LABEL_GAP_F;
+  const clearV = clear / STAGE_RATIO;
+
+  // A satellite near the vertical axis has nothing beside it, so its statement
+  // stands above or below instead. Everything else reads outward from the ring.
+  const side: AimSide =
+    Math.abs(cos) < 0.35 ? (sin < 0 ? 'top' : 'bottom') : cos > 0 ? 'end' : 'start';
 
   return {
     ...aim,
@@ -78,6 +133,9 @@ const NODES: readonly DiagramNode[] = AIMS.map((aim, index) => {
     // Placement and scale both live in the SVG transform, driven by the node
     // centre. A CSS scale would compose outside it and throw the icon clear.
     iconTransform: `translate(${x} ${y}) scale(${ICON_SCALE}) translate(${-ICON_SIZE / 2} ${-ICON_SIZE / 2})`,
+    side,
+    insetInline: (side === 'end' ? fx + clear : side === 'start' ? 1 - (fx - clear) : fx) * 100,
+    insetBlock: (side === 'top' ? 1 - (fy - clearV) : side === 'bottom' ? fy + clearV : fy) * 100,
   };
 });
 
@@ -122,8 +180,10 @@ export class Partnerships {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   protected readonly copy = COPY;
-  protected readonly aims = AIMS;
   protected readonly nodes = NODES;
+
+  /** Handed to the stage, so the ratio the insets assume is the one it gets. */
+  protected readonly stageRatio = STAGE_RATIO;
 
   protected readonly viewBox = `0 0 ${VIEW} ${VIEW}`;
   protected readonly cx = CX;

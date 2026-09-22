@@ -20,7 +20,9 @@
         }
       </p>
 
-      <p class="about__para about__reveal" style="--reveal-index: 6">{{ copy.isolation }}</p>
+      <p class="about__para about__reveal" style="--reveal-index: 6">{{ copy.structure }}</p>
+
+      <p class="about__para about__reveal" style="--reveal-index: 7">{{ copy.isolation }}</p>
 
       <!--
         The six building blocks. Connectors are drawn from each item's own box in
@@ -88,45 +90,152 @@
         }
       </ul>
 
-      <p class="about__closing about__reveal" style="--reveal-index: 7">{{ copy.closing }}</p>
+      <p class="about__closing about__reveal" style="--reveal-index: 8">{{ copy.closing }}</p>
     </div>
 
-    <ul class="about__cards" role="list">
-      @for (card of copy.cards; track card.label; let i = $index) {
-        <li class="about__card" [style.--reveal-order]="cardOrder + i">
-          <span class="about__card-badge" aria-hidden="true">
-            <svg
-              viewBox="0 0 20 20"
-              width="20"
-              height="20"
-              stroke="currentColor"
-              stroke-width="1.25"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              @switch (card.icon) {
-                @case ('target') {
-                  <circle cx="10" cy="10" r="6.6" />
-                  <circle cx="10" cy="10" r="3.2" />
-                  <path d="M10 10 16.5 3.5" />
-                  <path d="M13.6 3.5H16.5V6.4" />
+    <!--
+      The inline-end column: the two cards, and under them the values the
+      mission is measured against. They share a column rather than being two
+      grid children, because a third child of about__grid would be placed on a
+      row of its own and land at the foot of the copy instead.
+    -->
+    <div class="about__aside">
+      <ul class="about__cards" role="list">
+        @for (card of copy.cards; track card.label; let i = $index) {
+          <li class="about__card" [style.--reveal-order]="cardOrder + i">
+            <span class="about__card-badge" aria-hidden="true">
+              <svg
+                viewBox="0 0 20 20"
+                width="20"
+                height="20"
+                stroke="currentColor"
+                stroke-width="1.25"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                @switch (card.icon) {
+                  @case ('target') {
+                    <circle cx="10" cy="10" r="6.6" />
+                    <circle cx="10" cy="10" r="3.2" />
+                    <path d="M10 10 16.5 3.5" />
+                    <path d="M13.6 3.5H16.5V6.4" />
+                  }
+                  @case ('telescope') {
+                    <path d="M3.2 11.4 12.6 6l2 3.5-9.4 5.4z" />
+                    <path
+                      d="M13.6 7.7 16.4 6.1a1.2 1.2 0 0 1 1.6.5 1.2 1.2 0 0 1-.4 1.6l-2.8 1.6"
+                    />
+                    <path d="M7.6 13.2 9.4 16.4" />
+                    <path d="M4.6 14.9 6.2 17.6" />
+                  }
                 }
-                @case ('telescope') {
-                  <path d="M3.2 11.4 12.6 6l2 3.5-9.4 5.4z" />
-                  <path d="M13.6 7.7 16.4 6.1a1.2 1.2 0 0 1 1.6.5 1.2 1.2 0 0 1-.4 1.6l-2.8 1.6" />
-                  <path d="M7.6 13.2 9.4 16.4" />
-                  <path d="M4.6 14.9 6.2 17.6" />
-                }
-              }
-            </svg>
-          </span>
+              </svg>
+            </span>
 
-          <div class="about__card-body">
-            <p class="about__card-label">{{ card.label }}</p>
-            <p class="about__card-text">{{ card.body }}</p>
-          </div>
+            <div class="about__card-body">
+              <p class="about__card-label">{{ card.label }}</p>
+              <p class="about__card-text">{{ card.body }}</p>
+            </div>
+          </li>
+        }
+      </ul>
+
+      <!-- The four values, carrying the card stagger on from where it stops. -->
+      <ul class="about__values" role="list">
+        @for (value of copy.values; track value.label; let i = $index) {
+          <li class="about__value" [style.--reveal-order]="valueOrder + i">
+            <span class="about__value-mark" aria-hidden="true">
+              <ng-container
+                [ngTemplateOutlet]="mark"
+                [ngTemplateOutletContext]="{ icon: value.icon }"
+              />
+            </span>
+            <p class="about__value-label">{{ value.label }}</p>
+            <p class="about__value-line">{{ value.line }}</p>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+
+  <!--
+    Our Approach — four verbs, the full measure of the section rather than a
+    column of it, so it reads as the group's own statement rather than as more
+    of the copy above.
+  -->
+  <div class="section__inner about__approach">
+    <p class="eyebrow about__approach-eyebrow">{{ copy.approachEyebrow }}</p>
+
+    <ul class="about__approach-list" role="list">
+      @for (item of copy.approach; track item.label; let i = $index) {
+        <li class="about__approach-item" [style.--reveal-order]="approachOrder + i">
+          <span class="about__element-disc" aria-hidden="true">
+            <ng-container
+              [ngTemplateOutlet]="mark"
+              [ngTemplateOutletContext]="{ icon: item.icon }"
+            />
+          </span>
+          <p class="about__approach-label">{{ item.label }}</p>
+          <p class="about__approach-body">{{ item.body }}</p>
         </li>
       }
     </ul>
+
+    <p
+      class="about__approach-tagline"
+      [style.--reveal-order]="approachOrder + copy.approach.length"
+    >
+      <span>{{ copy.approachLead }}</span
+      ><span class="about__approach-accent">{{ copy.approachAccent }}</span>
+    </p>
   </div>
 </section>
+
+<!--
+  The five marks the two rows above draw, written once. Same 20-unit space,
+  same single stroke, as every other icon on the page; the paths come from
+  shared/ui/icon/icon.ts, except `target`, which is the mission card's own.
+-->
+<ng-template #mark let-icon="icon">
+  <svg
+    viewBox="0 0 20 20"
+    width="20"
+    height="20"
+    stroke="currentColor"
+    stroke-width="1.25"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    @switch (icon) {
+      @case ('users') {
+        <circle cx="8" cy="7.4" r="2.8" />
+        <path d="M2.8 16.2a5.2 5.2 0 0 1 10.4 0" />
+        <path d="M13.4 5.2a2.6 2.6 0 0 1 0 4.8" />
+        <path d="M15 16.2a4.6 4.6 0 0 0-1.6-3.5" />
+      }
+      @case ('bulb') {
+        <path d="M7.6 13.2a4.6 4.6 0 1 1 4.8 0v1.6H7.6z" />
+        <path d="M8.4 17h3.2" />
+      }
+      @case ('target') {
+        <circle cx="10" cy="10" r="6.6" />
+        <circle cx="10" cy="10" r="3.2" />
+        <path d="M10 10 16.5 3.5" />
+        <path d="M13.6 3.5H16.5V6.4" />
+      }
+      @case ('growth') {
+        <path d="M3.2 16.4h13.6" />
+        <path d="M6 16.4v-3.8M9.4 16.4v-6.2M12.8 16.4v-2.6" />
+        <path d="m4.4 8.6 3.6-3.6 2.6 2.6L15.2 3" />
+        <path d="M12.6 3h2.8v2.8" />
+      }
+      @case ('globe') {
+        <circle cx="10" cy="10" r="7.2" />
+        <path
+          d="M10 2.8c1.9 2 2.9 4.5 2.9 7.2s-1 5.2-2.9 7.2c-1.9-2-2.9-4.5-2.9-7.2s1-5.2 2.9-7.2z"
+        />
+        <path d="M3.1 7.8h13.8M3.1 12.2h13.8" />
+      }
+    }
+  </svg>
+</ng-template>

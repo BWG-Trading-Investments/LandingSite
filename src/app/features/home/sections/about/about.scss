@@ -293,3 +293,201 @@
     }
   }
 }
+
+// =============================================================================
+// The inline-end column
+//
+// The two cards and the four values share one grid child, so the values sit
+// under the cards rather than being placed on a row of their own.
+// =============================================================================
+.about__aside {
+  display: grid;
+  gap: var(--bwg-sp-5);
+  align-content: start;
+}
+
+// =============================================================================
+// The four values
+//
+// The card's own border, radius and ground, at a smaller measure: these are a
+// footnote to the mission above them, not four more cards.
+// =============================================================================
+.about__values {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--bwg-sp-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  // Two up as soon as a tile can hold its line without breaking it.
+  @include up('sm') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.about__value {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bwg-sp-2);
+  padding: var(--bwg-sp-5);
+  border: 1px solid var(--bwg-hairline);
+  border-radius: var(--bwg-r);
+  background: var(--bwg-navy-soft);
+}
+
+.about__value-mark {
+  display: block;
+  color: var(--bwg-gold);
+}
+
+.about__value-label {
+  color: var(--bwg-gold);
+  font-size: var(--bwg-fs-xs);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-eyebrow);
+}
+
+.about__value-line {
+  color: var(--bwg-text-muted);
+  font-size: var(--bwg-fs-sm);
+  line-height: var(--bwg-lh-snug);
+}
+
+// =============================================================================
+// Our Approach
+//
+// A rule across the full measure and four verbs under it, in the manner of the
+// statement section's strip: the section has said what the group is, and this
+// says how it works.
+// =============================================================================
+.about__approach {
+  margin-block-start: var(--bwg-sp-9);
+  padding-block-start: var(--bwg-sp-7);
+  border-block-start: 1px solid var(--bwg-rule);
+}
+
+.about__approach-list {
+  // The disc is the one drawn for the building blocks above; it takes its size
+  // from a property the list holding it sets, so the list states it here too.
+  --element-size: 3rem;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--bwg-sp-6);
+  margin: var(--bwg-sp-6) 0 0;
+  padding: 0;
+  list-style: none;
+
+  @include up('md') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include up('lg') {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+// The divider runs between items, so it belongs to the one that follows and is
+// dropped by whichever item leads a row. Which item that is falls out of the
+// column count, as it does for the building blocks above.
+.about__approach-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--bwg-sp-3);
+  padding-block-start: var(--bwg-sp-5);
+  border-block-start: 1px solid var(--bwg-rule);
+
+  &:first-child {
+    padding-block-start: 0;
+    border-block-start: 0;
+  }
+
+  // From two columns the divider turns and stands between them instead.
+  @include up('md') {
+    padding-block-start: 0;
+    padding-inline-start: var(--bwg-sp-5);
+    border-block-start: 0;
+    border-inline-start: 1px solid var(--bwg-rule);
+
+    &:nth-child(2n + 1) {
+      padding-inline-start: 0;
+      border-inline-start: 0;
+    }
+  }
+
+  @include up('lg') {
+    &:nth-child(2n + 1) {
+      padding-inline-start: var(--bwg-sp-5);
+      border-inline-start: 1px solid var(--bwg-rule);
+    }
+
+    &:first-child {
+      padding-inline-start: 0;
+      border-inline-start: 0;
+    }
+  }
+}
+
+.about__approach-label {
+  color: var(--bwg-text);
+  font-family: var(--bwg-font-ui);
+  font-size: var(--bwg-fs-sm);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+.about__approach-body {
+  max-width: var(--bwg-measure);
+  color: var(--bwg-text-muted);
+  font-size: var(--bwg-fs-sm);
+  line-height: var(--bwg-lh-relaxed);
+}
+
+.about__approach-tagline {
+  margin-block-start: var(--bwg-sp-7);
+  color: var(--bwg-text);
+  font-size: var(--bwg-fs-md);
+  line-height: var(--bwg-lh-relaxed);
+  text-align: center;
+  text-wrap: balance;
+}
+
+.about__approach-accent {
+  color: var(--bwg-gold);
+  font-weight: var(--bwg-fw-ui-medium);
+}
+
+// =============================================================================
+// Scroll reveal — the rows added after the cards
+//
+// Same gate, same easing and same stagger as the blocks and cards above; the
+// order numbers carry on from theirs, so the section arrives as one sequence.
+// =============================================================================
+:host-context(.bwg-js) {
+  @include motion-safe {
+    .about__value,
+    .about__approach-item,
+    .about__approach-tagline {
+      opacity: 0;
+      transform: translateY(16px);
+      transition:
+        opacity var(--bwg-dur-reveal) var(--bwg-ease-out),
+        transform var(--bwg-dur-reveal) var(--bwg-ease-out);
+      transition-delay: calc(
+        var(--bwg-delay-orbit) + var(--reveal-order, 0) * var(--bwg-stagger-orbit)
+      );
+    }
+
+    .is-revealed {
+      .about__value,
+      .about__approach-item,
+      .about__approach-tagline {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+}

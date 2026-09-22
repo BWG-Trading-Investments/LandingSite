@@ -51,17 +51,19 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { label: 'Home', kind: 'anchor', target: 'hero', sections: ['hero', 'statement'] },
   { label: 'About BWG', kind: 'anchor', target: 'about' },
   { label: 'Our Ecosystem', kind: 'anchor', target: 'ecosystem' },
-  { label: 'Our Projects', kind: 'anchor', target: 'projects' },
-  // Our Leaders opens on the Board of Directors and covers the whole leadership
-  // run that follows it: the board, the CEO spotlight and the roster. Clicking
-  // goes to `board`, which is the first of the three in document order, so the
-  // reader arrives at the top of the leadership story rather than at its end.
+  // Our Leaders covers the whole leadership run: the Board of Directors, the
+  // spotlight on its chairman, and the roster of the people behind the group.
+  // Clicking goes to `board`, the first of the three in document order, so the
+  // reader arrives at the top of the leadership story rather than partway down
+  // it. The target follows that order — if these three are ever rearranged
+  // again, it is whichever one comes first.
   {
     label: 'Our Leaders',
     kind: 'anchor',
     target: 'board',
     sections: ['board', 'ceo-spotlight', 'leaders'],
   },
+  { label: 'Our Projects', kind: 'anchor', target: 'projects' },
   { label: 'Partnerships', kind: 'anchor', target: 'partnerships' },
   { label: 'Invest', kind: 'anchor', target: 'invest' },
   { label: 'Contact us', kind: 'anchor', target: 'contact' },
@@ -107,10 +109,10 @@ export const SECTION_IDS = [
   'statement',
   'about',
   'ecosystem',
-  'projects',
   'board',
   'ceo-spotlight',
   'leaders',
+  'projects',
   'partnerships',
   'invest',
   'contact',

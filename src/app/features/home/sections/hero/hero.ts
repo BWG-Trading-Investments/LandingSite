@@ -13,9 +13,6 @@ import { ScrollSpyService } from '../../../../core/scroll-spy.service';
 import { Globe } from './globe/globe';
 import { GlobeStatic } from './globe/globe-static';
 
-/** Below this width the globe is always the SVG fallback. */
-const WEBGL_MIN_WIDTH = 768;
-
 /** Four cores or fewer is not worth a GPU context for a decorative globe. */
 const WEBGL_MIN_CORES = 4;
 
@@ -179,9 +176,17 @@ export class Hero {
   /**
    * Decide between WebGL and the SVG globe, and keep deciding.
    *
-   * A window dragged narrower, or a reduced-motion preference switched on
-   * mid-session, should both drop back to the fallback rather than keeping a
-   * canvas alive that the reader has just said they do not want.
+   * A reduced-motion preference switched on mid-session drops back to the
+   * fallback rather than keeping a canvas alive that the reader has just said
+   * they do not want.
+   *
+   * Width is deliberately not part of this. It used to be — anything under
+   * 768px got the SVG globe — and the two are not the same picture: the SVG
+   * carries a visible graticule and far heavier land dots, so a phone was
+   * showing a different globe from a desktop rather than a smaller one. The
+   * canvas is the same cost at 270px as it is at 550px, and cheaper: it is a
+   * decorative sphere, paused by an IntersectionObserver the moment it leaves
+   * the viewport. What remains is a judgement about the device, not the window.
    */
   private watchCapability(): void {
     const view = this.document.defaultView;
@@ -189,23 +194,16 @@ export class Hero {
       return;
     }
 
-    const wide = view.matchMedia(`(min-width: ${WEBGL_MIN_WIDTH}px)`);
     const reduced = view.matchMedia('(prefers-reduced-motion: reduce)');
     // Core count cannot change, so it is read once.
     const cores = view.navigator.hardwareConcurrency ?? 8;
 
     const evaluate = () => {
-      this.useWebgl.set(
-        !this.webglFailed && wide.matches && !reduced.matches && cores > WEBGL_MIN_CORES,
-      );
+      this.useWebgl.set(!this.webglFailed && !reduced.matches && cores > WEBGL_MIN_CORES);
     };
 
-    wide.addEventListener('change', evaluate);
     reduced.addEventListener('change', evaluate);
-    this.destroyRef.onDestroy(() => {
-      wide.removeEventListener('change', evaluate);
-      reduced.removeEventListener('change', evaluate);
-    });
+    this.destroyRef.onDestroy(() => reduced.removeEventListener('change', evaluate));
 
     evaluate();
   }

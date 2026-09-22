@@ -81,14 +81,6 @@
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
     align-items: center;
   }
-
-  @include up('wide') {
-    // The satellites are positioned against this box, so it stops being a grid
-    // and becomes the coordinate space instead.
-    display: block;
-    position: relative;
-    aspect-ratio: 1000 / 660;
-  }
 }
 
 .eco__ring {
@@ -96,12 +88,6 @@
   width: 100%;
   margin-inline: auto;
   max-width: 30rem;
-
-  @include up('wide') {
-    position: absolute;
-    inset: 0;
-    max-width: none;
-  }
 }
 
 .eco__canvas {
@@ -180,10 +166,6 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--bwg-sp-6) var(--bwg-sp-5);
   }
-
-  @include up('wide') {
-    display: block;
-  }
 }
 
 .eco__capability {
@@ -193,13 +175,6 @@
   border-block-start: 1px solid var(--bwg-hairline);
 
   @include between('lg', 'wide') {
-    padding-block: 0;
-    border-block-start: 0;
-  }
-
-  @include up('wide') {
-    position: absolute;
-    width: 30%;
     padding-block: 0;
     border-block-start: 0;
   }
@@ -231,11 +206,40 @@
   line-height: var(--bwg-lh-relaxed);
 }
 
-// --- Satellite placement, from 1280px -----------------------------------------
+// --- The satellite composition ------------------------------------------------
 //
-// Each side opens away from a different edge, so the two computed percentages
-// are applied to whichever insets that side needs. Nothing is hand-placed.
-@include up('wide') {
+// The ring fills the box and the six divisions stand around it, each placed
+// against the same coordinate space the SVG is drawn in. Each side opens away
+// from a different edge, so the two computed percentages are applied to
+// whichever insets that side needs. Nothing is hand-placed.
+//
+// Used twice: at the widest layout, and again below 1024px. It belonged to the
+// wide layout alone, and everything narrower fell back to a stack of cards
+// under the ring — which left the arrangement, and the relation it draws
+// between the six divisions and the group at the centre, on the desktop only.
+@mixin satellites {
+  .eco__diagram {
+    display: block;
+    position: relative;
+  }
+
+  .eco__ring {
+    position: absolute;
+    inset: 0;
+    max-width: none;
+  }
+
+  .eco__capabilities {
+    display: block;
+  }
+
+  .eco__capability {
+    position: absolute;
+    width: 30%;
+    padding-block: 0;
+    border-block-start: 0;
+  }
+
   .eco__capability[data-side='end'] {
     inset-inline-start: var(--inset-inline);
     inset-block-start: var(--inset-block);
@@ -275,6 +279,60 @@
 
   .eco__capability[data-side='start'] .eco__body {
     margin-inline-start: auto;
+  }
+}
+
+@include up('wide') {
+  @include satellites;
+
+  .eco__diagram {
+    aspect-ratio: 1000 / 660;
+  }
+}
+
+// --- The same composition, at phone and tablet widths -------------------------
+@include down('lg') {
+  @include satellites;
+
+  .eco__diagram {
+    // Taller than the 1000x660 the ring is drawn in. Type does not scale with
+    // the box, so at this width the two labels on the vertical axis take a far
+    // greater share of the frame than they do on a desktop, and the drawing's
+    // own proportions leave them hanging off the top and the bottom of it. The
+    // extra height is the room they stand in; the SVG keeps its own aspect and
+    // centres itself in the middle of it.
+    aspect-ratio: 1 / 1;
+    // width and justify-self, not margin: auto — an auto inline margin opts a
+    // grid item out of stretching, and with every child of this box absolutely
+    // positioned there is no content left to give it a width of its own.
+    width: 100%;
+    max-width: 40rem;
+    justify-self: center;
+  }
+
+  // The reset lets a heading break mid-word. At 320px a name is very nearly as
+  // wide as the slot it stands in, and MARKETIN/G is not a line break: the name
+  // holds together and sits a hair over its own box instead, into space that is
+  // empty either way.
+  .eco__title {
+    overflow-wrap: normal;
+  }
+
+  // The mark at the hub is a fixed 3rem against a ring that is now a third of
+  // the width it was, so it follows the ring down instead of filling it.
+  .eco__mark img {
+    height: clamp(1.4rem, 6.8vw, 3rem);
+  }
+}
+
+// Under 768px the ring is small enough that the six sentences cannot stand
+// beside it without running into each other and across the drawing. The numbers
+// and the division names hold their places around the circle — which is what
+// the arrangement is there to say — and the sentences return with the room for
+// them.
+@include down('md') {
+  .eco__body {
+    display: none;
   }
 }
 
@@ -364,6 +422,137 @@
       .eco__capability {
         opacity: 1;
       }
+    }
+  }
+}
+
+// =============================================================================
+// What each division covers
+//
+// Sits under the name in all three layouts — except the satellite ring, where
+// the label is a share of the stage and has no room for a second line of type
+// without standing on the drawing or on the label below it.
+// =============================================================================
+.eco__subtitle {
+  margin-block-start: var(--bwg-sp-2);
+  color: var(--bwg-gold);
+  font-size: var(--bwg-fs-xs);
+  font-weight: var(--bwg-fw-ui-medium);
+  line-height: var(--bwg-lh-tight);
+  letter-spacing: var(--bwg-tracking-wide);
+}
+
+// Measured, not assumed: at every width from 360px up the line fits between the
+// ring and the label above or below it, satellite layouts included. Under that
+// the six labels are a share of a 280px stage and the extra line runs them into
+// one another, so there it stands down and the name carries the division alone.
+@include down('xs') {
+  .eco__subtitle {
+    display: none;
+  }
+}
+
+// =============================================================================
+// The BWG Advantage
+//
+// A rule across the full measure, and under it the four marks read as a sum.
+// =============================================================================
+.eco__advantage {
+  margin-block-start: var(--bwg-sp-9);
+  padding-block-start: var(--bwg-sp-7);
+  border-block-start: 1px solid var(--bwg-rule);
+}
+
+.eco__advantage-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--bwg-sp-6);
+  margin: var(--bwg-sp-6) 0 0;
+  padding: 0;
+  list-style: none;
+
+  // One row, with the operators standing between the four.
+  @include up('lg') {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--bwg-sp-4);
+  }
+}
+
+.eco__adv {
+  display: flex;
+  align-items: center;
+  gap: var(--bwg-sp-4);
+}
+
+// The operator belongs to the item that follows it, which is what keeps it
+// between two of them rather than at the end of a row.
+.eco__adv-op {
+  display: none;
+  flex: 0 0 auto;
+  color: var(--bwg-gold);
+  font-family: var(--bwg-font-display);
+  font-size: var(--bwg-fs-lg);
+  line-height: 1;
+
+  @include up('lg') {
+    display: block;
+  }
+}
+
+.eco__adv-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--bwg-sp-3);
+  text-align: center;
+}
+
+// The ring's own node, in markup: the same gold rim on the same soft ground.
+.eco__adv-disc {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid var(--bwg-gold);
+  border-radius: var(--bwg-r-circle);
+  background: var(--bwg-navy-soft);
+  color: var(--bwg-gold);
+}
+
+.eco__adv-label {
+  color: var(--bwg-text);
+  font-family: var(--bwg-font-ui);
+  font-size: var(--bwg-fs-xs);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+// What the sum comes to.
+.eco__adv--accent .eco__adv-label {
+  color: var(--bwg-gold);
+}
+
+// =============================================================================
+// Scroll reveal — the advantage band
+//
+// Same gate and easing as the capability labels, picking their stagger up where
+// the sixth node leaves it.
+// =============================================================================
+:host-context(.bwg-js) {
+  @include motion-safe {
+    .eco__adv {
+      opacity: 0;
+      transition: opacity var(--bwg-dur-slow) var(--bwg-ease-out);
+      transition-delay: calc(
+        var(--bwg-delay-orbit) + var(--bwg-dur-slow) + var(--node-index, 0) *
+          var(--bwg-stagger-orbit)
+      );
+    }
+
+    .is-revealed .eco__adv {
+      opacity: 1;
     }
   }
 }

@@ -285,10 +285,16 @@ export const PROJECTS: readonly Project[] = [
     icon: 'globe',
     url: null,
     urlLabel: null,
-    image: null,
-    imageWidth: null,
-    imageHeight: null,
+    // The supplied file, whole and untouched: the framed square, the two-line
+    // wordmark and the line under it, on the black it was drawn on. It carries
+    // its own ground, so it needs no plate behind it — the plate is for marks
+    // that arrive as bare ink.
+    image: '/assets/images/white-square-logo.jpeg',
+    imageWidth: 800,
+    imageHeight: 423,
     imageOnPlate: false,
+    smallMark: true,
+    markIsLockup: true,
     // The slide's description is one sentence and it is the same sentence in
     // both places, so the page states it once: the summary is skipped where it
     // repeats the intro verbatim.

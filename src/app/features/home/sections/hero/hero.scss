@@ -181,10 +181,15 @@
   aspect-ratio: 1;
   margin-inline: auto;
 
+  // Square at every width. The globe and all five labels are placed against
+  // this box in percentages, so this one number scales the whole composition —
+  // which is what keeps the phone a smaller copy of the desktop rather than an
+  // arrangement of its own.
   @include down('lg') {
-    // Below the desktop layout the labels leave the stage and stack, so the
-    // stage is the globe and nothing else.
-    max-width: 420px;
+    max-width: 460px;
+    // The lowest label hangs a little past the square, exactly as it does on
+    // desktop; this is the room it hangs into.
+    margin-block-end: var(--bwg-sp-6);
   }
 }
 
@@ -192,6 +197,22 @@
   position: absolute;
   inset: 0;
   z-index: var(--bwg-z-globe);
+
+  // An equal inset on all four sides of a square is still a square, so the
+  // globe stays a circle and keeps the desktop's framing — same disc, same rim,
+  // same dots, same arcs, drawn smaller. The room it gives back is what the
+  // labels stand in once they no longer have a column of their own.
+  @include down('lg') {
+    inset: 16%;
+  }
+
+  // A phone has the same labels to place but half the width to place them in,
+  // and the words do not scale with the screen. The circle gives up the
+  // difference, so the text still passes outside the disc rather than across
+  // it — which is what the desktop composition does, at a size that affords it.
+  @include down('sm') {
+    inset: 20%;
+  }
 }
 
 .hero__labels {
@@ -200,8 +221,84 @@
   list-style: none;
 }
 
+// Fixed slots around the globe — the same five positions at every width. Below
+// the desktop layout the labels are a share of the stage rather than a fixed
+// measure, so they shrink with the circle instead of crowding it.
 .cap {
-  position: relative;
+  position: absolute;
+  z-index: var(--bwg-z-copy);
+  // Two of these stand side by side above the globe, so 42% each leaves them a
+  // gap between — and it is the narrowest measure that still sets 'Connecting
+  // Markets' on one line once the icon and the padding have taken their share.
+  width: 42%;
+}
+
+.cap[data-side='end'] {
+  text-align: end;
+
+  .cap__link {
+    flex-direction: row-reverse;
+  }
+}
+
+// They never move, because a label that drifts with the globe's rotation reads
+// as a bug rather than as a flourish.
+.cap[data-slot='upper-start'] {
+  inset-block-start: 4%;
+  inset-inline-start: 0;
+}
+
+.cap[data-slot='upper-end'] {
+  inset-block-start: 0;
+  inset-inline-end: 0;
+}
+
+// INVESTMENT sits at the globe's equator, where the sphere is widest and its
+// silhouette reaches furthest out — measured, that edge falls at 90% of the
+// globe's box rather than at the box's own edge, which is why this one slot had
+// the disc under its first letters. Below 640px the page gutter is the only room
+// there is, and the label takes 12px of it: more, and its icon would be standing
+// on the edge of the screen.
+.cap[data-slot='mid-end'] {
+  inset-block-start: 42%;
+  inset-inline-end: -12px;
+
+  // From 640px the stage is capped at 460px while the page around it keeps
+  // growing, so there is room to set the text down beside the sphere, clear of
+  // it, rather than on its limb.
+  @include between('sm', 'lg') {
+    inset-inline-end: -26px;
+  }
+}
+
+.cap[data-slot='lower-start'] {
+  inset-block-start: 64%;
+  inset-inline-start: 0;
+}
+
+.cap[data-slot='lower-end'] {
+  inset-block-start: 82%;
+  inset-inline-end: 0;
+}
+
+// The connector hairline toward the globe's edge. CSS, not WebGL.
+.cap::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 18px;
+  width: 18px;
+  height: 1px;
+  background: var(--bwg-gold-deep);
+}
+
+.cap[data-side='start']::after {
+  inset-inline-start: 100%;
+  transform-origin: var(--bwg-origin-inline-start) center;
+}
+
+.cap[data-side='end']::after {
+  inset-inline-end: 100%;
+  transform-origin: var(--bwg-origin-inline-end) center;
 }
 
 .cap__link {
@@ -249,87 +346,59 @@
   }
 }
 
-// --- Stacked, below the desktop layout --------------------------------------
-.hero__labels {
-  display: grid;
-  gap: var(--bwg-sp-5);
-  margin-block-start: var(--bwg-sp-8);
-  grid-template-columns: minmax(0, 1fr);
-
-  @include between('md', 'lg') {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-// --- Positioned around the globe, at desktop --------------------------------
+// --- The same slots, against the desktop column -----------------------------
 @include up('lg') {
-  .hero__labels {
-    display: block;
-    margin-block-start: 0;
-  }
-
   .cap {
-    position: absolute;
-    z-index: var(--bwg-z-copy);
-    // Sized so the widest slot cannot reach past the viewport at 1024px, where
-    // the stage column is only around 430px wide. It widens again at xl, where
-    // there is room for it.
+    // A fixed measure here rather than a share: the stage column is only around
+    // 430px wide at 1024px, and a percentage of it would not hold the text. It
+    // widens again at xl, where there is room for it.
     width: 158px;
   }
 
-  .cap[data-side='end'] {
-    text-align: end;
-
-    .cap__link {
-      flex-direction: row-reverse;
-    }
+  .cap::after {
+    width: 30px;
   }
 
-  // Fixed percentage slots. They never move, because a label that drifts with
-  // the globe's rotation reads as a bug rather than as a flourish.
   .cap[data-slot='upper-start'] {
-    inset-block-start: 4%;
     inset-inline-start: -8%;
   }
 
+  // The end-side slots hang past the stage into the page gutter, and the
+  // gutter is the only thing between them and the window. Their percentages are
+  // of the stage, which grows faster than the gutter does, so from about 1200px
+  // the widest of them was arriving with two or three pixels to spare — less
+  // than the width of a scrollbar, which is why the labels read as cut off. The
+  // pixel caps hold the overhang to what the gutter can actually absorb; below
+  // roughly 1150px the percentage is the smaller of the two and still decides.
   .cap[data-slot='upper-end'] {
-    inset-block-start: 0;
-    inset-inline-end: -6%;
+    inset-inline-end: max(-6%, -20px);
   }
 
+  // Out as far as the gutter can take it. The two-column layout gives the stage
+  // half the page here and the sphere grows with it while the word does not, so
+  // below 1440px the label cannot get entirely clear of the disc without leaving
+  // the screen; this is the distance that buys the most daylight and still keeps
+  // a margin between the label and the window.
   .cap[data-slot='mid-end'] {
-    inset-block-start: 42%;
-    inset-inline-end: -10%;
+    inset-inline-end: max(-10%, -46px);
   }
 
   .cap[data-slot='lower-start'] {
-    inset-block-start: 64%;
     inset-inline-start: -10%;
   }
 
   .cap[data-slot='lower-end'] {
-    inset-block-start: 82%;
-    inset-inline-end: -4%;
+    inset-inline-end: max(-4%, -14px);
   }
+}
 
-  // The connector hairline toward the globe's edge. CSS, not WebGL.
-  .cap::after {
-    content: '';
-    position: absolute;
-    inset-block-start: 18px;
-    width: 30px;
-    height: 1px;
-    background: var(--bwg-gold-deep);
-  }
-
-  .cap[data-side='start']::after {
-    inset-inline-start: 100%;
-    transform-origin: var(--bwg-origin-inline-start) center;
-  }
-
-  .cap[data-side='end']::after {
-    inset-inline-end: 100%;
-    transform-origin: var(--bwg-origin-inline-end) center;
+// Above 1280px the wrap stops widening and the page margins take the growth
+// instead. INVESTMENT follows them out until it stands clear of the sphere — at
+// 76px its first letter passes the silhouette — and then holds, rather than
+// drifting away from the globe as the window keeps opening.
+@include up('wide') {
+  .cap[data-slot='mid-end'] {
+    inset-inline-end: max(-76px, calc(-46px - (100vw - 1280px) / 2));
   }
 }
 

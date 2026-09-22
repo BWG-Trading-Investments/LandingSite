@@ -5,9 +5,9 @@ import { ARC_ROUTES, type GeoPoint, sampleLandPoints, toVector } from './world-m
 /**
  * The globe as inline SVG — no canvas, no WebGL, no image file.
  *
- * This is what renders below 768px, on low-core machines, under reduced motion,
- * and whenever a WebGL context cannot be created. It is also what the server
- * prerenders, so the hero is never an empty box in the static HTML.
+ * This is what renders on low-core machines, under reduced motion, and whenever
+ * a WebGL context cannot be created. It is also what the server prerenders, so
+ * the hero is never an empty box in the static HTML.
  *
  * It mirrors the WebGL globe's construction: a filled dark disc, a gold rim, a
  * dense landmass with a brighter minority picked out as city lights, and the
