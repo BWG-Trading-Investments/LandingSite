@@ -55,7 +55,7 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding-block: calc(var(--bwg-nav-h) + var(--bwg-sp-7)) var(--bwg-sp-10);
+  padding-block: calc(var(--bwg-nav-clear) + var(--bwg-sp-7)) var(--bwg-sp-10);
   background:
     radial-gradient(120% 90% at 78% 18%, rgb(29 111 165 / 55%), transparent 62%),
     linear-gradient(168deg, var(--fl-deep) 0%, var(--fl-abyss) 62%, #03101d 100%);
@@ -630,7 +630,7 @@
 // Defensive only: the route exists because the slug does, so this branch is not
 // reachable while the record is. Left unstyled beyond the essentials.
 .fl--missing {
-  padding-block: calc(var(--bwg-nav-h) + var(--bwg-sp-10)) var(--bwg-sp-10);
+  padding-block: calc(var(--bwg-nav-clear) + var(--bwg-sp-10)) var(--bwg-sp-10);
   color: var(--fl-ink);
 
   a {

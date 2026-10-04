@@ -52,22 +52,43 @@
 // =============================================================================
 .nav__logo {
   display: flex;
-  align-items: center;
+  align-self: stretch;
   flex: 0 0 auto;
   margin-inline-end: auto;
   perspective: 420px;
 }
 
+// The mark is taller than the bar, so it hangs from the bar's top edge rather
+// than centring in it. The slot keeps a fixed footprint in the row — the link
+// row has ~31px of slack at 1024px, so a wider flex item would overflow it —
+// and the image draws over the free space beside it.
 .nav__logo-tilt {
+  position: relative;
   display: block;
+  width: var(--bwg-nav-logo-slot);
   transform-style: preserve-3d;
   transition: transform var(--bwg-dur-slow) var(--bwg-ease-out);
 
   img {
-    // Never upscaled: the source is 506x581 and this renders it at 34px tall.
-    height: var(--bwg-logo-h);
+    // Never upscaled: the source is 506x581. Shrinks with the bar on scroll,
+    // on the same duration and easing as the bar's own height.
+    position: absolute;
+    inset-block-start: var(--bwg-nav-logo-top);
+    inset-inline-start: 0;
+    height: var(--bwg-nav-logo-h);
     width: auto;
+    // The reset caps images at their container; the slot is narrower than the
+    // mark by design.
+    max-width: none;
+    transition:
+      height var(--bwg-dur-slow) var(--bwg-ease-out),
+      inset-block-start var(--bwg-dur-slow) var(--bwg-ease-out);
   }
+}
+
+.nav--scrolled .nav__logo-tilt img {
+  inset-block-start: var(--bwg-nav-logo-top-scrolled);
+  height: var(--bwg-nav-logo-h-scrolled);
 }
 
 // =============================================================================
@@ -306,6 +327,16 @@
 .nav-panel__logo img {
   height: var(--bwg-logo-h);
   width: auto;
+}
+
+// The markup carries the ink lockup for the default light theme; its wordmark
+// would vanish on the dark bar, so the dark theme swaps the white original back
+// in — the same split the CEO spotlight uses.
+:host-context([data-theme='dark']) {
+  .nav__logo-tilt img,
+  .nav-panel__logo img {
+    content: url('/assets/bwg-lockup.png');
+  }
 }
 
 .nav-panel__close {

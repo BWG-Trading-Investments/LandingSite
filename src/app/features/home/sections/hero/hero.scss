@@ -16,7 +16,7 @@
   // Tightened so the whole left column clears 100svh at 1280x800: the old
   // sp-8 / sp-10 pair spent 188px on padding and pushed the buttons below the
   // fold. See the stacking budget in the brief report.
-  padding-block: calc(var(--bwg-nav-h) + var(--bwg-sp-7)) var(--bwg-sp-9);
+  padding-block: calc(var(--bwg-nav-clear) + var(--bwg-sp-7)) var(--bwg-sp-9);
   // Contains the globe's entrance, which starts 35% off the inline-end edge.
   overflow: hidden;
 }

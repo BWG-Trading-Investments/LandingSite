@@ -84,7 +84,7 @@
   isolation: isolate;
   overflow: hidden;
   // Clears the fixed navbar, which this page sits under like every other route.
-  padding-block: calc(var(--bwg-nav-h) + var(--bwg-sp-6)) var(--bwg-sp-9);
+  padding-block: calc(var(--bwg-nav-clear) + var(--bwg-sp-6)) var(--bwg-sp-9);
 }
 
 // The ground: a mint bloom behind the platform over a soft green wash falling to

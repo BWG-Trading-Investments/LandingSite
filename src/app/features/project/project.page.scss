@@ -7,7 +7,7 @@
 .project {
   display: block;
   // Clears the fixed navbar, which this page sits under like every other route.
-  padding-block: calc(var(--bwg-nav-h) + var(--bwg-sp-8)) var(--bwg-section-y);
+  padding-block: calc(var(--bwg-nav-clear) + var(--bwg-sp-8)) var(--bwg-section-y);
 }
 
 .wrap {

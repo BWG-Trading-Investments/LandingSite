@@ -166,7 +166,7 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding-block: calc(var(--bwg-nav-h) + var(--bwg-sp-6)) var(--bwg-sp-10);
+  padding-block: calc(var(--bwg-nav-clear) + var(--bwg-sp-6)) var(--bwg-sp-10);
   color: var(--tm-on-band);
 }
 
@@ -615,7 +615,7 @@
 // ── NOT FOUND ────────────────────────────────────────────────────────────────
 
 .tm--missing {
-  padding-block: calc(var(--bwg-nav-h) + var(--bwg-sp-9)) var(--bwg-sp-10);
+  padding-block: calc(var(--bwg-nav-clear) + var(--bwg-sp-9)) var(--bwg-sp-10);
 
   h1 {
     font-family: var(--bwg-font-display);

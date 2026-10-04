@@ -253,7 +253,19 @@
   --bwg-gutter: clamp(20px, 5vw, 56px);
   --bwg-nav-h: 84px; // transparent, over the hero
   --bwg-nav-h-scrolled: 68px; // glass, after scrollY > 24
-  --bwg-logo-h: 34px; // never upscale the raster mark past this
+  --bwg-logo-h: 34px; // mobile panel mark
+  // The bar's mark. At the top it is taller than the bar and hangs from its top
+  // edge; once the glass bar takes over it shrinks to sit inside it (8px above
+  // and below), so nothing scrolling beneath can ever pass under it.
+  --bwg-nav-logo-h: 136px;
+  --bwg-nav-logo-h-scrolled: 52px;
+  --bwg-nav-logo-top: 10px;
+  --bwg-nav-logo-top-scrolled: 8px;
+  // Where the top-state mark ends (146px). Page tops pad from here, not from
+  // the bar, so the first heading keeps a clear gap below the logo.
+  --bwg-nav-clear: max(var(--bwg-nav-h), calc(var(--bwg-nav-logo-top) + var(--bwg-nav-logo-h)));
+  // Footprint the mark keeps in the row, whatever size it draws at.
+  --bwg-nav-logo-slot: 59px;
 
   // ---------------------------------------------------------------------------
   // Z-index. The hero's three layers are z0/z1/z2 in the brief; they are named
