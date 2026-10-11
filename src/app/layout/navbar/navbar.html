@@ -1,13 +1,7 @@
 <header class="nav" [class.nav--scrolled]="scrolled()" [attr.inert]="menuOpen() ? '' : null">
   <div class="nav__inner">
-    <a
-      class="nav__logo"
-      routerLink="/"
-      aria-label="BWG — Business World Group, home"
-      (pointermove)="onLogoMove($event)"
-      (pointerleave)="onLogoLeave()"
-    >
-      <span class="nav__logo-tilt" [style.transform]="logoTransform()">
+    <a class="nav__logo" routerLink="/" aria-label="BWG — Business World Group, home">
+      <span class="nav__logo-tilt">
         <img
           src="/assets/bwg-lockup-light.png"
           alt="BWG — Business World Group"

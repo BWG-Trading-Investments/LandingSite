@@ -48,14 +48,13 @@
 }
 
 // =============================================================================
-// Logo — the only 3D touch in the bar
+// Logo — static: no tilt, no transform, so the hanging mark never swings
 // =============================================================================
 .nav__logo {
   display: flex;
   align-self: stretch;
   flex: 0 0 auto;
   margin-inline-end: auto;
-  perspective: 420px;
 }
 
 // The mark is taller than the bar, so it hangs from the bar's top edge rather
@@ -66,8 +65,6 @@
   position: relative;
   display: block;
   width: var(--bwg-nav-logo-slot);
-  transform-style: preserve-3d;
-  transition: transform var(--bwg-dur-slow) var(--bwg-ease-out);
 
   img {
     // Never upscaled: the source is 506x581. Shrinks with the bar on scroll,

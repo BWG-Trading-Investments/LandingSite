@@ -7,7 +7,6 @@ import {
   ElementRef,
   HostListener,
   PLATFORM_ID,
-  computed,
   effect,
   inject,
   signal,
@@ -23,9 +22,6 @@ import { ThemeService } from '../../core/theme.service';
 
 /** Applied to <body> while the mobile panel is open. Styled in base/_a11y.scss. */
 const SCROLL_LOCK_CLASS = 'bwg-scroll-locked';
-
-/** Maximum tilt of the logo mark on either axis, in degrees. */
-const MAX_TILT_DEG = 16;
 
 /**
  * The site header.
@@ -76,22 +72,11 @@ export class Navbar {
    */
   private readonly currentUrl = signal(this.path());
 
-  /** Cursor tilt, in degrees. Zero until a pointer actually moves over the mark. */
-  private readonly tiltX = signal(0);
-  private readonly tiltY = signal(0);
-
-  protected readonly logoTransform = computed(
-    () => `rotateX(${this.tiltY()}deg) rotateY(${this.tiltX()}deg)`,
-  );
-
   private readonly panel = viewChild<ElementRef<HTMLElement>>('panel');
   private readonly burger = viewChild<ElementRef<HTMLButtonElement>>('burger');
 
   /** Suppresses the focus-restore effect on first render, before any open. */
   private hasOpened = false;
-
-  /** Coalesces pointermove to one write per frame. */
-  private tiltQueued = false;
 
   constructor() {
     // Any navigation closes the panel — including a router link inside it.
@@ -191,45 +176,5 @@ export class Navbar {
 
   protected isActive(item: NavItem): boolean {
     return this.currentFor(item) !== null;
-  }
-
-  /**
-   * Tilts the mark up to 16° on both axes toward the cursor.
-   *
-   * Skipped for coarse pointers and for readers who asked for reduced motion —
-   * checked at event time rather than cached, so a mid-session preference change
-   * is honoured.
-   */
-  protected onLogoMove(event: PointerEvent): void {
-    if (!this.isBrowser || this.tiltQueued) {
-      return;
-    }
-    if (event.pointerType !== 'mouse' || this.prefersReducedMotion()) {
-      return;
-    }
-
-    const bounds = (event.currentTarget as HTMLElement).getBoundingClientRect();
-    // -1 → 1 across each axis, measured from the centre of the mark.
-    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-
-    this.tiltQueued = true;
-    requestAnimationFrame(() => {
-      this.tiltQueued = false;
-      this.tiltX.set(x * 2 * MAX_TILT_DEG);
-      // Inverted: pointer below centre should tip the top of the mark away.
-      this.tiltY.set(-y * 2 * MAX_TILT_DEG);
-    });
-  }
-
-  protected onLogoLeave(): void {
-    this.tiltX.set(0);
-    this.tiltY.set(0);
-  }
-
-  private prefersReducedMotion(): boolean {
-    return (
-      this.document.defaultView?.matchMedia('(prefers-reduced-motion: reduce)').matches ?? false
-    );
   }
 }
