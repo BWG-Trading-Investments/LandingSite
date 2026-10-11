@@ -48,7 +48,7 @@
 }
 
 // =============================================================================
-// Logo — the box never moves; on hover only its parts drift (see navbar.ts)
+// Logo — still at rest; on hover the whole mark scales from its centre (navbar.ts)
 // =============================================================================
 .nav__logo {
   display: flex;
@@ -69,8 +69,8 @@
 
 // The lockup's box. Never upscaled: the source is 360x415. Shrinks with the bar
 // on scroll, on the same duration and easing as the bar's own height. It is
-// also the hover target, so its footprint never changes while the parts move —
-// a part drifting out from under the cursor cannot end the hover.
+// also the hover target and is never transformed itself, so its footprint stays
+// put while the image inside it scales — no enter/leave flicker at the edges.
 .nav__logo-mark {
   position: absolute;
   inset-block-start: var(--bwg-nav-logo-top);
@@ -82,14 +82,15 @@
     inset-block-start var(--bwg-dur-slow) var(--bwg-ease-out);
 }
 
-// Every part spans the whole canvas, so they stack pixel-aligned and a
-// percentage offset is a share of the logo's own size at any scale.
-.nav__logo-part {
+// The one image fills the box; scaling about its centre keeps that point fixed.
+.nav__logo-mark img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  // The reset caps images at their container; this one is the container's size.
   max-width: none;
+  transform-origin: 50% 50%;
   pointer-events: none;
 }
 
@@ -340,14 +341,9 @@
 // would vanish on the dark bar, so the dark theme swaps the white original back
 // in — the same split the CEO spotlight uses.
 :host-context([data-theme='dark']) {
+  .nav__logo-mark img,
   .nav-panel__logo img {
     content: url('/assets/bwg-lockup.png');
-  }
-
-  @each $part in crown, leaf-left, leaf-right, letter-b, letter-w, letter-g, tagline {
-    .nav__logo-part[data-part='#{$part}'] {
-      content: url('/assets/brand/lockup-parts/#{$part}.png');
-    }
   }
 }
 

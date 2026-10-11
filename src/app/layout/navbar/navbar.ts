@@ -26,21 +26,10 @@ const SCROLL_LOCK_CLASS = 'bwg-scroll-locked';
 type Gsap = typeof import('gsap').gsap;
 
 /**
- * The lockup's parts, top to bottom, and how far each drifts on hover — as a
- * percentage of the logo's own width (x) and height (y), so the spread scales
- * with the mark when the bar shrinks it. Each moves away from the centre, and
- * no two close a gap between them: the wordmark spreads sideways, the W and the
- * tagline both drop but the tagline drops further.
+ * How far the whole mark grows on hover, about its own centre. The centre stays
+ * put and every edge moves out from it — 4px each way at the bar's full size.
  */
-const LOGO_PARTS = [
-  { name: 'crown', x: 0, y: -4.5 },
-  { name: 'leaf-left', x: -4, y: 2.5 },
-  { name: 'leaf-right', x: 4, y: 2.5 },
-  { name: 'letter-b', x: -6, y: 1 },
-  { name: 'letter-w', x: 0, y: 2 },
-  { name: 'letter-g', x: 6, y: 1 },
-  { name: 'tagline', x: 0, y: 4 },
-] as const;
+const LOGO_HOVER_SCALE = 1.06;
 
 /**
  * The site header.
@@ -91,12 +80,10 @@ export class Navbar {
    */
   private readonly currentUrl = signal(this.path());
 
-  protected readonly logoParts = LOGO_PARTS;
-
   /** Set on pointerdown, so a click knows whether it came from a finger. */
   protected logoPointerType = '';
 
-  private readonly logoMark = viewChild<ElementRef<HTMLElement>>('logoMark');
+  private readonly logoImg = viewChild<ElementRef<HTMLImageElement>>('logoImg');
 
   /** Loaded after first render, so it stays out of the initial bundle. */
   private gsapLoad?: Promise<Gsap>;
@@ -160,7 +147,7 @@ export class Navbar {
       if (this.isBrowser) {
         this.document.body.classList.remove(SCROLL_LOCK_CLASS);
         this.document.getElementById('main')?.removeAttribute('inert');
-        this.gsap?.killTweensOf(this.logoPartEls());
+        this.gsap?.killTweensOf(this.logoEl());
       }
     });
   }
@@ -217,8 +204,8 @@ export class Navbar {
 
   /**
    * Mouse only: touch and pen fire pointerenter on a tap too, and have no
-   * reliable leave, so they get the tap pulse instead. The mark's box never
-   * moves — only its parts drift, and back on leave.
+   * reliable leave, so they get the tap pulse instead. The image grows as one
+   * piece about its centre; the box it sits in never moves.
    */
   protected onLogoEnter(event: PointerEvent): void {
     if (event.pointerType !== 'mouse') {
@@ -227,18 +214,18 @@ export class Navbar {
     this.logoHovered = true;
     this.withGsap((gsap) => {
       if (this.logoHovered) {
-        this.spreadLogo(gsap, 0.9, 'expo.out');
+        this.expandLogo(gsap, 0.9, 'power3.out');
       }
     });
   }
 
   protected onLogoLeave(): void {
     this.logoHovered = false;
-    this.withGsap((gsap) => this.gatherLogo(gsap));
+    this.withGsap((gsap) => this.settleLogo(gsap));
   }
 
   /**
-   * The touch fallback: one brief spread and return per tap. On click rather
+   * The touch fallback: one brief expand and return per tap. On click rather
    * than pointerdown, so a scroll that starts on the logo never triggers it,
    * and nothing is prevented — the link still navigates.
    */
@@ -246,39 +233,36 @@ export class Navbar {
     if (this.logoPointerType === 'mouse' || this.logoPointerType === '') {
       return;
     }
-    this.withGsap((gsap) => this.spreadLogo(gsap, 0.4, 'power2.out', () => this.gatherLogo(gsap)));
+    this.withGsap((gsap) => this.expandLogo(gsap, 0.35, 'power2.out', () => this.settleLogo(gsap)));
   }
 
-  /** `overwrite` kills whatever the parts were doing, so rapid hovers never stack. */
-  private spreadLogo(gsap: Gsap, duration: number, ease: string, onComplete?: () => void): void {
-    gsap.to(this.logoPartEls(), {
-      xPercent: (i: number) => LOGO_PARTS[i].x,
-      yPercent: (i: number) => LOGO_PARTS[i].y,
+  /** `overwrite` kills whatever the mark was doing, so rapid hovers never stack. */
+  private expandLogo(gsap: Gsap, duration: number, ease: string, onComplete?: () => void): void {
+    gsap.to(this.logoEl(), {
+      scale: LOGO_HOVER_SCALE,
+      transformOrigin: '50% 50%',
       duration,
       ease,
-      stagger: 0.02,
       overwrite: true,
       onComplete,
     });
   }
 
-  /** Back to rest, then the transform is cleared so the parts sit exactly as drawn. */
-  private gatherLogo(gsap: Gsap): void {
-    const parts = this.logoPartEls();
-    gsap.to(parts, {
-      xPercent: 0,
-      yPercent: 0,
-      duration: 0.75,
+  /** Back to rest, then the transform is cleared so the mark sits exactly as drawn. */
+  private settleLogo(gsap: Gsap): void {
+    const logo = this.logoEl();
+    gsap.to(logo, {
+      scale: 1,
+      duration: 0.7,
       ease: 'power3.inOut',
       overwrite: true,
-      onComplete: () => gsap.set(parts, { clearProps: 'transform' }),
+      onComplete: () => gsap.set(logo, { clearProps: 'transform' }),
     });
   }
 
-  private logoPartEls(): HTMLElement[] {
-    return Array.from(
-      this.logoMark()?.nativeElement.querySelectorAll<HTMLElement>('.nav__logo-part') ?? [],
-    );
+  private logoEl(): HTMLImageElement[] {
+    const img = this.logoImg()?.nativeElement;
+    return img ? [img] : [];
   }
 
   /** Runs `fn` once GSAP is in — straight away after the first load. Never with reduced motion. */

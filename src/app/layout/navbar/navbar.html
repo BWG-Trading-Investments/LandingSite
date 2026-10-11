@@ -1,9 +1,8 @@
 <header class="nav" [class.nav--scrolled]="scrolled()" [attr.inert]="menuOpen() ? '' : null">
   <div class="nav__inner">
     <!--
-      The lockup is drawn as seven full-canvas layers cut from the one PNG, each
-      pixel in exactly one layer, so at rest they compose the original exactly.
-      Hover drifts them apart; see onLogoEnter().
+      The lockup is one image. Hover scales it, whole, out from its own centre;
+      see onLogoEnter().
     -->
     <a
       class="nav__logo"
@@ -15,18 +14,15 @@
       (click)="onLogoTap()"
     >
       <span class="nav__logo-tilt">
-        <span #logoMark class="nav__logo-mark">
-          @for (part of logoParts; track part.name) {
-            <img
-              class="nav__logo-part"
-              [attr.data-part]="part.name"
-              [src]="'/assets/brand/lockup-parts/' + part.name + '-light.png'"
-              alt=""
-              width="360"
-              height="415"
-              decoding="async"
-            />
-          }
+        <span class="nav__logo-mark">
+          <img
+            #logoImg
+            src="/assets/bwg-lockup-light.png"
+            alt="BWG — Business World Group"
+            width="26"
+            height="30"
+            decoding="async"
+          />
         </span>
       </span>
     </a>
