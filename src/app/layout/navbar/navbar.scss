@@ -48,7 +48,7 @@
 }
 
 // =============================================================================
-// Logo — static: no tilt, no transform, so the hanging mark never swings
+// Logo — the box never moves; on hover only its parts drift (see navbar.ts)
 // =============================================================================
 .nav__logo {
   display: flex;
@@ -65,25 +65,35 @@
   position: relative;
   display: block;
   width: var(--bwg-nav-logo-slot);
-
-  img {
-    // Never upscaled: the source is 506x581. Shrinks with the bar on scroll,
-    // on the same duration and easing as the bar's own height.
-    position: absolute;
-    inset-block-start: var(--bwg-nav-logo-top);
-    inset-inline-start: 0;
-    height: var(--bwg-nav-logo-h);
-    width: auto;
-    // The reset caps images at their container; the slot is narrower than the
-    // mark by design.
-    max-width: none;
-    transition:
-      height var(--bwg-dur-slow) var(--bwg-ease-out),
-      inset-block-start var(--bwg-dur-slow) var(--bwg-ease-out);
-  }
 }
 
-.nav--scrolled .nav__logo-tilt img {
+// The lockup's box. Never upscaled: the source is 360x415. Shrinks with the bar
+// on scroll, on the same duration and easing as the bar's own height. It is
+// also the hover target, so its footprint never changes while the parts move —
+// a part drifting out from under the cursor cannot end the hover.
+.nav__logo-mark {
+  position: absolute;
+  inset-block-start: var(--bwg-nav-logo-top);
+  inset-inline-start: 0;
+  height: var(--bwg-nav-logo-h);
+  aspect-ratio: 360 / 415;
+  transition:
+    height var(--bwg-dur-slow) var(--bwg-ease-out),
+    inset-block-start var(--bwg-dur-slow) var(--bwg-ease-out);
+}
+
+// Every part spans the whole canvas, so they stack pixel-aligned and a
+// percentage offset is a share of the logo's own size at any scale.
+.nav__logo-part {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  pointer-events: none;
+}
+
+.nav--scrolled .nav__logo-mark {
   inset-block-start: var(--bwg-nav-logo-top-scrolled);
   height: var(--bwg-nav-logo-h-scrolled);
 }
@@ -330,9 +340,14 @@
 // would vanish on the dark bar, so the dark theme swaps the white original back
 // in — the same split the CEO spotlight uses.
 :host-context([data-theme='dark']) {
-  .nav__logo-tilt img,
   .nav-panel__logo img {
     content: url('/assets/bwg-lockup.png');
+  }
+
+  @each $part in crown, leaf-left, leaf-right, letter-b, letter-w, letter-g, tagline {
+    .nav__logo-part[data-part='#{$part}'] {
+      content: url('/assets/brand/lockup-parts/#{$part}.png');
+    }
   }
 }
 
