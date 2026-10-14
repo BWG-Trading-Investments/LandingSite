@@ -68,6 +68,11 @@ the prerendered files, gzips text, pins content-hashed assets with a long
 URLs. `railway.json` wires it up, so a fresh Railway service needs no build or
 start command set in the dashboard.
 
+`railpack.json` repeats the start command for Railway's Railpack builder. Without
+it, Railpack sees an Angular app whose `start` script is `ng serve`, switches to its
+own static-site mode, and fails the build looking for the output in `browser/`
+instead of `dist/bwg-v1/browser`. Keep the two start commands in step.
+
 To check a production build locally exactly as Railway will serve it:
 
 ```bash
