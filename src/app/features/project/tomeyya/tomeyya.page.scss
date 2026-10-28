@@ -295,6 +295,49 @@
   font-weight: var(--bwg-fw-ui-medium);
 }
 
+// The way out to the live product: FISH LINK's hero button, shape, type, arrow
+// and motion unchanged. Only the fill is Tomeyya's — cream on the red, which
+// does not follow the theme, so neither do these values.
+.hero__cta {
+  display: inline-flex;
+  gap: var(--bwg-sp-3);
+  align-items: center;
+  margin-block-start: var(--bwg-sp-6);
+  padding: 0.85em 1.5em;
+  border-radius: var(--bwg-r-pill);
+  background: linear-gradient(100deg, #fffdf9, #ecdfc9);
+  color: #8f2233;
+  font-size: var(--bwg-fs-sm);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-wide);
+  text-decoration: none;
+  text-transform: uppercase;
+  box-shadow: 0 0.6rem 1.6rem rgb(78 15 28 / 45%);
+  transition:
+    transform var(--bwg-dur-base) var(--bwg-ease-out),
+    box-shadow var(--bwg-dur-base) var(--bwg-ease-out);
+
+  svg {
+    transition: transform var(--bwg-dur-base) var(--bwg-ease-out);
+  }
+
+  &:hover,
+  &:focus-visible {
+    box-shadow: 0 0.9rem 2rem rgb(78 15 28 / 58%);
+
+    svg {
+      transform: translateX(3px);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover,
+    &:focus-visible {
+      transform: translateY(-2px);
+    }
+  }
+}
+
 // ── THE ECOSYSTEM ────────────────────────────────────────────────────────────
 
 .eco__intro {

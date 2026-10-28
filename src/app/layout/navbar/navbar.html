@@ -1,4 +1,9 @@
-<header class="nav" [class.nav--scrolled]="scrolled()" [attr.inert]="menuOpen() ? '' : null">
+<header
+  class="nav"
+  [class.nav--scrolled]="scrolled()"
+  [class.nav--dark]="onDarkPage()"
+  [attr.inert]="menuOpen() ? '' : null"
+>
   <div class="nav__inner">
     <!--
       The lockup is one image. Hover scales it, whole, out from its own centre;

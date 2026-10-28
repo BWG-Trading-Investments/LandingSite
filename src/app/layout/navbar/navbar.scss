@@ -99,6 +99,26 @@
   height: var(--bwg-nav-logo-h-scrolled);
 }
 
+// Over a page that stays black in both themes (MA3DENHA's), the bar takes that
+// page's palette and the master lockup — gold mark, light wordmark — in place of
+// the light theme's ink one, which would vanish there. Every other page, and the
+// menu panel, keep following the site theme.
+.nav--dark {
+  --bwg-ink: #0b0b0b;
+  --bwg-text: #f5f5f5;
+  --bwg-text-muted: #b8b8b8;
+  --bwg-gold: #d4af5a;
+  --bwg-gold-bright: #f2d477;
+  --bwg-gold-rgb: 212 175 90;
+  --bwg-rule: rgb(212 175 90 / 22%);
+  --bwg-hairline: rgb(212 175 90 / 12%);
+  --bwg-glass: rgb(11 11 11 / 82%);
+
+  .nav__logo-mark img {
+    content: url('/assets/bwg-lockup.png');
+  }
+}
+
 // =============================================================================
 // Desktop links
 // =============================================================================

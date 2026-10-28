@@ -191,8 +191,9 @@ export const PROJECTS: readonly Project[] = [
     tagline: '2026',
     sector: 'Loyalty & Financial Technology',
     icon: 'bullion',
-    url: null,
-    urlLabel: null,
+    url: 'https://www.ma3denha.com/',
+    // The name rather than the host: the button reads "Visit Ma3denha".
+    urlLabel: 'Ma3denha',
     // The supplied logo, whole: the symbol with MA3DENHA and معدنها stacked
     // under it, every part of the artwork in assets/ma3denha_f.png and in its
     // own colours. What is not here is the white card it was exported on and
@@ -509,8 +510,9 @@ export const PROJECTS: readonly Project[] = [
     tagline: 'A Complete Digital Restaurant Management & Ordering Ecosystem',
     sector: 'Digital Restaurant Technology',
     icon: 'cutlery',
-    url: null,
-    urlLabel: null,
+    url: 'https://www.tomeyya.com/',
+    // The name rather than the host: the button reads "Visit Tomeyya".
+    urlLabel: 'Tomeyya',
     // The supplied logo, from assets/Tomeyya Logo Final.png. The file as
     // delivered is a 5463×3200 canvas with the lockup floating in the middle of
     // it — more than half of its width is empty — so what is served here is the

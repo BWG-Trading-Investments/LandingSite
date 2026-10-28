@@ -7,6 +7,7 @@ import {
   ElementRef,
   HostListener,
   PLATFORM_ID,
+  computed,
   effect,
   inject,
   signal,
@@ -79,6 +80,12 @@ export class Navbar {
    * dirty. This updates on every NavigationEnd instead.
    */
   private readonly currentUrl = signal(this.path());
+
+  /**
+   * MA3DENHA's page is black in both site themes, so over it the bar wears the
+   * dark palette and the master lockup whatever the theme is. See navbar.scss.
+   */
+  protected readonly onDarkPage = computed(() => this.currentUrl() === '/projects/ma3danha');
 
   /** Set on pointerdown, so a click knows whether it came from a finger. */
   protected logoPointerType = '';

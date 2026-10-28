@@ -46,6 +46,7 @@ import { Icon } from '../../shared/ui/icon/icon';
     './project.page.scss',
     './project.page.madaaad.scss',
     './project.page.madaaad-devices.scss',
+    './project.page.ma3denha.scss',
   ],
 })
 export class ProjectPage {
@@ -57,6 +58,12 @@ export class ProjectPage {
 
   /** Which of the two layouts renders. See the note above. */
   protected readonly isMadaaad = computed(() => this.project()?.slug === 'madaaad');
+
+  /**
+   * MA3DENHA keeps the shared layout but wears its own black and gold, scoped to
+   * a modifier on the article — see project.page.ma3denha.scss.
+   */
+  protected readonly isMa3denha = computed(() => this.project()?.slug === 'ma3danha');
 
   /**
    * Whether the page draws its large mark frame beside the copy.

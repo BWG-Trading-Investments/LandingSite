@@ -1,0 +1,128 @@
+@use 'abstracts' as *;
+
+// =============================================================================
+// MA3DENHA
+//
+// The shared layout in project.page.html, worn in the product's own black and
+// gold. Nothing here changes a selector's layout: the group's `--bwg-*` tokens
+// are re-pointed on `.project--ma3denha` alone, so every rule in
+// project.page.scss picks the palette up as written, and WHITE SQUARE and
+// MOSHAREK, which render the same markup without the modifier, are untouched.
+//
+// Restrained on purpose: black grounds, light type, and gold kept for the name,
+// the eyebrows, the dividers, the icons and the button — not for everything.
+//
+// Like FISH LINK, the page is the same in both site themes — a black-and-gold
+// investment platform that turned ivory would stop being one. Tokens that the
+// group derives from others (`--bwg-rule` from `--bwg-gold-rgb`, and so on) are
+// resolved on :root, so each is restated here rather than left to inherit. The
+// navbar over this page follows suit; see `.nav--dark` in navbar.scss.
+// =============================================================================
+.project--ma3denha {
+  --bwg-ink: #0b0b0b;
+  --bwg-navy-soft: #141414;
+  --bwg-gold: #d4af5a;
+  --bwg-gold-bright: #f2d477;
+  --bwg-text: #f5f5f5;
+  --bwg-text-muted: #b8b8b8;
+
+  --bwg-gold-rgb: 212 175 90;
+  --bwg-text-rgb: 245 245 245;
+  --bwg-shadow-rgb: 0 0 0;
+
+  --bwg-rule: rgb(212 175 90 / 22%);
+  --bwg-rule-strong: rgb(212 175 90 / 42%);
+  --bwg-hairline: rgb(212 175 90 / 12%);
+  --bwg-shadow-sm: none;
+  --bwg-focus: #f2d477;
+
+  // The page clears the hanging BWG mark by less than the default: the default
+  // allows for a hero, and this page opens straight onto its way back.
+  padding-block-start: calc(var(--bwg-nav-clear) + var(--bwg-sp-5));
+  color: var(--bwg-text);
+
+  // One faint pool of warm light, top right, on flat black.
+  background:
+    radial-gradient(48rem 30rem at 92% 0%, rgb(212 175 90 / 6%), transparent 70%), #0b0b0b;
+}
+
+// ── HEADING GROUP ────────────────────────────────────────────────────────────
+
+.project--ma3denha .project__grid {
+  margin-block-start: var(--bwg-sp-6);
+}
+
+// The name in gold. Only the type takes the gradient: the logo in the heading
+// is an image and is drawn over it untouched.
+.project--ma3denha .project__name {
+  background: linear-gradient(180deg, #f2d477, #d4af5a);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+// The dark-ground lockup, straight on the page: no plate, no frame, no glow.
+// Sized in `em` so it tracks the name at every breakpoint, a little shorter than
+// the light-ground lockup was so the name leads.
+.project--ma3denha .project__mark--lockup {
+  height: 1.6em;
+}
+
+// Name, year, divider and intro read as one group.
+.project--ma3denha .project__tagline {
+  margin-block-start: var(--bwg-sp-2);
+}
+
+.project--ma3denha .project__rule,
+.project--ma3denha .project__intro {
+  margin-block-start: var(--bwg-sp-5);
+}
+
+.project--ma3denha .glance__heading {
+  color: var(--bwg-gold);
+}
+
+// ── VISIT ────────────────────────────────────────────────────────────────────
+
+// FISH LINK's hero button — pill, type, arrow, lift and arrow nudge as they are
+// there — filled with the gold the brand's own buttons use, and set in black.
+.project--ma3denha .cta {
+  display: inline-flex;
+  gap: var(--bwg-sp-3);
+  align-items: center;
+  margin-block-start: var(--bwg-sp-6);
+  padding: 0.85em 1.5em;
+  border-radius: var(--bwg-r-pill);
+  background: linear-gradient(100deg, #f0cf7a, #c8962e);
+  color: #0b0b0d;
+  font-size: var(--bwg-fs-sm);
+  font-weight: var(--bwg-fw-ui-medium);
+  letter-spacing: var(--bwg-tracking-wide);
+  text-decoration: none;
+  text-transform: uppercase;
+  box-shadow: 0 0.6rem 1.6rem rgb(200 150 46 / 22%);
+  transition:
+    transform var(--bwg-dur-base) var(--bwg-ease-out),
+    box-shadow var(--bwg-dur-base) var(--bwg-ease-out);
+
+  svg {
+    transition: transform var(--bwg-dur-base) var(--bwg-ease-out);
+  }
+
+  &:hover,
+  &:focus-visible {
+    box-shadow: 0 0.9rem 2rem rgb(217 180 59 / 34%);
+
+    svg {
+      transform: translateX(3px);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover,
+    &:focus-visible {
+      transform: translateY(-2px);
+    }
+  }
+}
