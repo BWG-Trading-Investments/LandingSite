@@ -483,8 +483,32 @@
   }
 }
 
+// The hero's button takes the shape, type and motion of TOMEYYA's and FISH
+// LINK's — uppercase pill, lift and arrow nudge — in MADAAAD's own green. The
+// closing link keeps the shared rule above as it was.
 .md-cta {
   margin-block-start: var(--bwg-sp-6);
+  padding: 0.85em 1.5em;
+  font-size: var(--bwg-fs-sm);
+  letter-spacing: var(--bwg-tracking-wide);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition:
+    background var(--bwg-dur-base) var(--bwg-ease-out),
+    transform var(--bwg-dur-base) var(--bwg-ease-out),
+    box-shadow var(--bwg-dur-base) var(--bwg-ease-out);
+
+  &:hover,
+  &:focus-visible {
+    box-shadow: 0 0.9rem 2rem rgb(2 87 47 / 30%);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover,
+    &:focus-visible {
+      transform: translateY(-2px);
+    }
+  }
 }
 
 .md-close {
